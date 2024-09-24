@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:donapp/LoginMethods.dart';
+import 'package:donapp/CadastroScreen.dart';
+
 
 void main() {
   runApp(const Donapp());
@@ -24,7 +25,9 @@ class _DonappState extends State<Donapp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
+            
             backgroundColor: Color.fromARGB(255, 26, 26, 26),
             appBar: AppBar(
               title: const Text('DonApp',
@@ -68,5 +71,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Loginmethods();
+  return CadastroScreen();
 }
