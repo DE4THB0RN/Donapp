@@ -107,23 +107,21 @@ class _OngpageState extends State<Ongpage> {
                 children: [
                   // Primeira imagem
                   Container(
-                    width: 100, // Largura da imagem
-                    height: 100, // Altura da imagem
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(15), // Bordas arredondadas
+                      borderRadius: BorderRadius.circular(15),
                       image: DecorationImage(
-                        image: AssetImage('assets/dog1.png'), // Imagem
-                        fit: BoxFit
-                            .cover, // Ajusta a imagem para cobrir todo o container
+                        image: AssetImage('assets/dog1.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
 
                   // Segunda imagem
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       image: DecorationImage(
@@ -135,8 +133,8 @@ class _OngpageState extends State<Ongpage> {
 
                   // Terceira imagem
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 150,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       image: DecorationImage(
