@@ -1,5 +1,5 @@
+import 'package:donapp/PaginaUsuario.dart';
 import 'package:flutter/material.dart';
-import 'package:donapp/LoginMethods.dart';
 
 void main() {
   runApp(const Donapp());
@@ -68,5 +68,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Loginmethods();
+  return Paginausuario();
 }
