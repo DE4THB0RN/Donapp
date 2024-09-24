@@ -98,6 +98,44 @@ class _PaginausuarioState extends State<Paginausuario> {
                     ]),
                   ),
                 ),
+              ),
+              Card(
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: EdgeInsets.all(2),
+                    child: Column(children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(3),
+                          child: Row(
+                            children: [
+                              Text(
+                                'ONG 2',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      75, 0, 0, 0)),
+                              Text(
+                                '21/02',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(2),
+                          child: Text("R\$ XX,##"),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
               )
             ],
           ),
