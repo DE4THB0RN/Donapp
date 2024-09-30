@@ -1,6 +1,5 @@
 import 'package:donapp/OngPage.dart';
 import 'package:flutter/material.dart';
-import 'package:donapp/LoginMethods.dart';
 
 void main() {
   runApp(Donapp());
