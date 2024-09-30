@@ -1,18 +1,19 @@
+import 'package:donapp/OngPage.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/LoginMethods.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Donapp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class Donapp extends StatefulWidget {
+  Donapp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Donapp> createState() => _DonappState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _DonappState extends State<Donapp> {
   int cont = 0;
 
   void incrementar() {
@@ -24,11 +25,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
-            backgroundColor: Color.fromARGB(255, 26, 26, 26),
             appBar: AppBar(
-              title: const Text('ESSE É O PODER DO SUPER SAIYAJIN 4',
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('DonApp', style: TextStyle(color: Colors.white)),
+                  Icon(Icons.home)
+                ],
+              ),
               backgroundColor: Color.fromARGB(255, 2, 54, 97),
             ),
             body: _body(),
@@ -37,17 +43,17 @@ class _MyAppState extends State<MyApp> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Suponha',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  Icon(
+                    Icons.home,
+                    color: Colors.white,
                   ),
-                  Text(
-                    'Por',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
                   ),
-                  Text(
-                    'Absurdo',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  Icon(
+                    Icons.notifications,
+                    color: Colors.white,
                   )
                 ],
               ),
@@ -62,5 +68,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Loginmethods();
+  return Ongpage();
 }
