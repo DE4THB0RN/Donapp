@@ -34,7 +34,9 @@ class _DonappState extends State<Donapp> {
                       fontFamily: 'Katibeh')),
               backgroundColor: Color.fromARGB(255, 2, 54, 97),
             ),
-            body: _body(),
+            body: SingleChildScrollView(
+              child: _body(),
+            ),
             bottomNavigationBar: BottomAppBar(
               color: Color.fromARGB(255, 2, 54, 97),
               child: Row(

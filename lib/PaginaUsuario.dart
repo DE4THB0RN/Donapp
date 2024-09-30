@@ -57,90 +57,63 @@ class _PaginausuarioState extends State<Paginausuario> {
       ),
       Center(
         child: Padding(
-          padding: EdgeInsets.all(3),
+          padding:const EdgeInsets.all(3),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Card(
-                child: SizedBox(
-                  width: 300,
-                  child: Padding(
-                    padding: EdgeInsets.all(2),
-                    child: Column(children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Row(
-                            children: [
-                              Text(
-                                'ONG 1',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      75, 0, 0, 0)),
-                              Text(
-                                '23/02',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
+              _donation('ONG 1', '01/01/2021', 'R\$ 100,00'),
+              _donation('ONG 2', '02/01/2021', 'R\$ 200,00'),
+              _donation('ONG 3', '03/01/2021', 'R\$ 300,00'),
+              _donation('ONG 4', '04/01/2021', 'R\$ 400,00'),
+              _donation('ONG 5', '05/01/2021', 'R\$ 500,00'),
+            ],
+          ),
+        ),
+      )
+    ]);
+  }
+
+  _donation(nomeOng, data, valor) {
+    return Card(
+      child: SizedBox(
+        width: 300,
+        child: Padding(
+          padding: EdgeInsets.all(2),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: Row(
+                    children: [
+                      Text(
+                        nomeOng.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(2),
-                          child: Text("R\$ XX,##"),
-                        ),
+                      Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(75, 0, 0, 0)),
+                      Text(
+                        data.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ]),
+                    ],
                   ),
                 ),
               ),
-              Card(
-                child: SizedBox(
-                  width: 300,
-                  child: Padding(
-                    padding: EdgeInsets.all(2),
-                    child: Column(children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Row(
-                            children: [
-                              Text(
-                                'ONG 2',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      75, 0, 0, 0)),
-                              Text(
-                                '21/02',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(2),
-                          child: Text("R\$ XX,##"),
-                        ),
-                      ),
-                    ]),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Text(
+                    valor.toString(),
                   ),
                 ),
               )
             ],
           ),
         ),
-      )
-    ]);
+      ),
+    );
   }
 }
