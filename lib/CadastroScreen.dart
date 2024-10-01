@@ -108,7 +108,7 @@ class CadastroScreen extends StatelessWidget {
                       backgroundColor: Colors.black,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, 'Home');
+                      Navigator.pushReplacementNamed(context, 'Home');
                     },
                     child: Text(
                       'Registrar',
