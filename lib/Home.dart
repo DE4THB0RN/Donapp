@@ -30,7 +30,8 @@ class HomeScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
-                    image: AssetImage('img/imagemgenerica.jpg')),
+                  image: AssetImage('assets/dogfeliz.png'),
+                ),
               ),
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -61,23 +62,23 @@ class HomeScreen extends StatelessWidget {
                 NGOCard(
                   title: 'ONG 1',
                   description: 'Somos uma ONG de ajudar animais',
-                  imageUrl: 'https://www.example.com/ong1.jpg',
+                  image: 'assets/beagle.png',
                 ),
                 NGOCard(
                   title: 'ONG 2',
                   description: 'Doamos alimentos para os pobres',
-                  imageUrl: 'https://www.example.com/ong2.jpg',
+                  image: 'assets/dog1.png',
                 ),
                 NGOCard(
                   title: 'ONG 3',
                   description: 'Somos uma ONG que doa roupas para os sem teto',
-                  imageUrl: 'https://www.example.com/ong3.jpg',
+                  image: 'assets/dog2.png',
                 ),
                 NGOCard(
                   title: 'ONG 4',
                   description:
                       'Somos uma ONG que salva crianças em situação de fome e pobreza',
-                  imageUrl: 'https://www.example.com/ong4.jpg',
+                  image: 'assets/dog3.png',
                 ),
               ],
             ),
@@ -91,20 +92,24 @@ class HomeScreen extends StatelessWidget {
 class NGOCard extends StatelessWidget {
   final String title;
   final String description;
-  final String imageUrl;
+  final String image;
 
   NGOCard(
-      {required this.title, required this.description, required this.imageUrl});
+      {required this.title, required this.description, required this.image});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading:
-            Image.network(imageUrl, width: 50, height: 50, fit: BoxFit.cover),
-        title: Text(title),
-        subtitle: Text(description),
+    return GestureDetector(
+      child: Card(
+        child: ListTile(
+          leading: Image.asset(image, width: 50, height: 50, fit: BoxFit.cover),
+          title: Text(title),
+          subtitle: Text(description),
+        ),
       ),
+      onTap: () => {
+        Navigator.pushNamed(context, 'ONG'),
+      },
     );
   }
 }
