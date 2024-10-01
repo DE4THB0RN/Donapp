@@ -8,7 +8,7 @@ class Loginmethods extends StatefulWidget {
 }
 
 class _LoginmethodsState extends State<Loginmethods> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,10 +27,10 @@ class _LoginmethodsState extends State<Loginmethods> {
         ),
         ElevatedButton(
           onPressed: () => {print(_controller.text)},
-          child: Text('Enviar'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(230, 192, 192, 192),
           ),
+          child: Text('Enviar'),
         )
       ],
     );
