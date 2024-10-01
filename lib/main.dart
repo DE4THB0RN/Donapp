@@ -1,5 +1,6 @@
-import 'package:donapp/PaginaUsuario.dart';
 import 'package:flutter/material.dart';
+import 'package:donapp/CadastroScreen.dart';
+
 
 void main() {
   runApp(const Donapp());
@@ -24,7 +25,9 @@ class _DonappState extends State<Donapp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
+            
             backgroundColor: Color.fromARGB(255, 26, 26, 26),
             appBar: AppBar(
               title: const Text('DonApp',
@@ -34,9 +37,7 @@ class _DonappState extends State<Donapp> {
                       fontFamily: 'Katibeh')),
               backgroundColor: Color.fromARGB(255, 2, 54, 97),
             ),
-            body: SingleChildScrollView(
-              child: _body(),
-            ),
+            body: _body(),
             bottomNavigationBar: BottomAppBar(
               color: Color.fromARGB(255, 2, 54, 97),
               child: Row(
@@ -70,5 +71,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Paginausuario();
+  return CadastroScreen();
 }
