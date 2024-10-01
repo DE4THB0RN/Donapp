@@ -18,6 +18,13 @@ class _HomecallState extends State<Homecall> {
             style: TextStyle(
                 fontSize: 30, color: Colors.white, fontFamily: 'Katibeh')),
         backgroundColor: Color.fromARGB(255, 2, 54, 97),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            color: Colors.white,
+            onPressed: () {},
+          ),
+        ],
       ),
       body: _body(),
       bottomNavigationBar: BottomAppBar(
