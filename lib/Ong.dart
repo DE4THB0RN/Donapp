@@ -22,7 +22,9 @@ class _ONGState extends State<ONG> {
           IconButton(
             icon: Icon(Icons.account_circle),
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, 'Usuario');
+            },
           ),
         ],
       ),
