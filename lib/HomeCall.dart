@@ -32,9 +32,7 @@ class _HomecallState extends State<Homecall> {
             ),
             IconButton(
               icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.pushNamed(context, 'Home');
-              },
+              onPressed: () {},
               color: Colors.white,
             ),
             IconButton(
