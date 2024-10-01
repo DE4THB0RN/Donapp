@@ -1,4 +1,6 @@
 import 'package:donapp/Cadastro.dart';
+import 'package:donapp/HomeCall.dart';
+import 'package:donapp/Ong.dart';
 import 'package:donapp/Usuario.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +33,8 @@ class _DonappState extends State<Donapp> {
       routes: {
         'Cadastro': (context) => Cadastro(),
         'Usuario': (context) => Usuario(),
-        'Home': (context) => Cadastro(),
+        'Home': (context) => Homecall(),
+        'ONG': (context) => ONG(),
       },
     );
   }

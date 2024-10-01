@@ -108,7 +108,7 @@ class CadastroScreen extends StatelessWidget {
                       backgroundColor: Colors.black,
                     ),
                     onPressed: () {
-                      // Ação ao registrar
+                      Navigator.pushNamed(context, 'Home');
                     },
                     child: Text(
                       'Registrar',
