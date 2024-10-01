@@ -1,6 +1,6 @@
+import 'package:donapp/Cadastro.dart';
+import 'package:donapp/Usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:donapp/CadastroScreen.dart';
-
 
 void main() {
   runApp(const Donapp());
@@ -25,42 +25,15 @@ class _DonappState extends State<Donapp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            
-            backgroundColor: Color.fromARGB(255, 26, 26, 26),
-            appBar: AppBar(
-              title: const Text('DonApp',
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontFamily: 'Katibeh')),
-              backgroundColor: Color.fromARGB(255, 2, 54, 97),
-            ),
-            body: _body(),
-            bottomNavigationBar: BottomAppBar(
-              color: Color.fromARGB(255, 2, 54, 97),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.notifications),
-                    onPressed: () {},
-                    color: Colors.white,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.home),
-                    onPressed: () {},
-                    color: Colors.white,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {},
-                    color: Colors.white,
-                  )
-                ],
-              ),
-            )));
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      home: _body(),
+      routes: {
+        'Cadastro': (context) => Cadastro(),
+        'Usuario': (context) => Usuario(),
+        'Home': (context) => Cadastro(),
+      },
+    );
   }
 }
 
@@ -71,5 +44,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return CadastroScreen();
+  return Cadastro();
 }
