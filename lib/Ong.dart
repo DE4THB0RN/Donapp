@@ -18,6 +18,13 @@ class _ONGState extends State<ONG> {
             style: TextStyle(
                 fontSize: 30, color: Colors.white, fontFamily: 'Katibeh')),
         backgroundColor: Color.fromARGB(255, 2, 54, 97),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            color: Colors.white,
+            onPressed: () {},
+          ),
+        ],
       ),
       body: _body(),
       bottomNavigationBar: BottomAppBar(
@@ -33,7 +40,7 @@ class _ONGState extends State<ONG> {
             IconButton(
               icon: Icon(Icons.home),
               onPressed: () {
-                Navigator.pushNamed(context, 'Home');
+                Navigator.pushReplacementNamed(context, 'Home');
               },
               color: Colors.white,
             ),
