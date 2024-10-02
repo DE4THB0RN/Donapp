@@ -12,7 +12,7 @@ class _HomecallState extends State<Homecall> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 26, 26, 26),
+      backgroundColor: Color.fromARGB(255, 226, 226, 226),
       appBar: AppBar(
         title: const Text('DonApp',
             style: TextStyle(
@@ -22,7 +22,9 @@ class _HomecallState extends State<Homecall> {
           IconButton(
             icon: Icon(Icons.account_circle),
             color: Colors.white,
-            onPressed: () {Navigator.pushNamed(context, 'Usuario');},
+            onPressed: () {
+              Navigator.pushNamed(context, 'Usuario');
+            },
           ),
         ],
       ),

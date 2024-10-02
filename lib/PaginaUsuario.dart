@@ -32,7 +32,7 @@ class _PaginausuarioState extends State<Paginausuario> {
             child: Text(
               'Usuário',
               style: TextStyle(
-                  fontSize: 26, color: Colors.white, fontFamily: 'Katibeh'),
+                  fontSize: 26, color: Colors.black, fontFamily: 'Katibeh'),
             ),
           ),
           Padding(
@@ -40,7 +40,7 @@ class _PaginausuarioState extends State<Paginausuario> {
             child: Center(
               child: Text(
                 '300 seguindo',
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(fontSize: 20, color: Colors.black),
               ),
             ),
           ),
@@ -53,7 +53,7 @@ class _PaginausuarioState extends State<Paginausuario> {
               child: Text(
                 'Histórico de doações',
                 style: TextStyle(
-                    fontSize: 20, color: Colors.white, fontFamily: 'Katibeh'),
+                    fontSize: 20, color: Colors.black, fontFamily: 'Katibeh'),
               ),
             ),
           ),

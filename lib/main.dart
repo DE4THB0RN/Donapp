@@ -1,5 +1,7 @@
 import 'package:donapp/Cadastro.dart';
+import 'package:donapp/EscolhaScreen.dart';
 import 'package:donapp/HomeCall.dart';
+import 'package:donapp/Login.dart';
 import 'package:donapp/Ong.dart';
 import 'package:donapp/Usuario.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +33,12 @@ class _DonappState extends State<Donapp> {
       initialRoute: '/',
       home: _body(),
       routes: {
+        'Escolha': (context) => Escolhascreen(),
         'Cadastro': (context) => Cadastro(),
         'Usuario': (context) => Usuario(),
         'Home': (context) => Homecall(),
         'ONG': (context) => ONG(),
+        'Login': (context) => LoginScreen(),
       },
     );
   }
@@ -47,5 +51,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Cadastro();
+  return Escolhascreen();
 }

@@ -1,14 +1,14 @@
-import 'package:donapp/CadastroScreen.dart';
+import 'package:donapp/Escolha.dart';
 import 'package:flutter/material.dart';
 
-class Cadastro extends StatefulWidget {
-  const Cadastro({super.key});
+class Escolhascreen extends StatefulWidget {
+  const Escolhascreen({super.key});
 
   @override
-  State<Cadastro> createState() => _CadastroState();
+  State<Escolhascreen> createState() => _EscolhascreenState();
 }
 
-class _CadastroState extends State<Cadastro> {
+class _EscolhascreenState extends State<Escolhascreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +24,6 @@ class _CadastroState extends State<Cadastro> {
   }
 
   _body() {
-    return CadastroScreen();
+    return Escolha();
   }
 }

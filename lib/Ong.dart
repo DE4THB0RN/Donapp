@@ -12,7 +12,7 @@ class _ONGState extends State<ONG> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 26, 26, 26),
+      backgroundColor: Color.fromARGB(255, 226, 226, 226),
       appBar: AppBar(
         title: const Text('DonApp',
             style: TextStyle(

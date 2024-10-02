@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class CadastroScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Cor de fundo igual à da imagem
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -21,7 +21,7 @@ class CadastroScreen extends StatelessWidget {
                   CrossAxisAlignment.start, // Alinhamento à esquerda
               children: [
                 Text(
-                  'Nome:',
+                  'Email:',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white, // Cor branca para o texto
@@ -32,47 +32,7 @@ class CadastroScreen extends StatelessWidget {
                 TextField(
                   keyboardType: TextInputType.name, // Tipo de input para nome
                   decoration: InputDecoration(
-                    hintText: 'NomeExemplo',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white, // Cor de fundo do input
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Email:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white, // Cor branca para o texto
-                    fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                  ),
-                ),
-                SizedBox(height: 5),
-                TextField(
-                  keyboardType:
-                      TextInputType.emailAddress, // Tipo de input para email
-                  decoration: InputDecoration(
                     hintText: 'EmailExemplo@email.com',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white, // Cor de fundo do input
-                  ),
-                ),
-                SizedBox(height: 15),
-                Text(
-                  'Idade:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white, // Cor branca para o texto
-                    fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                  ),
-                ),
-                SizedBox(height: 5),
-                TextField(
-                  keyboardType:
-                      TextInputType.number, // Tipo de input para idade
-                  decoration: InputDecoration(
-                    hintText: 'IdadeExemplo',
                     border: OutlineInputBorder(),
                     filled: true,
                     fillColor: Colors.white, // Cor de fundo do input
@@ -105,6 +65,25 @@ class CadastroScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 15),
+                      backgroundColor: Colors.blue,
+                    ),
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Home');
+                    },
+                    child: Text(
+                      'Entrar com Google',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                    height: 20), // Margem entre os campos de input e os botões
+                SizedBox(
+                  width: double
+                      .infinity, // Faz o botão ocupar toda a largura disponível
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 15),
                       backgroundColor: Colors.black,
                     ),
                     onPressed: () {
@@ -126,10 +105,10 @@ class CadastroScreen extends StatelessWidget {
                       backgroundColor: Colors.black,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Login');
+                      Navigator.pushReplacementNamed(context, 'Cadastro');
                     },
                     child: Text(
-                      'Já tenho conta',
+                      'Criar conta',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -141,10 +120,4 @@ class CadastroScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: CadastroScreen(),
-  ));
 }
