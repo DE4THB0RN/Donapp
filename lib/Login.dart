@@ -18,14 +18,14 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment:
-                  CrossAxisAlignment.start, // Alinhamento à esquerda
+                  CrossAxisAlignment.start,
               children: [
                 Text(
                   'Email:',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white, // Cor branca para o texto
-                    fontWeight: FontWeight.bold, // Deixa o texto mais visível
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold, 
                   ),
                 ),
                 SizedBox(height: 5),
@@ -43,18 +43,18 @@ class LoginScreen extends StatelessWidget {
                   'Senha:',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white, // Cor branca para o texto
-                    fontWeight: FontWeight.bold, // Deixa o texto mais visível
+                    color: Colors.white, 
+                    fontWeight: FontWeight.bold, 
                   ),
                 ),
                 SizedBox(height: 5),
                 TextField(
-                  obscureText: true, // Input para senha
+                  obscureText: true, // Input para senha, esconde o texto digitado
                   decoration: InputDecoration(
                     hintText: 'Digite sua senha:',
                     border: OutlineInputBorder(),
                     filled: true,
-                    fillColor: Colors.white, // Cor de fundo do input
+                    fillColor: Colors.white, 
                   ),
                 ),
                 SizedBox(
@@ -95,7 +95,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10), // Pequeno espaço entre os botões
+                SizedBox(height: 10), 
                 SizedBox(
                   width: double
                       .infinity, // Faz o botão ocupar toda a largura disponível

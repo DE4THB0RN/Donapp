@@ -4,7 +4,7 @@ class CadastroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Cor de fundo igual à da imagem
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -97,8 +97,7 @@ class CadastroScreen extends StatelessWidget {
                     fillColor: Colors.white, // Cor de fundo do input
                   ),
                 ),
-                SizedBox(
-                    height: 20), // Margem entre os campos de input e os botões
+                SizedBox(height: 20), // Margem entre o input e os botões
                 SizedBox(
                   width: double
                       .infinity, // Faz o botão ocupar toda a largura disponível
@@ -118,8 +117,7 @@ class CadastroScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10), // Pequeno espaço entre os botões
                 SizedBox(
-                  width: double
-                      .infinity, // Faz o botão ocupar toda a largura disponível
+                  width: double.infinity, // Ocupar a maioria da tela
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 15),
