@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 class Ongpage extends StatefulWidget {
   const Ongpage({super.key});
@@ -100,72 +102,94 @@ class _OngpageState extends State<Ongpage> {
 
             SizedBox(height: 20),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    // Primeira imagem
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: AssetImage('assets/dog1.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(width: 10),
-
-                    // Segunda imagem
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: AssetImage('assets/dog2.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(width: 10),
-
-                    // Terceira imagem
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: AssetImage('assets/dog3.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(width: 10),
-
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: AssetImage('assets/dog3.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            FlutterCarousel(
+              options: FlutterCarouselOptions(
+                height: 400.0,
+                showIndicator: true,
+                slideIndicator: CircularSlideIndicator(),
               ),
+              items: [1, 2, 3, 4, 5].map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(color: Colors.amber),
+                        child: Text(
+                          'text $i',
+                          style: TextStyle(fontSize: 16.0),
+                        ));
+                  },
+                );
+              }).toList(),
             ),
+
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       children: [
+            //         // Primeira imagem
+            //         Container(
+            //           width: 150,
+            //           height: 150,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(15),
+            //             image: DecorationImage(
+            //               image: AssetImage('assets/dog1.png'),
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ),
+            //         ),
+
+            //         SizedBox(width: 10),
+
+            //         // Segunda imagem
+            //         Container(
+            //           width: 150,
+            //           height: 150,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(15),
+            //             image: DecorationImage(
+            //               image: AssetImage('assets/dog2.png'),
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ),
+            //         ),
+
+            //         SizedBox(width: 10),
+
+            //         // Terceira imagem
+            //         Container(
+            //           width: 150,
+            //           height: 150,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(15),
+            //             image: DecorationImage(
+            //               image: AssetImage('assets/dog3.png'),
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ),
+            //         ),
+
+            //         SizedBox(width: 10),
+
+            //         Container(
+            //           width: 150,
+            //           height: 150,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(15),
+            //             image: DecorationImage(
+            //               image: AssetImage('assets/dog3.png'),
+            //               fit: BoxFit.cover,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             SizedBox(height: 20),
 
