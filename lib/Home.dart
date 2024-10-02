@@ -108,7 +108,7 @@ class NGOCard extends StatelessWidget {
         ),
       ),
       onTap: () => {
-        Navigator.pushNamed(context, 'ONG'),
+        Navigator.pushReplacementNamed(context, 'ONG'),
       },
     );
   }
