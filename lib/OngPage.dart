@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 class Ongpage extends StatefulWidget {
@@ -84,7 +83,7 @@ class _OngpageState extends State<Ongpage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.amber, // Cor de fundo do container
+                  color: Colors.grey, // Cor de fundo do container
                   borderRadius:
                       BorderRadius.circular(15), // Bordas arredondadas
                 ),
@@ -102,97 +101,34 @@ class _OngpageState extends State<Ongpage> {
 
             SizedBox(height: 20),
 
+            //Carousel
             FlutterCarousel(
               options: FlutterCarouselOptions(
                 height: 400.0,
                 showIndicator: true,
                 slideIndicator: CircularSlideIndicator(),
               ),
-              items: [1, 2, 3, 4, 5].map((i) {
+              items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
+                  .map((i) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Image.asset(
+                        i,
+                        fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(color: Colors.amber),
-                        child: Text(
-                          'text $i',
-                          style: TextStyle(fontSize: 16.0),
-                        ));
+                      ),
+                    );
                   },
                 );
               }).toList(),
             ),
 
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: SingleChildScrollView(
-            //     scrollDirection: Axis.horizontal,
-            //     child: Row(
-            //       children: [
-            //         // Primeira imagem
-            //         Container(
-            //           width: 150,
-            //           height: 150,
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(15),
-            //             image: DecorationImage(
-            //               image: AssetImage('assets/dog1.png'),
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-
-            //         SizedBox(width: 10),
-
-            //         // Segunda imagem
-            //         Container(
-            //           width: 150,
-            //           height: 150,
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(15),
-            //             image: DecorationImage(
-            //               image: AssetImage('assets/dog2.png'),
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-
-            //         SizedBox(width: 10),
-
-            //         // Terceira imagem
-            //         Container(
-            //           width: 150,
-            //           height: 150,
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(15),
-            //             image: DecorationImage(
-            //               image: AssetImage('assets/dog3.png'),
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-
-            //         SizedBox(width: 10),
-
-            //         Container(
-            //           width: 150,
-            //           height: 150,
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(15),
-            //             image: DecorationImage(
-            //               image: AssetImage('assets/dog3.png'),
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-
             SizedBox(height: 20),
 
+            //Mapa
             Column(
               children: [
                 Text(
@@ -220,6 +156,9 @@ class _OngpageState extends State<Ongpage> {
               ],
             ),
 
+            SizedBox(height: 20),
+
+            //Publicações
             Column(
               children: [
                 Text(
@@ -230,100 +169,10 @@ class _OngpageState extends State<Ongpage> {
                     fontSize: 20,
                   ),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/dog1.png"),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Coisas que acontecem",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH. ",
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.amber, // Cor de fundo do container
-                      borderRadius:
-                          BorderRadius.circular(15), // Bordas arredondadas
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/dog1.png"),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Coisas que acontecem",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "diminui o texto pra ver oq rola ",
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.amber, // Cor de fundo do container
-                      borderRadius:
-                          BorderRadius.circular(15), // Bordas arredondadas
-                    ),
-                  ),
-                ),
+                buildCard('assets/dog1.png', 'Salvando animais!',
+                    'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
+                buildCard('assets/dog2.png', 'Novos abrigos',
+                    'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
               ],
             ),
           ],
@@ -331,4 +180,52 @@ class _OngpageState extends State<Ongpage> {
       ),
     );
   }
+}
+
+Widget buildCard(String imagePath, String title, String description) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    child: Container(
+      child: Row(
+        children: [
+          Container(
+            height: 150,
+            width: 150,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  description,
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 10),
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(15),
+      ),
+    ),
+  );
 }
