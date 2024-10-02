@@ -59,18 +59,20 @@ class _OngpageState extends State<Ongpage> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () {
-                            //o que acontece quando pressionado
+                            print("Seguir!");
                           },
                           icon: Icon(Icons.favorite),
                           label: Text('Seguir'),
                         ),
                         SizedBox(width: 20),
-                        Text('ONG 1',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            )),
+                        Text(
+                          'ONG 1',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
                       ],
                     ))
               ],
