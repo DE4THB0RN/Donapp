@@ -1,9 +1,10 @@
-import 'package:donapp/Cadastro.dart';
-import 'package:donapp/EscolhaScreen.dart';
-import 'package:donapp/HomeCall.dart';
-import 'package:donapp/Login.dart';
-import 'package:donapp/Ong.dart';
-import 'package:donapp/Usuario.dart';
+import 'package:donapp/Rotas/Cadastro.dart';
+
+import 'package:donapp/Rotas/HomeCall.dart';
+import 'package:donapp/Telas/Login.dart';
+import 'package:donapp/Rotas/Ong.dart';
+import 'package:donapp/Rotas/EscolhaScreen.dart';
+import 'package:donapp/Rotas/Usuario.dart';
 import 'package:flutter/material.dart';
 
 void main() {

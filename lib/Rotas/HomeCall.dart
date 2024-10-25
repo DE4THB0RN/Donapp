@@ -1,28 +1,29 @@
-import 'package:donapp/Components/AppBarra.dart';
+import 'package:donapp/Components/AppBarra2.dart';
 import 'package:donapp/Components/BottomBarra.dart';
-import 'package:donapp/PaginaUsuario.dart';
 import 'package:donapp/Theme/Color.dart';
+
+import '../Telas/Home.dart';
 import 'package:flutter/material.dart';
 
-class Usuario extends StatefulWidget {
-  const Usuario({super.key});
+class Homecall extends StatefulWidget {
+  const Homecall({super.key});
 
   @override
-  State<Usuario> createState() => _UsuarioState();
+  State<Homecall> createState() => _HomecallState();
 }
 
-class _UsuarioState extends State<Usuario> {
+class _HomecallState extends State<Homecall> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: AppBarra2(),
       body: _body(),
       bottomNavigationBar: Bottombarra(),
     );
   }
 
   _body() {
-    return Paginausuario();
+    return Home();
   }
 }
