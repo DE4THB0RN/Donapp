@@ -1,10 +1,11 @@
+import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 
 class CadastroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.backgroundColor,
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -12,8 +13,8 @@ class CadastroScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: Color.fromARGB(
-                    255, 2, 54, 97), // Cor de fundo para a área de inputs
+                color:
+                    AppColor.appBarColor, // Cor de fundo para a área de inputs
                 borderRadius: BorderRadius.circular(20.0), // Borda arredondada
               ),
               child: Column(

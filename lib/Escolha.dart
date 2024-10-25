@@ -1,3 +1,4 @@
+import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 
 class Escolha extends StatefulWidget {
@@ -34,7 +35,7 @@ _botao(context, text, destino) {
   return ElevatedButton(
     style: ButtonStyle(
         backgroundColor:
-            WidgetStateProperty.all<Color>(Color.fromARGB(255, 2, 54, 97))),
+            WidgetStateProperty.all<Color>(AppColor.appBarColor)),
     onPressed: () => {
       Navigator.pushReplacementNamed(context, destino.toString()),
     },
