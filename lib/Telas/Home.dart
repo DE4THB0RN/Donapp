@@ -1,3 +1,4 @@
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -23,7 +24,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: Padinho.medio,
             child: Container(
               height: 200,
               width: double.infinity,

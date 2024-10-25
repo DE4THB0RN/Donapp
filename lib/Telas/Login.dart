@@ -1,31 +1,31 @@
+import 'package:donapp/Theme/Color.dart';
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.backgroundColor,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: Padinho.medio,
           child: Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: Padinho.medio,
             decoration: BoxDecoration(
-              color: Color.fromARGB(
-                  255, 2, 54, 97), // Cor de fundo para a área de inputs
+              color: AppColor.appBarColor, // Cor de fundo para a área de inputs
               borderRadius: BorderRadius.circular(20.0), // Borda arredondada
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Email:',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold, 
+                    color: AppColor.backgroundColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 5),
@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                     hintText: 'EmailExemplo@email.com',
                     border: OutlineInputBorder(),
                     filled: true,
-                    fillColor: Colors.white, // Cor de fundo do input
+                    fillColor: AppColor.backgroundColor, // Cor de fundo do input
                   ),
                 ),
                 SizedBox(height: 15),
@@ -43,18 +43,19 @@ class LoginScreen extends StatelessWidget {
                   'Senha:',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white, 
-                    fontWeight: FontWeight.bold, 
+                    color: AppColor.backgroundColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 5),
                 TextField(
-                  obscureText: true, // Input para senha, esconde o texto digitado
+                  obscureText:
+                      true, // Input para senha, esconde o texto digitado
                   decoration: InputDecoration(
                     hintText: 'Digite sua senha:',
                     border: OutlineInputBorder(),
                     filled: true,
-                    fillColor: Colors.white, 
+                    fillColor: AppColor.backgroundColor,
                   ),
                 ),
                 SizedBox(
@@ -72,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: Text(
                       'Entrar com Google',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColor.backgroundColor),
                     ),
                   ),
                 ),
@@ -91,11 +92,11 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: Text(
                       'Registrar',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColor.backgroundColor),
                     ),
                   ),
                 ),
-                SizedBox(height: 10), 
+                SizedBox(height: 10),
                 SizedBox(
                   width: double
                       .infinity, // Faz o botão ocupar toda a largura disponível
@@ -109,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: Text(
                       'Criar conta',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: AppColor.backgroundColor),
                     ),
                   ),
                 ),

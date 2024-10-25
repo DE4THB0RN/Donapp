@@ -1,3 +1,4 @@
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 
 class Paginausuario extends StatefulWidget {
@@ -14,7 +15,7 @@ class _PaginausuarioState extends State<Paginausuario> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: Padinho.medio,
             child: Center(
               child: CircleAvatar(
                 radius: 56,
@@ -36,7 +37,7 @@ class _PaginausuarioState extends State<Paginausuario> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: Padinho.medio,
             child: Center(
               child: Text(
                 '300 seguindo',
@@ -48,7 +49,7 @@ class _PaginausuarioState extends State<Paginausuario> {
             padding: EdgeInsets.all(40),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: Padinho.medio,
             child: Center(
               child: Text(
                 'Histórico de doações',
