@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   carousel_slider: ^4.2.1
   flutter_carousel_widget: ^3.0.1
+  sqflite: ^2.4.0
 
 dev_dependencies:
   flutter_test:
