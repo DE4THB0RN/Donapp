@@ -81,7 +81,6 @@ class __LoginpageState extends State<LoginpageState> {
                   CustomButton(
                     text: 'Entrar',
                     onPressed: () {
-                      _initPrefs();
                       if (email.isEmpty || senha.isEmpty) {
                         showDialog(
                           context: context,
@@ -145,5 +144,17 @@ class __LoginpageState extends State<LoginpageState> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+    String? emailtoken = prefs.getString('email');
+    String? senhatoken = prefs.getString('senha');
+
+    if (emailtoken != null && senhatoken != null) {
+      Navigator.pushReplacementNamed(context, 'Home');
+    }
   }
 }
