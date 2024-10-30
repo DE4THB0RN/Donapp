@@ -104,7 +104,7 @@ class __LoginpageState extends State<LoginpageState> {
                         await _pegaManinho();
                         if (_usuario.isNotEmpty) {
                           String nome = _usuario.first['nome'];
-                          nome = _cipher.xorDecode(nome);
+                          nome = _cipher.xorEncode(nome);
                           prefs.setString('nome', nome);
                           String emailtoken = _cipher.xorEncode(email);
                           prefs.setString('email', emailtoken);

@@ -174,7 +174,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
     String? senhatoken = prefs.getString('senha');
     String? nometoken = prefs.getString('nome');
 
-    if (emailtoken != null && senhatoken != null && nometoken != null) {
+    if (emailtoken != null &&
+        senhatoken != null &&
+        nometoken != null &&
+        nometoken != "blah blah blah") {
       Navigator.pushReplacementNamed(context, 'Home');
     }
   }
