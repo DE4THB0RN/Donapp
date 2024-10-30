@@ -63,7 +63,7 @@ class __LoginpageState extends State<LoginpageState> {
                 ),
                 SizedBox(height: 20),
                 CustomButton(
-                  text: 'Registrar',
+                  text: 'Entrar',
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, 'Home');
                   },
