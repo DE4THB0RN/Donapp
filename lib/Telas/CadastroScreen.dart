@@ -155,4 +155,16 @@ class _CadastroScreenState extends State<CadastroScreen> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+    String? emailtoken = prefs.getString('email');
+    String? senhatoken = prefs.getString('senha');
+
+    if (emailtoken != null && senhatoken != null) {
+      Navigator.pushReplacementNamed(context, 'Home');
+    }
+  }
 }
