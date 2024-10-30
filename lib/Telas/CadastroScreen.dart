@@ -1,7 +1,22 @@
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
+import 'package:donapp/Components/CustomButton.dart';
+import 'package:donapp/Components/CustomInputField.dart'; 
+import 'package:donapp/Components/CustomDateInputField.dart';
+import 'package:intl/intl.dart';
 
-class CadastroScreen extends StatelessWidget {
+class CadastroScreen extends StatefulWidget {
+  @override
+  _CadastroScreenState createState() => _CadastroScreenState();
+}
+
+class _CadastroScreenState extends State<CadastroScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String nome = '';
+  String email = '';
+  String dataNascimento = '';
+  String senha = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,128 +28,78 @@ class CadastroScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color:
-                    AppColor.appBarColor, // Cor de fundo para a área de inputs
-                borderRadius: BorderRadius.circular(20.0), // Borda arredondada
+                color: AppColor.appBarColor,
+                borderRadius: BorderRadius.circular(20.0),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Alinhamento à esquerda
-                children: [
-                  Text(
-                    'Nome:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white, // Cor branca para o texto
-                      fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    keyboardType: TextInputType.name, // Tipo de input para nome
-                    decoration: InputDecoration(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomInputField(
+                      labelText: 'Nome:',
                       hintText: 'NomeExemplo',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white, // Cor de fundo do input
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    'Email:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white, // Cor branca para o texto
-                      fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    keyboardType:
-                        TextInputType.emailAddress, // Tipo de input para email
-                    decoration: InputDecoration(
-                      hintText: 'EmailExemplo@email.com',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white, // Cor de fundo do input
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    'Idade:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white, // Cor branca para o texto
-                      fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    keyboardType:
-                        TextInputType.number, // Tipo de input para idade
-                    decoration: InputDecoration(
-                      hintText: 'IdadeExemplo',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white, // Cor de fundo do input
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    'Senha:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white, // Cor branca para o texto
-                      fontWeight: FontWeight.bold, // Deixa o texto mais visível
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    obscureText: true, // Input para senha
-                    decoration: InputDecoration(
-                      hintText: 'Digite sua senha:',
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.white, // Cor de fundo do input
-                    ),
-                  ),
-                  SizedBox(height: 20), // Margem entre o input e os botões
-                  SizedBox(
-                    width: double
-                        .infinity, // Faz o botão ocupar toda a largura disponível
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        backgroundColor: Colors.black,
-                      ),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, 'Home');
+                      keyboardType: TextInputType.name,
+                      onChanged: (value) {
+                        setState(() {
+                          nome = value;
+                        });
                       },
-                      child: Text(
-                        'Registrar',
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
-                  ),
-                  SizedBox(height: 10), // Pequeno espaço entre os botões
-                  SizedBox(
-                    width: double.infinity, // Ocupar a maioria da tela
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        backgroundColor: Colors.black,
-                      ),
+                    SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Email:',
+                      hintText: 'EmailExemplo@email.com',
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    CustomDateInputField(
+                      labelText: 'Data de Nascimento:',
+                        hintText: 'Selecione a data de nascimento',
+                        onDateSelected: (selectedDate) {
+                        setState(() {
+                        dataNascimento = DateFormat("dd MMMM yyyy").format(selectedDate);
+                        });
+                      },
+                    ),
+                  
+                    SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Senha:',
+                      hintText: 'Digite sua senha:',
+                      keyboardType: TextInputType.text,
+                      obscureText:
+                          true, // Define o campo de senha para ocultar o texto
+                      onChanged: (value) {
+                        setState(() {
+                          senha = value;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Registrar',
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.pushReplacementNamed(context, 'Home');
+                        }
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    CustomButton(
+                      text: 'Já tenho conta',
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, 'Login');
                       },
-                      child: Text(
-                        'Já tenho conta',
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
