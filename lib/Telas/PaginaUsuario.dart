@@ -1,4 +1,5 @@
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
@@ -177,6 +178,40 @@ class _PaginausuarioState extends State<Paginausuario> {
                 ),
                 SizedBox(height: 20),
                 CustomButton(
+                  text: 'Salvar',
+                  onPressed: () async {
+                    //Pega o usuario dessas coisas
+                    List<Map<String, dynamic>> userfull =
+                        await SQLUser.pegaUmUsuarioEmail(email, senha);
+                    int id = userfull.first['id'];
+
+                    //Transforma a senha em md5
+                    String senhamd = generateMd5(senhaedit);
+
+                    // Altera o usuário no banco de dados
+                    await SQLUser.atualizaUsuario(
+                        id,
+                        nomeedit,
+                        userfull.first['dataNasc'],
+                        userfull.first['email'],
+                        senhamd);
+
+                    // Inicializa o SharedPreferences
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+
+                    // Altera os tokens armazenados
+                    Cipher cipher = Cipher();
+                    nomeedit = cipher.xorEncode(nomeedit);
+                    senhaedit = cipher.xorEncode(senhaedit);
+                    await prefs.setString('nome', nomeedit);
+                    await prefs.setString('senha', senhaedit);
+
+                    Navigator.pop(context); // Fecha o diálogo
+                  },
+                ),
+                SizedBox(height: 10),
+                CustomButton(
                   text: 'Sair da Conta',
                   onPressed: () async {
                     // Inicializa o SharedPreferences
@@ -264,7 +299,6 @@ class _PaginausuarioState extends State<Paginausuario> {
 
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Navigator.pushReplacementNamed(context, 'Login');
-
                     },
                     child: Text(
                       'Sim',
