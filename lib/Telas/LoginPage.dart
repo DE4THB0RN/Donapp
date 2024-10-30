@@ -29,7 +29,7 @@ class __LoginpageState extends State<LoginpageState> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  void _pegaManinho() async {
+  Future<void> _pegaManinho() async {
     _usuario = await SQLUser.pegaUmUsuarioEmail(email, senha);
   }
 
@@ -80,7 +80,7 @@ class __LoginpageState extends State<LoginpageState> {
                   SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar',
-                    onPressed: () {
+                    onPressed: () async {
                       _initPrefs();
                       if (email.isEmpty || senha.isEmpty) {
                         showDialog(
@@ -102,7 +102,7 @@ class __LoginpageState extends State<LoginpageState> {
                         );
                       } else {
                         senha = generateMd5(senha);
-                        _pegaManinho();
+                        await _pegaManinho();
                         if (_usuario.isNotEmpty) {
                           String emailtoken = _cipher.xorEncode(email);
                           prefs.setString('email', emailtoken);

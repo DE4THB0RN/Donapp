@@ -8,7 +8,7 @@ class ProfileIcon extends StatelessWidget {
       icon: Icon(Icons.account_circle),
       color: AppColor.backgroundColor,
       onPressed: () {
-        Navigator.pushNamed(context, 'Usuario');
+        Navigator.pushReplacementNamed(context, 'Usuario');
       },
     );
   }

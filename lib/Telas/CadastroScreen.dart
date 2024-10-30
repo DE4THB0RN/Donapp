@@ -95,13 +95,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       onChanged: (value) {
                         setState(() {
                           senha = value;
+                          print(senha);
                         });
                       },
                     ),
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
-                      onPressed: () {
+                      onPressed: () async {
                         _initPrefs();
                         if (nome.isEmpty ||
                             email.isEmpty ||
@@ -125,9 +126,12 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             },
                           );
                         } else {
+                          print("teste");
                           senha = generateMd5(senha);
-                          _creando();
+                          await _creando();
+                          print("teste1");
                           if (id != -1) {
+                            print("teste2");
                             if (_formKey.currentState!.validate()) {
                               String emailtoken = _cipher.xorEncode(email);
                               prefs.setString('email', emailtoken);
@@ -159,25 +163,15 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   void initState() {
     super.initState();
+    _checkLogin();
+  }
 
-    bool checagem = false;
+  void _checkLogin() async {
+    prefs = await SharedPreferences.getInstance();
+    String? emailtoken = prefs.getString('email');
+    String? senhatoken = prefs.getString('senha');
 
-    void dor() async {
-      SharedPreferences prefas = await SharedPreferences.getInstance();
-      String? emailtoken = prefas.getString('email');
-      String? senhatoken = prefas.getString('senha');
-
-      if (emailtoken != null && senhatoken != null) {
-        checagem = true;
-      }
-
-      print("oiiii");
-    }
-
-    print("oiiii diferente");
-    dor();
-
-    if (checagem) {
+    if (emailtoken != null && senhatoken != null) {
       Navigator.pushReplacementNamed(context, 'Home');
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Paginausuario extends StatefulWidget {
   const Paginausuario({super.key});
@@ -151,7 +152,16 @@ class _PaginausuarioState extends State<Paginausuario> {
                 SizedBox(height: 20),
                 CustomButton(
                   text: 'Sair da Conta',
-                  onPressed: () {
+                  onPressed: () async {
+                    // Inicializa o SharedPreferences
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+
+                    // Remove os tokens armazenados
+                    await prefs.remove('email');
+                    await prefs.remove('senha');
+
+                    Navigator.pop(context); // Fecha o diálogo
                     Navigator.pushReplacementNamed(context, 'Login');
                   },
                 ),
@@ -179,7 +189,6 @@ class _PaginausuarioState extends State<Paginausuario> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          
           content: Text(
             'Tem certeza de que deseja excluir a conta?',
             style: TextStyle(color: Colors.white),
@@ -188,41 +197,39 @@ class _PaginausuarioState extends State<Paginausuario> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                 Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey, // Cor de fundo para o botão "Sim"
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Fecha apenas o pop-up de confirmação
-                  },
-                  child: Text(
-                    'Não',
-                    style: TextStyle(color: Colors.white),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context); // Fecha apenas o pop-up de confirmação
+                    },
+                    child: Text(
+                      'Não',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-                 ),
-                
-                 Container(
-                decoration: BoxDecoration(
-                  color: Colors.red, // Cor de fundo para o botão "Sim"
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    // Ação para excluir a conta
-                   
-                    // Adicione qualquer ação de exclusão de conta aqui
-                  },
-                  
-                  child: Text(
-                    'Sim',
-                    style: TextStyle(color: Colors.white),
-                    
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      // Ação para excluir a conta
+
+                      // Adicione qualquer ação de exclusão de conta aqui
+                    },
+                    child: Text(
+                      'Sim',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-                 ),
               ],
             ),
           ],
