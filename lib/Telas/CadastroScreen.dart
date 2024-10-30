@@ -8,12 +8,21 @@ import 'package:intl/intl.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class CadastroScreen extends StatefulWidget {
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
 
 class _CadastroScreenState extends State<CadastroScreen> {
+
+  late SharedPreferences prefs;
+
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+  
   final _formKey = GlobalKey<FormState>();
   int id = -1;
   String nome = '';
