@@ -160,16 +160,21 @@ class _CadastroScreenState extends State<CadastroScreen> {
   void initState() {
     super.initState();
 
-    late SharedPreferences _prefas;
-    void _intierPrefs() async {
-      _prefas = await SharedPreferences.getInstance();
+    bool checagem = false;
+
+    void dor() async {
+      SharedPreferences prefas = await SharedPreferences.getInstance();
+      String? emailtoken = prefas.getString('email');
+      String? senhatoken = prefas.getString('senha');
+
+      if (emailtoken != null && senhatoken != null) {
+        checagem = true;
+      }
     }
 
-    _intierPrefs();
-    String? emailtoken = _prefas.getString('email');
-    String? senhatoken = _prefas.getString('senha');
+    dor();
 
-    if (emailtoken != null && senhatoken != null) {
+    if (checagem) {
       Navigator.pushReplacementNamed(context, 'Home');
     }
   }
