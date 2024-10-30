@@ -129,19 +129,20 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               );
                             },
                           );
-                        }
-                        senha = generateMd5(senha);
-                        _creando();
-                        if (id != -1) {
-                          if (_formKey.currentState!.validate()) {
-                            for (dynamic element in _users) {
-                              print(element['id']);
-                              print(element['nome']);
-                              print(element['dataNasc']);
-                              print(element['email']);
-                              print(element['senha']);
+                        } else {
+                          senha = generateMd5(senha);
+                          _creando();
+                          if (id != -1) {
+                            if (_formKey.currentState!.validate()) {
+                              for (dynamic element in _users) {
+                                print(element['id']);
+                                print(element['nome']);
+                                print(element['dataNasc']);
+                                print(element['email']);
+                                print(element['senha']);
+                              }
+                              Navigator.pushReplacementNamed(context, 'Home');
                             }
-                            Navigator.pushReplacementNamed(context, 'Home');
                           }
                         }
                       },
