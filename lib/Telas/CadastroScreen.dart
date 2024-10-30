@@ -155,4 +155,27 @@ class _CadastroScreenState extends State<CadastroScreen> {
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+
+    bool checagem = false;
+
+    void dor() async {
+      SharedPreferences prefas = await SharedPreferences.getInstance();
+      String? emailtoken = prefas.getString('email');
+      String? senhatoken = prefas.getString('senha');
+
+      if (emailtoken != null && senhatoken != null) {
+        checagem = true;
+      }
+    }
+
+    dor();
+
+    if (checagem) {
+      Navigator.pushReplacementNamed(context, 'Home');
+    }
+  }
 }
