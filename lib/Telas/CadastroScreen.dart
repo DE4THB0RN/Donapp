@@ -170,8 +170,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
       if (emailtoken != null && senhatoken != null) {
         checagem = true;
       }
+
+      print("oiiii");
     }
 
+    print("oiiii diferente");
     dor();
 
     if (checagem) {
