@@ -1,4 +1,5 @@
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,6 @@ import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomDateInputField.dart';
 import 'package:intl/intl.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroScreen extends StatefulWidget {
@@ -29,15 +27,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String email = '';
   String dataNascimento = '';
   String senha = '';
-  List<Map<String, dynamic>> _users = [];
   final Cipher _cipher = Cipher();
 
   Future<void> _creando() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
-  }
-
-  void _pegaTodos() async {
-    _users = await SQLUser.pegaUsuario();
   }
 
   @override
@@ -161,9 +154,5 @@ class _CadastroScreenState extends State<CadastroScreen> {
         ),
       ),
     );
-  }
-
-  String generateMd5(String input) {
-    return md5.convert(utf8.encode(input)).toString();
   }
 }
