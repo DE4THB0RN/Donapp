@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
@@ -108,23 +109,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             email.isEmpty ||
                             dataNascimento.isEmpty ||
                             senha.isEmpty) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Erro'),
-                                content: Text('Preencha todos os campos'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          Preencha.dialogo(context);
                         } else {
                           print("teste");
                           senha = generateMd5(senha);

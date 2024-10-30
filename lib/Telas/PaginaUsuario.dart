@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class _PaginausuarioState extends State<Paginausuario> {
   String email = '';
   String nomeedit = '';
   String senhaedit = '';
+  int id = -1;
+  String datanasc = '';
 
   @override
   void initState() {
@@ -180,34 +183,41 @@ class _PaginausuarioState extends State<Paginausuario> {
                 CustomButton(
                   text: 'Salvar',
                   onPressed: () async {
-                    //Pega o usuario dessas coisas
-                    List<Map<String, dynamic>> userfull =
-                        await SQLUser.pegaUmUsuarioEmail(email, senha);
-                    int id = userfull.first['id'];
+                    if (nomeedit.isEmpty || senhaedit.isEmpty) {
+                      Preencha.dialogo(context);
+                    } else {
+                      //Pega o usuario dessas coisas
+                      List<Map<String, dynamic>> userfull =
+                          await SQLUser.pegaUmUsuarioEmail(email, senha);
+                      if (id == -1) {
+                        id = userfull.first['id'];
+                        datanasc = userfull.first['dataNasc'];
+                      }
 
-                    //Transforma a senha em md5
-                    String senhamd = generateMd5(senhaedit);
+                      //Transforma a senha em md5
+                      String senhamd = generateMd5(senhaedit);
 
-                    // Altera o usuário no banco de dados
-                    await SQLUser.atualizaUsuario(
-                        id,
-                        nomeedit,
-                        userfull.first['dataNasc'],
-                        userfull.first['email'],
-                        senhamd);
+                      // Altera o usuário no banco de dados
+                      await SQLUser.atualizaUsuario(
+                          id, nomeedit, datanasc, email, senhamd);
 
-                    // Inicializa o SharedPreferences
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
+                      // Inicializa o SharedPreferences
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      setState(() {
+                        nome = nomeedit;
+                        senha = senhaedit;
+                      });
 
-                    // Altera os tokens armazenados
-                    Cipher cipher = Cipher();
-                    nomeedit = cipher.xorEncode(nomeedit);
-                    senhaedit = cipher.xorEncode(senhaedit);
-                    await prefs.setString('nome', nomeedit);
-                    await prefs.setString('senha', senhaedit);
+                      // Altera os tokens armazenados
+                      Cipher cipher = Cipher();
+                      nomeedit = cipher.xorEncode(nomeedit);
+                      senhaedit = cipher.xorEncode(senhaedit);
+                      await prefs.setString('nome', nomeedit);
+                      await prefs.setString('senha', senhaedit);
 
-                    Navigator.pop(context); // Fecha o diálogo
+                      Navigator.pop(context); // Fecha o diálogo
+                    }
                   },
                 ),
                 SizedBox(height: 10),
@@ -282,10 +292,13 @@ class _PaginausuarioState extends State<Paginausuario> {
                   ),
                   child: TextButton(
                     onPressed: () async {
+                      print('Hora de apagar');
                       // Ação para excluir a conta
                       List<Map<String, dynamic>> userfull =
                           await SQLUser.pegaUmUsuarioEmail(email, senha);
-                      int id = userfull.first['id'];
+                      if (id == -1) {
+                        id = userfull.first['id'];
+                      }
 
                       await SQLUser.apagaUsuario(id);
 
@@ -296,7 +309,8 @@ class _PaginausuarioState extends State<Paginausuario> {
                       await prefs.remove('email');
                       await prefs.remove('senha');
                       await prefs.remove('nome');
-
+                      print('apagado');
+                      Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Navigator.pushReplacementNamed(context, 'Login');
                     },

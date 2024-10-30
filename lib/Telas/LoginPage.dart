@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
@@ -82,23 +83,7 @@ class __LoginpageState extends State<LoginpageState> {
                     onPressed: () async {
                       _initPrefs();
                       if (email.isEmpty || senha.isEmpty) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Erro'),
-                              content: Text('Preencha todos os campos'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        Preencha.dialogo(context);
                       } else {
                         senha = generateMd5(senha);
                         await _pegaManinho();
