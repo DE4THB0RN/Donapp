@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Rotas/Usuario.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
@@ -21,7 +22,7 @@ class __LoginpageState extends State<LoginpageState> {
   String email = '';
   String senha = '';
 
-  List<Map<String, dynamic>> _produtos = [];
+  List<Map<String, dynamic>> _usuario = [];
 
   final Cipher _cipher = Cipher();
   void _initPrefs() async {
@@ -29,7 +30,7 @@ class __LoginpageState extends State<LoginpageState> {
   }
 
   void _pegaManinho() async {
-    _produtos = await SQLUser.pegaUmUsuarioEmail(email, senha);
+    _usuario = await SQLUser.pegaUmUsuarioEmail(email, senha);
   }
 
   @override
@@ -101,8 +102,31 @@ class __LoginpageState extends State<LoginpageState> {
                         );
                       } else {
                         senha = generateMd5(senha);
-                        if (SQLUser.pegaUmUsuarioEmail(email, senha) == null) {
+                        _pegaManinho();
+                        if (_usuario.isNotEmpty) {
+                          String emailtoken = _cipher.xorEncode(email);
+                          prefs.setString('email', emailtoken);
+                          String senhatoken = _cipher.xorEncode(senha);
+                          prefs.setString('senha', senhatoken);
                           Navigator.pushReplacementNamed(context, 'Home');
+                        } else if (_usuario.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Erro'),
+                                content: Text('Usuário não encontrado'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         }
                       }
                     },
