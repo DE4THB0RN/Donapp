@@ -1,3 +1,4 @@
+import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,16 @@ class _PaginausuarioState extends State<Paginausuario> {
   String nome = 'Usuário';
   String senha = '';
   String email = '';
+  String nomeedit = '';
+  String senhaedit = '';
 
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+    _setarDados();
   }
 
-  void _checkLogin() async {
+  void _setarDados() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? emailtoken = prefs.getString('email');
     String? senhatoken = prefs.getString('senha');
@@ -158,7 +161,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                   keyboardType: TextInputType.name,
                   onChanged: (value) {
                     setState(() {
-                      nome = value;
+                      nomeedit = value;
                     });
                   },
                 ),
@@ -169,7 +172,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   onChanged: (value) {
-                    senha = value;
+                    senhaedit = value;
                   },
                 ),
                 SizedBox(height: 20),
@@ -243,10 +246,25 @@ class _PaginausuarioState extends State<Paginausuario> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Ação para excluir a conta
+                      List<Map<String, dynamic>> userfull =
+                          await SQLUser.pegaUmUsuarioEmail(email, senha);
+                      int id = userfull.first['id'];
 
-                      // Adicione qualquer ação de exclusão de conta aqui
+                      await SQLUser.apagaUsuario(id);
+
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      // Remove os tokens armazenados
+                      await prefs.remove('email');
+                      await prefs.remove('senha');
+                      await prefs.remove('nome');
+
+                      Navigator.pop(context); // Fecha o pop-up de confirmação
+                      Navigator.pushReplacementNamed(context, 'Login');
+
                     },
                     child: Text(
                       'Sim',
