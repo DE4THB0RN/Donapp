@@ -1,8 +1,11 @@
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
+import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginpageState extends StatefulWidget {
   const LoginpageState({super.key});
@@ -12,8 +15,15 @@ class LoginpageState extends StatefulWidget {
 }
 
 class __LoginpageState extends State<LoginpageState> {
+  late SharedPreferences prefs;
+
   String email = '';
   String senha = '';
+
+  final Cipher _cipher = Cipher();
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +92,11 @@ class __LoginpageState extends State<LoginpageState> {
                             );
                           },
                         );
-                      } else {}
+                      } else {
+                        senha = generateMd5(senha);
+
+                        Navigator.pushReplacementNamed(context, 'Home');
+                      }
                     },
                   ),
                   SizedBox(height: 10),
