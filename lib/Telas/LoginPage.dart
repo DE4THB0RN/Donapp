@@ -1,6 +1,5 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Rotas/Usuario.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';

@@ -5,6 +5,7 @@ import 'package:donapp/Rotas/Ong.dart';
 import 'package:donapp/Rotas/EscolhaScreen.dart';
 import 'package:donapp/Rotas/Usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Rotas/Login.dart';
 
@@ -52,6 +53,14 @@ _botao(cont, incrementar) {
           onPressed: () => {incrementar()}, child: Text(cont.toString())));
 }
 
-_body() {
-  return Escolhascreen();
+_body() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? emailtoken = prefs.getString('email');
+  String? senhatoken = prefs.getString('senha');
+
+  if (emailtoken != null && senhatoken != null) {
+    return Homecall();
+  } else {
+    return Escolhascreen();
+  }
 }
