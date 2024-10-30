@@ -103,6 +103,9 @@ class __LoginpageState extends State<LoginpageState> {
                         senha = generateMd5(senha);
                         await _pegaManinho();
                         if (_usuario.isNotEmpty) {
+                          String nome = _usuario[0]['nome'];
+                          nome = _cipher.xorDecode(nome);
+                          prefs.setString('nome', nome);
                           String emailtoken = _cipher.xorEncode(email);
                           prefs.setString('email', emailtoken);
                           String senhatoken = _cipher.xorEncode(senha);
