@@ -21,9 +21,15 @@ class __LoginpageState extends State<LoginpageState> {
   String email = '';
   String senha = '';
 
+  List<Map<String, dynamic>> _produtos = [];
+
   final Cipher _cipher = Cipher();
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+  }
+
+  void _pegaManinho() async {
+    _produtos = await SQLUser.pegaUmUsuarioEmail(email, senha);
   }
 
   @override
