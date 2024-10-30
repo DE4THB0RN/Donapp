@@ -68,4 +68,11 @@ class SQLUser {
       print("Erro ao apagar o item item: $err");
     }
   }
+
+  static Future<List<Map<String, dynamic>>> pegaUmUsuarioEmail(
+      String email, String senha) async {
+    final db = await SQLUser.db();
+    return db.query('usuario',
+        where: "email = ? AND senha = ?", whereArgs: [email, senha], limit: 1);
+  }
 }
