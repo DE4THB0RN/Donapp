@@ -21,6 +21,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String dataNascimento = '';
   String senha = '';
 
+  Future<void> _creando() async {
+    id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,8 +117,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           );
                         }
                         senha = generateMd5(senha);
-                        id = SQLUser.adicionarUsuario(
-                            nome, dataNascimento, email, senha) as int;
+                        _creando();
                         if (id != -1) {
                           // List<Map<String, dynamic>> users =
                           //     SQLUser.pegaUsuario()
