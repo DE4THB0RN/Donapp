@@ -1,10 +1,8 @@
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
-import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginpageState extends StatefulWidget {
   const LoginpageState({super.key});
@@ -14,18 +12,18 @@ class LoginpageState extends StatefulWidget {
 }
 
 class __LoginpageState extends State<LoginpageState> {
-  late SharedPreferences prefs;
-  final Cipher _cipher = Cipher();
-  void _initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+
+  String email = '';  
+  String senha = '';
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      body: Center(
-        child: Padding(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
           padding: Padinho.medio,
           child: Container(
             padding: Padinho.medio,
@@ -42,7 +40,7 @@ class __LoginpageState extends State<LoginpageState> {
                   hintText: 'EmailExemplo@email.com',
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
-                    // Atualiza o estado se necessário
+                    email = value;
                   },
                 ),
                 SizedBox(height: 15),
@@ -52,7 +50,7 @@ class __LoginpageState extends State<LoginpageState> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   onChanged: (value) {
-                    // Atualiza o estado se necessário
+                    senha = value;
                   },
                 ),
                 SizedBox(height: 20),
@@ -64,9 +62,8 @@ class __LoginpageState extends State<LoginpageState> {
                 ),
                 SizedBox(height: 20),
                 CustomButton(
-                  text: 'Entrar',
+                  text: 'Registrar',
                   onPressed: () {
-                    _initPrefs();
                     Navigator.pushReplacementNamed(context, 'Home');
                   },
                 ),
@@ -80,6 +77,7 @@ class __LoginpageState extends State<LoginpageState> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );
