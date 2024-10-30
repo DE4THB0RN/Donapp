@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
 
-
-
-class _LoginpageState extends StatefulWidget {
-  const _LoginpageState({super.key});
+class LoginpageState extends StatefulWidget {
+  const LoginpageState({super.key});
 
   @override
-  State<_LoginpageState> createState() => __LoginpageState();
+  State<LoginpageState> createState() => __LoginpageState();
 }
 
-class __LoginpageState extends State<_LoginpageState> {
+class __LoginpageState extends State<LoginpageState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

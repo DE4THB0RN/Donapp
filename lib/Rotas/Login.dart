@@ -1,28 +1,26 @@
-import 'package:donapp/Components/AppBarra2.dart';
-import 'package:donapp/Components/BottomBarra.dart';
-import 'package:donapp/Telas/OngPage.dart';
+import 'package:donapp/Components/AppBarra.dart';
+import 'package:donapp/Telas/LoginPage.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 
-class ONG extends StatefulWidget {
-  const ONG({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<ONG> createState() => _ONGState();
+  State<Login> createState() => _LoginState();
 }
 
-class _ONGState extends State<ONG> {
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra2(),
+      appBar: AppBarra(),
       body: _body(),
-      bottomNavigationBar: Bottombarra()
     );
   }
 
   _body() {
-    return Loginpage();
+    return LoginpageState();
   }
 }
