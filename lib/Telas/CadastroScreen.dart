@@ -20,9 +20,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String email = '';
   String dataNascimento = '';
   String senha = '';
+  List<Map<String, dynamic>> _users = [];
 
   Future<void> _creando() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
+  }
+
+  void _pegaTodos() async {
+    _users = await SQLUser.pegaUsuario();
   }
 
   @override
@@ -119,18 +124,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         senha = generateMd5(senha);
                         _creando();
                         if (id != -1) {
-                          // List<Map<String, dynamic>> users =
-                          //     SQLUser.pegaUsuario()
-                          //         as List<Map<String, dynamic>>;
-
-                          // for (dynamic element in users) {
-                          //   print(element['id']);
-                          //   print(element['nome']);
-                          //   print(element['dataNasc']);
-                          //   print(element['email']);
-                          //   print(element['senha']);
-                          // }
-
                           if (_formKey.currentState!.validate()) {
                             Navigator.pushReplacementNamed(context, 'Home');
                           }
