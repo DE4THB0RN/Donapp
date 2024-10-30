@@ -1,3 +1,4 @@
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
@@ -73,7 +74,29 @@ class __LoginpageState extends State<LoginpageState> {
                     text: 'Entrar',
                     onPressed: () {
                       _initPrefs();
-                      Navigator.pushReplacementNamed(context, 'Home');
+                      if (email.isEmpty || senha.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Erro'),
+                              content: Text('Preencha todos os campos'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        senha = generateMd5(senha);
+
+                        Navigator.pushReplacementNamed(context, 'Home');
+                      }
                     },
                   ),
                   SizedBox(height: 10),
