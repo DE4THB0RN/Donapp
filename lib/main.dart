@@ -1,11 +1,12 @@
 import 'package:donapp/Rotas/Cadastro.dart';
 
 import 'package:donapp/Rotas/HomeCall.dart';
-import 'package:donapp/Telas/Login.dart';
 import 'package:donapp/Rotas/Ong.dart';
 import 'package:donapp/Rotas/EscolhaScreen.dart';
 import 'package:donapp/Rotas/Usuario.dart';
 import 'package:flutter/material.dart';
+
+import 'Rotas/Login.dart';
 
 void main() {
   runApp(const Donapp());
@@ -39,7 +40,7 @@ class _DonappState extends State<Donapp> {
         'Usuario': (context) => Usuario(),
         'Home': (context) => Homecall(),
         'ONG': (context) => ONG(),
-        'Login': (context) => LoginScreen(),
+        'Login': (context) => Login(),
       },
     );
   }
