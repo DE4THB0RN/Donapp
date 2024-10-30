@@ -39,6 +39,7 @@ dependencies:
   sqflite: ^2.4.0
   crypto: ^3.0.6
   shared_preferences: ^2.3.2
+  encrypt_decrypt_plus: ^1.2.0
 
 dev_dependencies:
   flutter_test:

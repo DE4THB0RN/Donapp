@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Theme/Color.dart';
+import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -29,6 +30,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String dataNascimento = '';
   String senha = '';
   List<Map<String, dynamic>> _users = [];
+  final Cipher _cipher = Cipher();
 
   Future<void> _creando() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
@@ -134,13 +136,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           _creando();
                           if (id != -1) {
                             if (_formKey.currentState!.validate()) {
-                              for (dynamic element in _users) {
-                                print(element['id']);
-                                print(element['nome']);
-                                print(element['dataNasc']);
-                                print(element['email']);
-                                print(element['senha']);
-                              }
+                              String emailtoken = _cipher.xorEncode(email);
+                              prefs.setString('email', emailtoken);
+                              String senhatoken = _cipher.xorEncode(senha);
+                              prefs.setString('senha', senhatoken);
                               Navigator.pushReplacementNamed(context, 'Home');
                             }
                           }

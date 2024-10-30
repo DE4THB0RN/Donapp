@@ -1,5 +1,6 @@
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
+import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
@@ -14,7 +15,7 @@ class LoginpageState extends StatefulWidget {
 
 class __LoginpageState extends State<LoginpageState> {
   late SharedPreferences prefs;
-
+  final Cipher _cipher = Cipher();
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
