@@ -53,14 +53,6 @@ _botao(cont, incrementar) {
           onPressed: () => {incrementar()}, child: Text(cont.toString())));
 }
 
-_body() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? emailtoken = prefs.getString('email');
-  String? senhatoken = prefs.getString('senha');
-
-  if (emailtoken != null && senhatoken != null) {
-    return Homecall();
-  } else {
-    return Escolhascreen();
-  }
+_body() {
+  return Escolhascreen();
 }
