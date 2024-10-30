@@ -81,6 +81,7 @@ class __LoginpageState extends State<LoginpageState> {
                   CustomButton(
                     text: 'Entrar',
                     onPressed: () {
+                      _initPrefs();
                       if (email.isEmpty || senha.isEmpty) {
                         showDialog(
                           context: context,
