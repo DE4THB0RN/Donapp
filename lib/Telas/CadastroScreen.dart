@@ -29,15 +29,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String email = '';
   String dataNascimento = '';
   String senha = '';
-  List<Map<String, dynamic>> _users = [];
   final Cipher _cipher = Cipher();
 
   Future<void> _creando() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
-  }
-
-  void _pegaTodos() async {
-    _users = await SQLUser.pegaUsuario();
   }
 
   @override

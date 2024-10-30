@@ -12,10 +12,8 @@ class LoginpageState extends StatefulWidget {
 }
 
 class __LoginpageState extends State<LoginpageState> {
-
-  String email = '';  
+  String email = '';
   String senha = '';
-
 
   @override
   Widget build(BuildContext context) {
@@ -24,60 +22,80 @@ class __LoginpageState extends State<LoginpageState> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-          padding: Padinho.medio,
-          child: Container(
             padding: Padinho.medio,
-            decoration: BoxDecoration(
-              color: AppColor.appBarColor, // Cor de fundo para a área de inputs
-              borderRadius: BorderRadius.circular(20.0), // Borda arredondada
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomInputField(
-                  labelText: 'Email:',
-                  hintText: 'EmailExemplo@email.com',
-                  keyboardType: TextInputType.emailAddress,
-                  onChanged: (value) {
-                    email = value;
-                  },
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Senha:',
-                  hintText: 'Digite sua senha:',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    senha = value;
-                  },
-                ),
-                SizedBox(height: 20),
-                CustomButton(
-                  text: 'Entrar com Google',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'Home');
-                  },
-                ),
-                SizedBox(height: 20),
-                CustomButton(
-                  text: 'Registrar',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'Home');
-                  },
-                ),
-                SizedBox(height: 10),
-                CustomButton(
-                  text: 'Criar conta',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'Cadastro');
-                  },
-                ),
-              ],
+            child: Container(
+              padding: Padinho.medio,
+              decoration: BoxDecoration(
+                color:
+                    AppColor.appBarColor, // Cor de fundo para a área de inputs
+                borderRadius: BorderRadius.circular(20.0), // Borda arredondada
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomInputField(
+                    labelText: 'Email:',
+                    hintText: 'EmailExemplo@email.com',
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      email = value;
+                    },
+                  ),
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Senha:',
+                    hintText: 'Digite sua senha:',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      senha = value;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Entrar com Google',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Home');
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Entrar',
+                    onPressed: () {
+                      _initPrefs();
+                      if (email.isEmpty || senha.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Erro'),
+                              content: Text('Preencha todos os campos'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {}
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  CustomButton(
+                    text: 'Criar conta',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Cadastro');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
         ),
       ),
     );
