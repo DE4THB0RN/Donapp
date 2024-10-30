@@ -1,12 +1,9 @@
 import 'package:donapp/Rotas/Cadastro.dart';
-
 import 'package:donapp/Rotas/HomeCall.dart';
 import 'package:donapp/Rotas/Ong.dart';
 import 'package:donapp/Rotas/EscolhaScreen.dart';
 import 'package:donapp/Rotas/Usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'Rotas/Login.dart';
 
 void main() {

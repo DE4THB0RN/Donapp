@@ -137,6 +137,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                               prefs.setString('email', emailtoken);
                               String senhatoken = _cipher.xorEncode(senha);
                               prefs.setString('senha', senhatoken);
+                              String nometoken = _cipher.xorEncode(nome);
+                              prefs.setString('nome', nometoken);
                               Navigator.pushReplacementNamed(context, 'Home');
                             }
                           }
@@ -170,8 +172,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
     prefs = await SharedPreferences.getInstance();
     String? emailtoken = prefs.getString('email');
     String? senhatoken = prefs.getString('senha');
+    String? nometoken = prefs.getString('nome');
 
-    if (emailtoken != null && senhatoken != null) {
+    if (emailtoken != null && senhatoken != null && nometoken != null) {
       Navigator.pushReplacementNamed(context, 'Home');
     }
   }

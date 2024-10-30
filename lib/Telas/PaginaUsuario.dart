@@ -1,4 +1,5 @@
 import 'package:donapp/Theme/Padding.dart';
+import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -15,6 +16,28 @@ class Paginausuario extends StatefulWidget {
 class _PaginausuarioState extends State<Paginausuario> {
   String nome = 'Usuário';
   String senha = '';
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLogin();
+  }
+
+  void _checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? emailtoken = prefs.getString('email');
+    String? senhatoken = prefs.getString('senha');
+    String? nometoken = prefs.getString('nome');
+    Cipher cipher = Cipher();
+    if (emailtoken != null && senhatoken != null && nometoken != null) {
+      setState(() {
+        nome = cipher.xorDecode(nometoken);
+        senha = cipher.xorDecode(senhatoken);
+        email = cipher.xorDecode(emailtoken);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +183,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                     // Remove os tokens armazenados
                     await prefs.remove('email');
                     await prefs.remove('senha');
+                    await prefs.remove('nome');
 
                     Navigator.pop(context); // Fecha o diálogo
                     Navigator.pushReplacementNamed(context, 'Login');
