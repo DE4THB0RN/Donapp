@@ -16,13 +16,12 @@ class CadastroScreen extends StatefulWidget {
 }
 
 class _CadastroScreenState extends State<CadastroScreen> {
-
   late SharedPreferences prefs;
 
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
-  
+
   final _formKey = GlobalKey<FormState>();
   int id = -1;
   String nome = '';
@@ -108,6 +107,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     CustomButton(
                       text: 'Registrar',
                       onPressed: () {
+                        _initPrefs();
                         if (nome.isEmpty ||
                             email.isEmpty ||
                             dataNascimento.isEmpty ||

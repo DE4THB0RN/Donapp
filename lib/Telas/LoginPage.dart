@@ -65,6 +65,7 @@ class __LoginpageState extends State<LoginpageState> {
                 CustomButton(
                   text: 'Registrar',
                   onPressed: () {
+                    _initPrefs();
                     Navigator.pushReplacementNamed(context, 'Home');
                   },
                 ),
