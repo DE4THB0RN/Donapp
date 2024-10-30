@@ -1,3 +1,4 @@
+import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -94,8 +95,9 @@ class __LoginpageState extends State<LoginpageState> {
                         );
                       } else {
                         senha = generateMd5(senha);
-
-                        Navigator.pushReplacementNamed(context, 'Home');
+                        if (SQLUser.pegaUmUsuarioEmail(email, senha) == null) {
+                          Navigator.pushReplacementNamed(context, 'Home');
+                        }
                       }
                     },
                   ),
