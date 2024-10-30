@@ -12,12 +12,18 @@ class LoginpageState extends StatefulWidget {
 }
 
 class __LoginpageState extends State<LoginpageState> {
+
+  String email = '';  
+  String senha = '';
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      body: Center(
-        child: Padding(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
           padding: Padinho.medio,
           child: Container(
             padding: Padinho.medio,
@@ -34,7 +40,7 @@ class __LoginpageState extends State<LoginpageState> {
                   hintText: 'EmailExemplo@email.com',
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
-                    // Atualiza o estado se necessário
+                    email = value;
                   },
                 ),
                 SizedBox(height: 15),
@@ -44,7 +50,7 @@ class __LoginpageState extends State<LoginpageState> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   onChanged: (value) {
-                    // Atualiza o estado se necessário
+                    senha = value;
                   },
                 ),
                 SizedBox(height: 20),
@@ -71,6 +77,7 @@ class __LoginpageState extends State<LoginpageState> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );
