@@ -35,7 +35,8 @@ class LoginScreen extends StatelessWidget {
                     hintText: 'EmailExemplo@email.com',
                     border: OutlineInputBorder(),
                     filled: true,
-                    fillColor: AppColor.backgroundColor, // Cor de fundo do input
+                    fillColor:
+                        AppColor.backgroundColor, // Cor de fundo do input
                   ),
                 ),
                 SizedBox(height: 15),
@@ -91,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, 'Home');
                     },
                     child: Text(
-                      'Registrar',
+                      'Entrar',
                       style: TextStyle(color: AppColor.backgroundColor),
                     ),
                   ),

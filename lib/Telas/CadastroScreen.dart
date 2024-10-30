@@ -123,6 +123,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         }
                         senha = generateMd5(senha);
                         _creando();
+                        _pegaTodos();
                         if (id != -1) {
                           if (_formKey.currentState!.validate()) {
                             for (dynamic element in _users) {

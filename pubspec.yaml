@@ -37,6 +37,7 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_carousel_widget: ^3.0.1
   sqflite: ^2.4.0
+  crypto: ^3.0.6
 
 dev_dependencies:
   flutter_test:
