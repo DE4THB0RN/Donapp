@@ -7,7 +7,7 @@ class SQLUser {
  nome TEXT,
  dataNasc DATE,
  email TEXT,
- senha INTEGER
+ senha TEXT
  )
  """);
   }
@@ -23,7 +23,7 @@ class SQLUser {
   }
 
   static Future<int> adicionarUsuario(
-      String nome, String dataNasc, String email, int senha) async {
+      String nome, String dataNasc, String email, String senha) async {
     final db = await SQLUser.db();
     final dados = {
       'nome': nome,
@@ -47,14 +47,13 @@ class SQLUser {
   }
 
   static Future<int> atualizaUsuario(
-      int id, String nome, String dataNasc, String email, int senha) async {
+      int id, String nome, String dataNasc, String email, String senha) async {
     final db = await SQLUser.db();
     final dados = {
       'nome': nome,
       'dataNasc': dataNasc,
       'email': email,
-      'senha': senha,
-      'createdAt': DateTime.now().toString()
+      'senha': senha
     };
     final result =
         await db.update('usuario', dados, where: "id = ?", whereArgs: [id]);

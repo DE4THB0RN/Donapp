@@ -1,9 +1,12 @@
+import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
-import 'package:donapp/Components/CustomInputField.dart'; 
+import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomDateInputField.dart';
 import 'package:intl/intl.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class CadastroScreen extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class CadastroScreen extends StatefulWidget {
 
 class _CadastroScreenState extends State<CadastroScreen> {
   final _formKey = GlobalKey<FormState>();
+  int id = -1;
   String nome = '';
   String email = '';
   String dataNascimento = '';
@@ -61,14 +65,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     SizedBox(height: 15),
                     CustomDateInputField(
                       labelText: 'Data de Nascimento:',
-                        hintText: 'Selecione a data de nascimento',
-                        onDateSelected: (selectedDate) {
+                      hintText: 'Selecione a data de nascimento',
+                      onDateSelected: (selectedDate) {
                         setState(() {
-                        dataNascimento = DateFormat("dd MMMM yyyy").format(selectedDate);
+                          dataNascimento =
+                              DateFormat("dd MMMM yyyy").format(selectedDate);
                         });
                       },
                     ),
-                  
                     SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Senha:',
@@ -86,8 +90,47 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     CustomButton(
                       text: 'Registrar',
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.pushReplacementNamed(context, 'Home');
+                        if (nome.isEmpty ||
+                            email.isEmpty ||
+                            dataNascimento.isEmpty ||
+                            senha.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Erro'),
+                                content: Text('Preencha todos os campos'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                        senha = generateMd5(senha);
+                        id = SQLUser.adicionarUsuario(
+                            nome, dataNascimento, email, senha) as int;
+                        if (id != -1) {
+                          // List<Map<String, dynamic>> users =
+                          //     SQLUser.pegaUsuario()
+                          //         as List<Map<String, dynamic>>;
+
+                          // for (dynamic element in users) {
+                          //   print(element['id']);
+                          //   print(element['nome']);
+                          //   print(element['dataNasc']);
+                          //   print(element['email']);
+                          //   print(element['senha']);
+                          // }
+
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.pushReplacementNamed(context, 'Home');
+                          }
                         }
                       },
                     ),
@@ -107,10 +150,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
       ),
     );
   }
-}
 
-void main() {
-  runApp(MaterialApp(
-    home: CadastroScreen(),
-  ));
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
+  }
 }
