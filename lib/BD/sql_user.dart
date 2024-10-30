@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart' as sql;
 
-class SQLHelper {
+class SQLUser {
   static Future<void> criaUsuario(sql.Database database) async {
     await database.execute("""CREATE TABLE usuario(
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -24,7 +24,7 @@ class SQLHelper {
 
   static Future<int> adicionarUsuario(
       String nome, String dataNasc, String email, int senha) async {
-    final db = await SQLHelper.db();
+    final db = await SQLUser.db();
     final dados = {
       'nome': nome,
       'dataNasc': dataNasc,
@@ -37,18 +37,18 @@ class SQLHelper {
   }
 
   static Future<List<Map<String, dynamic>>> pegaUsuario() async {
-    final db = await SQLHelper.db();
+    final db = await SQLUser.db();
     return db.query('usuario', orderBy: "id");
   }
 
   static Future<List<Map<String, dynamic>>> pegaUmUsuario(int id) async {
-    final db = await SQLHelper.db();
+    final db = await SQLUser.db();
     return db.query('usuario', where: "id = ?", whereArgs: [id], limit: 1);
   }
 
   static Future<int> atualizaUsuario(
       int id, String nome, String dataNasc, String email, int senha) async {
-    final db = await SQLHelper.db();
+    final db = await SQLUser.db();
     final dados = {
       'nome': nome,
       'dataNasc': dataNasc,
@@ -62,7 +62,7 @@ class SQLHelper {
   }
 
   static Future<void> apagaUsuario(int id) async {
-    final db = await SQLHelper.db();
+    final db = await SQLUser.db();
     try {
       await db.delete("usuario", where: "id = ?", whereArgs: [id]);
     } catch (err) {
