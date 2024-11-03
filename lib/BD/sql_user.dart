@@ -75,4 +75,11 @@ class SQLUser {
     return db.query('usuario',
         where: "email = ? AND senha = ?", whereArgs: [email, senha], limit: 1);
   }
+
+  static Future<List<Map<String, dynamic>>> pegaUmUsuarioEmail2(
+      String email) async {
+    final db = await SQLUser.db();
+    return db.query('usuario',
+        where: "email = ?", whereArgs: [email], limit: 1);
+  }
 }

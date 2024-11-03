@@ -29,8 +29,8 @@ class __LoginpageState extends State<LoginpageState> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  Future<void> _pegaManinho() async {
-    _usuario = await SQLUser.pegaUmUsuarioEmail(email, senha);
+  Future<void> _pegarUser() async {
+    _usuario = await SQLUser.pegaUmUsuarioEmail2(email);
   }
 
   @override
@@ -86,16 +86,20 @@ class __LoginpageState extends State<LoginpageState> {
                         Preencha.dialogo(context);
                       } else {
                         senha = generateMd5(senha);
-                        await _pegaManinho();
+                        await _pegarUser();
                         if (_usuario.isNotEmpty) {
-                          String nome = _usuario.first['nome'];
-                          nome = _cipher.xorEncode(nome);
-                          prefs.setString('nome', nome);
-                          String emailtoken = _cipher.xorEncode(email);
-                          prefs.setString('email', emailtoken);
-                          String senhatoken = _cipher.xorEncode(senha);
-                          prefs.setString('senha', senhatoken);
-                          Navigator.pushReplacementNamed(context, 'Home');
+                          if (_usuario.first['senha'] == senha) {
+                            String nome = _usuario.first['nome'];
+                            nome = _cipher.xorEncode(nome);
+                            prefs.setString('nome', nome);
+                            String emailtoken = _cipher.xorEncode(email);
+                            prefs.setString('email', emailtoken);
+                            String senhatoken = _cipher.xorEncode(senha);
+                            prefs.setString('senha', senhatoken);
+                            Navigator.pushReplacementNamed(context, 'Home');
+                          } else {
+                            _senhaErrada();
+                          }
                         } else if (_usuario.isEmpty) {
                           showDialog(
                             context: context,
@@ -131,6 +135,26 @@ class __LoginpageState extends State<LoginpageState> {
           ),
         ),
       ),
+    );
+  }
+
+  _senhaErrada() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Erro'),
+          content: Text('Senha incorreta'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
