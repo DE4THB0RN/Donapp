@@ -4,10 +4,10 @@ class SQLONG {
   static Future<void> criaOng(sql.Database database) async {
     await database.execute("""CREATE TABLE ONG(
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
- nome TEXT,
- email TEXT,
+ nome TEXT UNIQUE,
+ email TEXT UNIQUE,
  senha TEXT,
- cnpj TEXT,
+ cnpj TEXT UNIQUE,
  desc TEXT,
  foto_perfil TEXT,
  foto_banner TEXT
