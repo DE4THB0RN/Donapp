@@ -1,5 +1,9 @@
+import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/CustomInputField.dart';
+import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:intl/intl.dart';
 
 class Ongpage extends StatefulWidget {
   const Ongpage({super.key});
@@ -57,6 +61,13 @@ class _OngpageState extends State<Ongpage> {
                     right: 40,
                     child: Row(
                       children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            _openDoacaoPopup(context);
+                          },
+                          icon: Icon(Icons.wallet_giftcard),
+                          label: Text('Doar'),
+                        ),
                         ElevatedButton.icon(
                           onPressed: () {
                             print("Seguir!");
@@ -229,5 +240,95 @@ Widget buildCard(String imagePath, String title, String description) {
         borderRadius: BorderRadius.circular(15),
       ),
     ),
+  );
+}
+
+void _openDoacaoPopup(BuildContext context) {
+  final TextEditingController valorController = TextEditingController();
+  final NumberFormat currencyFormat =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: AppColor.appBarColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                'Doação',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20.0),
+              CustomInputFieldMoney(
+                labelText: 'Valor da Doação',
+                hintText: 'Digite o valor',
+                keyboardType: TextInputType.number,
+                controller: valorController,
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    // Remove caracteres que não são números
+                    String numericValue =
+                        value.replaceAll(RegExp(r'[^0-9]'), '');
+                    // Formata o valor como dinheiro
+                    String formattedValue =
+                        currencyFormat.format(int.parse(numericValue) / 100);
+                    // Atualiza o controlador para exibir o valor formatado
+                    valorController.value = TextEditingValue(
+                      text: formattedValue,
+                      selection: TextSelection.collapsed(
+                          offset: formattedValue.length),
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  String valor = valorController.text;
+                  print('Valor da doação: $valor');
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+                ),
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }
