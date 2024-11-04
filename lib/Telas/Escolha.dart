@@ -16,12 +16,12 @@ class _EscolhaState extends State<Escolha> {
         children: [
           SizedBox(
             width: 600,
-            child: _botao(context, 'Quero doar', 'Cadastro'),
+            child: _botao(context, 'Quero doar', 'Cadastro_User'),
           ),
           Padding(padding: EdgeInsets.all(60)),
           SizedBox(
             width: 600,
-            child: _botao(context, 'Sou uma ONG', 'Cadastro'),
+            child: _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
           ),
         ],
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,8 +34,7 @@ class _EscolhaState extends State<Escolha> {
 _botao(context, text, destino) {
   return ElevatedButton(
     style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all<Color>(AppColor.appBarColor)),
+        backgroundColor: WidgetStateProperty.all<Color>(AppColor.appBarColor)),
     onPressed: () => {
       Navigator.pushReplacementNamed(context, destino.toString()),
     },

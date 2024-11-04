@@ -1,4 +1,3 @@
-
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
@@ -24,8 +23,6 @@ class _CadastroOngState extends State<CadastroOng> {
   String email = '';
   String CNPJ = '';
   String senha = '';
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +93,7 @@ class _CadastroOngState extends State<CadastroOng> {
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
-                      onPressed: () async {
-                        
-                      },
+                      onPressed: () async {},
                     ),
                     SizedBox(height: 10),
                     CustomButton(
@@ -137,6 +132,7 @@ class _CadastroOngState extends State<CadastroOng> {
     }
   }
 }
+
 void main() {
   runApp(MaterialApp(
     home: CadastroOng(),

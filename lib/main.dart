@@ -1,6 +1,8 @@
 import 'package:donapp/Rotas/Cadastro.dart';
 
 import 'package:donapp/Rotas/HomeCall.dart';
+import 'package:donapp/Rotas/ONG_Cadastro.dart';
+import 'package:donapp/Rotas/ONG_Cadastro2.dart';
 import 'package:donapp/Rotas/Ong.dart';
 import 'package:donapp/Rotas/EscolhaScreen.dart';
 import 'package:donapp/Rotas/Usuario.dart';
@@ -21,7 +23,7 @@ class Donapp extends StatefulWidget {
 
 class _DonappState extends State<Donapp> {
   int cont = 0;
- 
+
   void incrementar() {
     setState(() {
       cont++;
@@ -36,11 +38,13 @@ class _DonappState extends State<Donapp> {
       home: _body(),
       routes: {
         'Escolha': (context) => Escolhascreen(),
-        'Cadastro': (context) => Cadastro(),
+        'Cadastro_User': (context) => Cadastro(),
         'Usuario': (context) => Usuario(),
         'Home': (context) => Homecall(),
         'ONG': (context) => ONG(),
         'Login': (context) => Login(),
+        'Cadastro_ONG': (context) => ONG_Cadastro(),
+        'Cadastro_ONG2': (context) => ONG_Cadastro2(),
       },
     );
   }
