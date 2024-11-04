@@ -30,59 +30,64 @@ class SQLONG {
     final db = await SQLONG.db();
     final dados = {
       'nome': nome,
-      'dataNasc': dataNasc,
+      'cnpj': cnpj,
       'email': email,
-      'senha': senha
+      'senha': senha,
+      'desc': '',
+      'foto_perfil': '',
+      'foto_banner': ''
     };
-    final id = await db.insert('usuario', dados,
+    final id = await db.insert('ONG', dados,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
   }
 
-  static Future<List<Map<String, dynamic>>> pegaUsuario() async {
+  static Future<List<Map<String, dynamic>>> pegaONG() async {
     final db = await SQLONG.db();
-    return db.query('usuario', orderBy: "id");
+    return db.query('ONG', orderBy: "id");
   }
 
-  static Future<List<Map<String, dynamic>>> pegaUmUsuario(int id) async {
+  static Future<List<Map<String, dynamic>>> pegaUmaONG(int id) async {
     final db = await SQLONG.db();
-    return db.query('usuario', where: "id = ?", whereArgs: [id], limit: 1);
+    return db.query('ONG', where: "id = ?", whereArgs: [id], limit: 1);
   }
 
-  static Future<int> atualizaUsuario(
-      int id, String nome, String dataNasc, String email, String senha) async {
+  static Future<int> atualizaONG(int id, String nome, String cnpj, String email,
+      String senha, String desc, String fotoPerfil, String fotoBanner) async {
     final db = await SQLONG.db();
     final dados = {
       'nome': nome,
-      'dataNasc': dataNasc,
+      'cnpj': cnpj,
       'email': email,
-      'senha': senha
+      'senha': senha,
+      'desc': desc,
+      'foto_perfil': fotoPerfil,
+      'foto_banner': fotoBanner
     };
     final result =
-        await db.update('usuario', dados, where: "id = ?", whereArgs: [id]);
+        await db.update('ONG', dados, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
-  static Future<void> apagaUsuario(int id) async {
+  static Future<void> apagaONG(int id) async {
     final db = await SQLONG.db();
     try {
-      await db.delete("usuario", where: "id = ?", whereArgs: [id]);
+      await db.delete("ONG", where: "id = ?", whereArgs: [id]);
     } catch (err) {
       print("Erro ao apagar o item item: $err");
     }
   }
 
-  static Future<List<Map<String, dynamic>>> pegaUmUsuarioEmail(
+  static Future<List<Map<String, dynamic>>> pegaUmaONGEmail(
       String email, String senha) async {
     final db = await SQLONG.db();
-    return db.query('usuario',
+    return db.query('ONG',
         where: "email = ? AND senha = ?", whereArgs: [email, senha], limit: 1);
   }
 
-  static Future<List<Map<String, dynamic>>> pegaUmUsuarioEmail2(
+  static Future<List<Map<String, dynamic>>> pegaUmaONGEmail2(
       String email) async {
     final db = await SQLONG.db();
-    return db.query('usuario',
-        where: "email = ?", whereArgs: [email], limit: 1);
+    return db.query('ONG', where: "email = ?", whereArgs: [email], limit: 1);
   }
 }
