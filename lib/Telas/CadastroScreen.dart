@@ -111,12 +111,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             senha.isEmpty) {
                           Preencha.dialogo(context);
                         } else {
-                          print("teste");
                           senha = generateMd5(senha);
                           await _creando();
-                          print("teste1");
                           if (id != -1) {
-                            print("teste2");
                             if (_formKey.currentState!.validate()) {
                               String emailtoken = _cipher.xorEncode(email);
                               prefs.setString('email', emailtoken);
@@ -159,10 +156,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
     String? senhatoken = prefs.getString('senha');
     String? nometoken = prefs.getString('nome');
 
-    if (emailtoken != null &&
-        senhatoken != null &&
-        nometoken != null &&
-        nometoken != "blah blah blah") {
+    if (emailtoken != null && senhatoken != null && nometoken != null) {
       Navigator.pushReplacementNamed(context, 'Home');
     }
   }

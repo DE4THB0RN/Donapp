@@ -6,7 +6,7 @@ class SQLUser {
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  nome TEXT,
  dataNasc DATE,
- email TEXT,
+ email TEXT UNIQUE,
  senha TEXT
  )
  """);
