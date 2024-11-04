@@ -1,33 +1,39 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImageInputField extends StatefulWidget {
-  final Function(String) onImageSelected;
+enum ImageShape { square, circle }
 
-  const ImageInputField({required this.onImageSelected, Key? key}) : super(key: key);
+class ImageInputField extends StatefulWidget {
+  final ValueChanged<String> onImageSelected;
+  final ImageShape shape;
+
+  const ImageInputField({
+    required this.onImageSelected,
+    this.shape = ImageShape.square,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _ImageInputFieldState createState() => _ImageInputFieldState();
 }
 
 class _ImageInputFieldState extends State<ImageInputField> {
-  String? _imageBase64; // Variável para armazenar a imagem em base64
-  File? _imageFile; // Variável para armazenar o arquivo de imagem selecionado
+  Uint8List? _imageData;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
     if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
-      final bytes = await _imageFile!.readAsBytes();
-      _imageBase64 = base64Encode(bytes);
+      final bytes = await pickedFile.readAsBytes();
+      final base64String = base64Encode(bytes);
 
-      setState(() {}); // Atualiza o estado para mostrar a imagem
+      setState(() {
+        _imageData = bytes;
+      });
 
-      widget.onImageSelected(_imageBase64!); // Retorna a string base64
+      widget.onImageSelected(base64String);
     }
   }
 
@@ -36,22 +42,25 @@ class _ImageInputFieldState extends State<ImageInputField> {
     return GestureDetector(
       onTap: _pickImage,
       child: Container(
-        width: 200, // Define a largura do quadrado
-        height: 150, // Define a altura do quadrado para manter o formato
+        width: double.infinity,
+        height: 180,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: Colors.grey),
-          image: _imageFile != null
+          color: Colors.grey[300],
+          shape: widget.shape == ImageShape.circle ? BoxShape.circle : BoxShape.rectangle,
+          image: _imageData != null
               ? DecorationImage(
-                  image: FileImage(_imageFile!),
+                  image: MemoryImage(_imageData!),
                   fit: BoxFit.cover,
                 )
               : null,
         ),
-        child: _imageFile == null
-            ? Center(child: Icon(Icons.add_a_photo, color: Colors.grey[700]))
-            : null, // Mostra o ícone se não houver imagem
+        child: _imageData == null
+            ? Icon(
+                Icons.add_a_photo,
+                size: 30,
+                color: Colors.grey[600],
+              )
+            : null,
       ),
     );
   }
