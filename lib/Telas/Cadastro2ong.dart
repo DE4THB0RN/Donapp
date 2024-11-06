@@ -1,4 +1,6 @@
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Theme/Color.dart';
 
@@ -24,8 +26,11 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   int id = -1;
   String perfil = '';
   String banner = '';
-  String CNPJ = '';
+  String email = '';
+  String nome = '';
+  String cnpj = '';
   String senha = '';
+  String desc = '';
   List<String> localidades =
       []; // Lista para armazenar os valores de cada localidade
   List<TextEditingController> _controllers =
@@ -51,6 +56,33 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
         localidades[i] = _controllers[i].text;
       }
     });
+  }
+
+  void _setarDados() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? emailtoken = prefs.getString('email');
+
+    if (emailtoken != null) {
+      setState(() {
+        email = cipher.xorDecode(emailtoken);
+      });
+      List<Map<String, dynamic>> ONG = await SQLONG.pegaUmaONGEmail2(email);
+      if (id == -1) {
+        id = ONG.first['id'];
+        email = ONG.first['email'];
+        nome = ONG.first['nome'];
+        cnpj = ONG.first['cnpj'];
+        senha = ONG.first['senha'];
+        desc = ONG.first['desc'];
+      }
+      await SQLONG.atualizaONG(
+          id, nome, cnpj, email, senha, desc, perfil, banner);
+      if (localidades.isNotEmpty) {
+        for (dynamic i in localidades) {
+          await SQLLocal.adicionarLocal(localidades[i], id);
+        }
+      }
+    }
   }
 
   @override
@@ -154,10 +186,14 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Terminar',
-                      onPressed: () {
-                        _initPrefs();
-                        String? emailtoken = prefs.getString('email');
-                        SQLONG.pegaUmaONGEmail2(emailtoken);
+                      onPressed: () async {
+                        _setarDados();
+                        List<Map<String, dynamic>> ONGteste =
+                            await SQLONG.pegaUmaONGEmail2(email);
+                        print(ONGteste);
+                        List<Map<String, dynamic>> coordenadas =
+                            await SQLLocal.pegaLocaisOng(id);
+                        print(coordenadas);
                       },
                     ),
                   ],
