@@ -2,7 +2,6 @@ import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
-import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -28,9 +27,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String email = '';
   String dataNascimento = '';
   String senha = '';
-  final Cipher _cipher = Cipher();
 
-  Future<void> _creando() async {
+  Future<void> _createUser() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
   }
 
@@ -112,14 +110,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           Preencha.dialogo(context);
                         } else {
                           senha = generateMd5(senha);
-                          await _creando();
+                          await _createUser();
                           if (id != -1) {
                             if (_formKey.currentState!.validate()) {
-                              String emailtoken = _cipher.xorEncode(email);
+                              String emailtoken = cipher.xorEncode(email);
                               prefs.setString('email', emailtoken);
-                              String senhatoken = _cipher.xorEncode(senha);
+                              String senhatoken = cipher.xorEncode(senha);
                               prefs.setString('senha', senhatoken);
-                              String nometoken = _cipher.xorEncode(nome);
+                              String nometoken = cipher.xorEncode(nome);
                               prefs.setString('nome', nometoken);
                               Navigator.pushReplacementNamed(context, 'Home');
                             }

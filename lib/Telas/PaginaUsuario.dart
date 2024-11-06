@@ -2,7 +2,6 @@ import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Padding.dart';
-import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -36,7 +35,6 @@ class _PaginausuarioState extends State<Paginausuario> {
     String? emailtoken = prefs.getString('email');
     String? senhatoken = prefs.getString('senha');
     String? nometoken = prefs.getString('nome');
-    Cipher cipher = Cipher();
     if (emailtoken != null && senhatoken != null && nometoken != null) {
       setState(() {
         nome = cipher.xorDecode(nometoken);
@@ -210,7 +208,6 @@ class _PaginausuarioState extends State<Paginausuario> {
                       });
 
                       // Altera os tokens armazenados
-                      Cipher cipher = Cipher();
                       nomeedit = cipher.xorEncode(nomeedit);
                       senhaedit = cipher.xorEncode(senhaedit);
                       await prefs.setString('nome', nomeedit);

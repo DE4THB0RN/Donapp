@@ -1,3 +1,6 @@
+import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
@@ -23,6 +26,10 @@ class _CadastroOngState extends State<CadastroOng> {
   String email = '';
   String CNPJ = '';
   String senha = '';
+
+  Future<void> _createONG() async {
+    id = await SQLONG.adicionarONG(nome, email, senha, CNPJ);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +100,36 @@ class _CadastroOngState extends State<CadastroOng> {
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
-                      onPressed: () async {},
+                      onPressed: () async {
+                        _initPrefs();
+                        if (nome.isEmpty ||
+                            email.isEmpty ||
+                            CNPJ.isEmpty ||
+                            senha.isEmpty) {
+                          Preencha.dialogo(context);
+                        } else {
+                          senha = generateMd5(senha);
+                          List<Map<String, dynamic>> ONGfull =
+                              await SQLONG.pegaUmaONGEmail2(email);
+
+                          if (ONGfull.isEmpty) {
+                            await _createONG();
+                            if (id != -1) {
+                              if (_formKey.currentState!.validate()) {
+                                String emailtoken = cipher.xorEncode(email);
+                                prefs.setString('email_ONG', emailtoken);
+                                String senhatoken = cipher.xorEncode(senha);
+                                prefs.setString('senha_ONG', senhatoken);
+                                String nometoken = cipher.xorEncode(nome);
+                                prefs.setString('nome_ONG', nometoken);
+                                Navigator.pushReplacementNamed(context, 'Home');
+                              }
+                            }
+                          } else {
+                            Preencha.ONG_existente(context);
+                          }
+                        }
+                      },
                     ),
                     SizedBox(height: 10),
                     CustomButton(
