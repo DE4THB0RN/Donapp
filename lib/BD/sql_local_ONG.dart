@@ -5,7 +5,8 @@ class SQLLocal {
     await database.execute("""CREATE TABLE local_ONG(
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  coordenada TEXT,
- id_ong INTEGER FOREIGN KEY REFERENCES ONG(id) 
+ id_ong INTEGER, 
+ FOREIGN KEY(id_ong) REFERENCES ONG(id) 
  )
  """);
   }

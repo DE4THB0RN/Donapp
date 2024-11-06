@@ -189,11 +189,19 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       onPressed: () async {
                         _setarDados();
                         List<Map<String, dynamic>> ONGteste =
-                            await SQLONG.pegaUmaONGEmail2(email);
-                        print(ONGteste);
+                            await SQLONG.pegaUmaONGEmail2("gustavin@gmail.com");
+                        print(ONGteste.first['email'] +
+                            ONGteste.first['nome'] +
+                            ONGteste.first['cnpj'] +
+                            ONGteste.first['senha'] +
+                            ONGteste.first['desc'] +
+                            ONGteste.first['foto_perfil'] +
+                            ONGteste.first['foto_banner']);
                         List<Map<String, dynamic>> coordenadas =
                             await SQLLocal.pegaLocaisOng(id);
-                        print(coordenadas);
+                        for (dynamic i in coordenadas) {
+                          print(i['coordenada']);
+                        }
                       },
                     ),
                   ],
