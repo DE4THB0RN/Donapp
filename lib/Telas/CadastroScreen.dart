@@ -110,17 +110,24 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           Preencha.dialogo(context);
                         } else {
                           senha = generateMd5(senha);
-                          await _createUser();
-                          if (id != -1) {
-                            if (_formKey.currentState!.validate()) {
-                              String emailtoken = cipher.xorEncode(email);
-                              prefs.setString('email', emailtoken);
-                              String senhatoken = cipher.xorEncode(senha);
-                              prefs.setString('senha', senhatoken);
-                              String nometoken = cipher.xorEncode(nome);
-                              prefs.setString('nome', nometoken);
-                              Navigator.pushReplacementNamed(context, 'Home');
+                          List<Map<String, dynamic>> userfull =
+                              await SQLUser.pegaUmUsuarioEmail2(email);
+
+                          if (userfull.isEmpty) {
+                            await _createUser();
+                            if (id != -1) {
+                              if (_formKey.currentState!.validate()) {
+                                String emailtoken = cipher.xorEncode(email);
+                                prefs.setString('email', emailtoken);
+                                String senhatoken = cipher.xorEncode(senha);
+                                prefs.setString('senha', senhatoken);
+                                String nometoken = cipher.xorEncode(nome);
+                                prefs.setString('nome', nometoken);
+                                Navigator.pushReplacementNamed(context, 'Home');
+                              }
                             }
+                          } else {
+                            Preencha.User_existente(context);
                           }
                         }
                       },
