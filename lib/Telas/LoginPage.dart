@@ -3,7 +3,6 @@ import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
-import 'package:encrypt_decrypt_plus/cipher/cipher.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomButton.dart';
@@ -24,7 +23,6 @@ class __LoginpageState extends State<LoginpageState> {
 
   List<Map<String, dynamic>> _usuario = [];
 
-  final Cipher _cipher = Cipher();
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
@@ -90,11 +88,11 @@ class __LoginpageState extends State<LoginpageState> {
                         if (_usuario.isNotEmpty) {
                           if (_usuario.first['senha'] == senha) {
                             String nome = _usuario.first['nome'];
-                            nome = _cipher.xorEncode(nome);
+                            nome = cipher.xorEncode(nome);
                             prefs.setString('nome', nome);
-                            String emailtoken = _cipher.xorEncode(email);
+                            String emailtoken = cipher.xorEncode(email);
                             prefs.setString('email', emailtoken);
-                            String senhatoken = _cipher.xorEncode(senha);
+                            String senhatoken = cipher.xorEncode(senha);
                             prefs.setString('senha', senhatoken);
                             Navigator.pushReplacementNamed(context, 'Home');
                           } else {
