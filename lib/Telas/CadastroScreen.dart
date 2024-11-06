@@ -27,6 +27,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   String email = '';
   String dataNascimento = '';
   String senha = '';
+  String senhaconfirm = '';
 
   Future<void> _createUser() async {
     id = await SQLUser.adicionarUsuario(nome, dataNascimento, email, senha);
@@ -98,6 +99,16 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         });
                       },
                     ),
+                    SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Confirme a senha:',
+                      hintText: 'Digite sua senha novamente',
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      onChanged: (value) {
+                        senhaconfirm = value;
+                      },
+                    ),
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
@@ -108,6 +119,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             dataNascimento.isEmpty ||
                             senha.isEmpty) {
                           Preencha.dialogo(context);
+                        } else if (senha != senhaconfirm) {
+                          Preencha.senhaErrada(context);
                         } else {
                           senha = generateMd5(senha);
                           List<Map<String, dynamic>> userfull =
