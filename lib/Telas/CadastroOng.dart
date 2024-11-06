@@ -68,7 +68,7 @@ class _CadastroOngState extends State<CadastroOng> {
                     SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'CNPJ:',
-                      hintText: 'XX. XXX. XXX/XXXX-XX.',
+                      hintText: 'XX.XXX.XXX/XXXX-XX',
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
                         setState(() {
@@ -111,30 +111,4 @@ class _CadastroOngState extends State<CadastroOng> {
       ),
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkLogin();
-  }
-
-  void _checkLogin() async {
-    prefs = await SharedPreferences.getInstance();
-    String? emailtoken = prefs.getString('email');
-    String? senhatoken = prefs.getString('senha');
-    String? nometoken = prefs.getString('nome');
-
-    if (emailtoken != null &&
-        senhatoken != null &&
-        nometoken != null &&
-        nometoken != "blah blah blah") {
-      Navigator.pushReplacementNamed(context, 'Home');
-    }
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: CadastroOng(),
-  ));
 }

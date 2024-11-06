@@ -1,3 +1,4 @@
+import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Theme/Color.dart';
 
@@ -14,8 +15,6 @@ class Cadastro2Ong extends StatefulWidget {
 
 class _Cadastro2OngState extends State<Cadastro2Ong> {
   late SharedPreferences prefs;
-  List<String> localidades = []; // Lista para armazenar os valores de cada localidade
-  List<TextEditingController> _controllers = []; // Lista de controllers para os inputs
 
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -27,21 +26,26 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   String banner = '';
   String CNPJ = '';
   String senha = '';
+  List<String> localidades =
+      []; // Lista para armazenar os valores de cada localidade
+  List<TextEditingController> _controllers =
+      []; // Lista de controllers para os inputs
 
   void _addLocalidade() {
     setState(() {
       localidades.add(''); // Adiciona um item vazio na lista
-      _controllers.add(TextEditingController()); // Cria um controller para o novo input
+      _controllers
+          .add(TextEditingController()); // Cria um controller para o novo input
     });
   }
 
   void _removeLocalidade(int index) {
     setState(() {
       // Remove o valor da lista de localidades e o controller correspondente
-      localidades.removeAt(index); 
+      localidades.removeAt(index);
       _controllers[index].dispose(); // Libera o controller removido
-      _controllers.removeAt(index); 
-      
+      _controllers.removeAt(index);
+
       // Sincroniza os valores restantes dos controllers com a lista de localidades
       for (int i = 0; i < _controllers.length; i++) {
         localidades[i] = _controllers[i].text;
@@ -123,9 +127,11 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                   hintText: 'Digite a localidade',
                                   keyboardType: TextInputType.text,
                                   onChanged: (value) {
-                                    localidades[i] = value; // Atualiza a lista com o valor inserido
+                                    localidades[i] =
+                                        value; // Atualiza a lista com o valor inserido
                                   },
-                                  key: ValueKey(_controllers[i]), // Garante que o widget seja reconstruído corretamente
+                                  key: ValueKey(_controllers[
+                                      i]), // Garante que o widget seja reconstruído corretamente
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -149,7 +155,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     CustomButton(
                       text: 'Terminar',
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, 'Login');
+                        _initPrefs();
+                        String? emailtoken = prefs.getString('email');
+                        SQLONG.pegaUmaONGEmail2(emailtoken);
                       },
                     ),
                   ],
@@ -161,13 +169,4 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       ),
     );
   }
-
-  
-  
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Cadastro2Ong(),
-  ));
 }
