@@ -122,7 +122,8 @@ class _CadastroOngState extends State<CadastroOng> {
                                 prefs.setString('senha_ONG', senhatoken);
                                 String nometoken = cipher.xorEncode(nome);
                                 prefs.setString('nome_ONG', nometoken);
-                                Navigator.pushReplacementNamed(context, 'Home');
+                                Navigator.pushReplacementNamed(
+                                    context, 'Cadastro_ONG2');
                               }
                             }
                           } else {
