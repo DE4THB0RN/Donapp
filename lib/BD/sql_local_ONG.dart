@@ -1,10 +1,22 @@
 import 'package:sqflite/sqflite.dart' as sql;
 
+String cep = '';
+String rua = '';
+String complemento = '';
+String bairro = '';
+String cidade = '';
+String estado = '';
+
 class SQLLocal {
   static Future<void> criaOng(sql.Database database) async {
     await database.execute("""CREATE TABLE local_ONG(
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
- coordenada TEXT,
+ cep TEXT,
+ rua TEXT,
+ complemento TEXT,
+ bairro TEXT,
+ cidade TEXT,
+ estado TEXT,
  id_ong INTEGER, 
  FOREIGN KEY(id_ong) REFERENCES ONG(id) 
  )
@@ -21,9 +33,18 @@ class SQLLocal {
     );
   }
 
-  static Future<int> adicionarLocal(String coordenada, int idOng) async {
+  static Future<int> adicionarLocal(String cep, String rua, String complemento,
+      String bairro, String cidade, String estado, int idOng) async {
     final db = await SQLLocal.db();
-    final dados = {'coordenada': coordenada, 'id_ong': idOng};
+    final dados = {
+      'cep': cep,
+      'rua': rua,
+      'complemento': complemento,
+      'bairro': bairro,
+      'cidade': cidade,
+      'estado': estado,
+      'id_ong': idOng
+    };
     final id = await db.insert('local_ONG', dados,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
@@ -41,19 +62,34 @@ class SQLLocal {
 
   // talvez de merda
   static Future<int> atualizaLocal(
-      int idOng, String localAntigo, String localNovo) async {
+    int idOng,
+    int id,
+    String cep,
+    String rua,
+    String complemento,
+    String bairro,
+    String cidade,
+    String estado,
+  ) async {
     final db = await SQLLocal.db();
-    final dados = {'coordenada': localNovo, 'id_ong': idOng};
-    final result = await db.update('local_ONG', dados,
-        where: "id_ong = ? , coordenada = ?", whereArgs: [idOng, localAntigo]);
+    final dados = {
+      'cep': cep,
+      'rua': rua,
+      'complemento': complemento,
+      'bairro': bairro,
+      'cidade': cidade,
+      'estado': estado,
+      'id_ong': idOng
+    };
+    final result =
+        await db.update('local_ONG', dados, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
-  static Future<void> apagaLocal(int idOng, String local) async {
+  static Future<void> apagaLocal(int id) async {
     final db = await SQLLocal.db();
     try {
-      await db.delete("local_ONG",
-          where: "id_ong = ? , coordenada = ?", whereArgs: [idOng, local]);
+      await db.delete("local_ONG", where: "id = ?", whereArgs: [id]);
     } catch (err) {
       print("Erro ao apagar o item item: $err");
     }
