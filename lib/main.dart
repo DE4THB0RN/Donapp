@@ -1,6 +1,7 @@
 import 'package:donapp/Rotas/Cadastro.dart';
 
 import 'package:donapp/Rotas/HomeCall.dart';
+import 'package:donapp/Rotas/Login_ONG.dart';
 import 'package:donapp/Rotas/ONG_Cadastro.dart';
 import 'package:donapp/Rotas/ONG_Cadastro2.dart';
 import 'package:donapp/Rotas/Ong.dart';
@@ -42,7 +43,8 @@ class _DonappState extends State<Donapp> {
         'Usuario': (context) => Usuario(),
         'Home': (context) => Homecall(),
         'ONG': (context) => ONG(),
-        'Login': (context) => Login(),
+        'Login_User': (context) => Login(),
+        'Login_ONG': (context) => LoginONG(),
         'Cadastro_ONG': (context) => ONG_Cadastro(),
         'Cadastro_ONG2': (context) => ONG_Cadastro2(),
       },

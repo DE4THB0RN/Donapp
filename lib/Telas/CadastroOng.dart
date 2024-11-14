@@ -17,8 +17,6 @@ class CadastroOng extends StatefulWidget {
 class _CadastroOngState extends State<CadastroOng> {
   late SharedPreferences prefs;
 
-  
-
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
@@ -143,7 +141,7 @@ class _CadastroOngState extends State<CadastroOng> {
                     CustomButton(
                       text: 'Já tenho conta',
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, 'Login');
+                        Navigator.pushReplacementNamed(context, 'Login_ONG');
                       },
                     ),
                   ],

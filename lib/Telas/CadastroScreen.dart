@@ -153,7 +153,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     CustomButton(
                       text: 'Já tenho conta',
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, 'Login');
+                        Navigator.pushReplacementNamed(context, 'Login_User');
                       },
                     ),
                   ],
