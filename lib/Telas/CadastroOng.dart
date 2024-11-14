@@ -171,7 +171,12 @@ class _CadastroOngState extends State<CadastroOng> {
 
     List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
     for (dynamic i in Localfull) {
-      print(i['coordenada']);
+      print(i['cep']);
+      print(i['rua']);
+      print(i['complemento']);
+      print(i['bairro']);
+      print(i['cidade']);
+      print(i['estado']);
       print(i['id_ong']);
     }
   }
