@@ -343,6 +343,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     CustomButton(
                       text: 'Terminar',
                       onPressed: () async {
+                        prefs = await SharedPreferences.getInstance();
                         String? emailOng = prefs.getString('email_ONG');
                         emailOng = cipher.xorDecode(emailOng!);
                         List<Map<String, dynamic>> ongFull =
