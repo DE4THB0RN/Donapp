@@ -1,6 +1,8 @@
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/Components/ImageInputField.dart';
+import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/Preencha.dart';
+import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +32,8 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   String cnpj = '';
   String senha = '';
   String desc = '';
-  List<String> localidades =
-      []; // Lista para armazenar os valores de cada localidade
-  List<TextEditingController> _controllers =
-      []; // Lista de controllers para os inputs
+  List<Localclass> localidades = [];
+  List<LocalCard> localCards = [];
   String cep = '';
   String rua = '';
   String complemento = '';
@@ -46,11 +46,13 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   TextEditingController controlCidade = TextEditingController();
   TextEditingController controlEstado = TextEditingController();
 
-  void _addLocalidade() {
+  void _addLocalidade(Localclass localidade) {
     setState(() {
-      localidades.add(''); // Adiciona um item vazio na lista
-      _controllers
-          .add(TextEditingController()); // Cria um controller para o novo input
+      localidades.add(localidade); // Adiciona um item vazio na lista
+      localCards.add(LocalCard(
+          rua: localidade.rua,
+          bairro: localidade.bairro,
+          complemento: localidade.complemento));
     });
   }
 
@@ -68,13 +70,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
     setState(() {
       // Remove o valor da lista de localidades e o controller correspondente
       localidades.removeAt(index);
-      _controllers[index].dispose(); // Libera o controller removido
-      _controllers.removeAt(index);
-
-      // Sincroniza os valores restantes dos controllers com a lista de localidades
-      for (int i = 0; i < _controllers.length; i++) {
-        localidades[i] = _controllers[i].text;
-      }
+      localCards.removeAt(index);
     });
   }
 
@@ -157,7 +153,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Cidade:',
                     hintText: 'Digite sua cidade',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       cidade = value;
                     },
@@ -169,7 +164,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Rua:',
                     hintText: 'Digite sua rua',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       rua = value;
                     },
@@ -181,7 +175,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Complemento:',
                     hintText: 'Digite o complemento',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       complemento = value;
                     },
@@ -192,7 +185,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Bairro:',
                     hintText: 'Digite o bairro',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       bairro = value;
                     },
@@ -204,7 +196,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Estado:',
                     hintText: 'Digite o estado',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       estado = value;
                     },
@@ -222,6 +213,16 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                           cep.isEmpty) {
                         Preencha.dialogo(context);
                       } else {
+                        Localclass local;
+                        if (complemento.isEmpty) {
+                          local =
+                              Localclass(cep, rua, '', bairro, cidade, estado);
+                          _addLocalidade(local);
+                        } else {
+                          local = Localclass(
+                              cep, rua, complemento, bairro, cidade, estado);
+                          _addLocalidade(local);
+                        }
                         Navigator.pop(context); // Fecha o diálogo
                       }
                     },
@@ -304,18 +305,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                           Row(
                             children: [
                               Expanded(
-                                child: CustomInputField(
-                                  labelText: 'Localidade ${i + 1}',
-                                  hintText: 'Digite a localidade',
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (value) {
-                                    localidades[i] =
-                                        value; // Atualiza a lista com o valor inserido
-                                  },
-                                  onSubmitted: (value) {},
-                                  key: ValueKey(_controllers[
-                                      i]), // Garante que o widget seja reconstruído corretamente
-                                ),
+                                child: localCards[i],
                               ),
                               SizedBox(width: 8),
                               IconButton(
@@ -334,6 +324,15 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       text: 'Adicionar Localidade',
                       //onPressed: _addLocalidade,
                       onPressed: () {
+                        setState(() {
+                          cep = '';
+                          rua = '';
+                          complemento = '';
+                          bairro = '';
+                          cidade = '';
+                          estado = '';
+                        });
+                        _retrieveData();
                         _openEditLocal(context);
                       },
                     ),

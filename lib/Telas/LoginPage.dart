@@ -126,7 +126,7 @@ class __LoginpageState extends State<LoginpageState> {
                   CustomButton(
                     text: 'Criar conta',
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Cadastro');
+                      Navigator.pushReplacementNamed(context, 'Cadastro_User');
                     },
                   ),
                 ],
