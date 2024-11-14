@@ -369,6 +369,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                 idOng);
                           }
                         }
+                        prefs.setBool('is_ONG', true);
                         Navigator.pushReplacementNamed(context, 'Home');
                       },
                     ),
