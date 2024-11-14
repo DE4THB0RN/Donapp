@@ -95,4 +95,12 @@ class SQLONG {
     final db = await SQLONG.db();
     return db.query('ONG', where: "email = ?", whereArgs: [email], limit: 1);
   }
+
+  static Future<void> dropDataBaseONG() async {
+    try {
+      await sql.deleteDatabase('ONG.db');
+    } catch (err) {
+      print("varios erro");
+    }
+  }
 }

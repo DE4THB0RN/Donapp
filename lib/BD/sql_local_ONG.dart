@@ -94,4 +94,12 @@ class SQLLocal {
       print("Erro ao apagar o item item: $err");
     }
   }
+
+  static Future<void> dropDataBaseLocal() async {
+    try {
+      await sql.deleteDatabase('local_ONG.db');
+    } catch (err) {
+      print("varios erro");
+    }
+  }
 }
