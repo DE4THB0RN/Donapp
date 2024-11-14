@@ -157,7 +157,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Cidade:',
                     hintText: 'Digite sua cidade',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       cidade = value;
                     },
@@ -169,7 +168,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Rua:',
                     hintText: 'Digite sua rua',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       rua = value;
                     },
@@ -181,7 +179,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Complemento:',
                     hintText: 'Digite o complemento',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       complemento = value;
                     },
@@ -192,7 +189,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Bairro:',
                     hintText: 'Digite o bairro',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       bairro = value;
                     },
@@ -204,7 +200,6 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     labelText: 'Estado:',
                     hintText: 'Digite o estado',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
                     onChanged: (value) {
                       estado = value;
                     },
