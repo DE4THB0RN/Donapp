@@ -99,109 +99,116 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          child: Padding(
-            padding: Padinho.medio,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.close, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: Padinho.medio,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  CustomInputField(
+                    labelText: 'CEP:',
+                    hintText: 'XXXXX-XXX',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        cep = value;
+                      });
+                    },
+                    onSubmitted: (value) async {
+                      String endereco = await CepService.recuperaCep(cep);
+                      if (endereco != "") {
+                        List<String> dados = endereco.split("/");
+                        setState(() {
+                          rua = dados[0];
+                          complemento = dados[1];
+                          bairro = dados[2];
+                          cidade = dados[3];
+                          estado = dados[4];
+                        });
+                      }
                     },
                   ),
-                ),
-                CustomInputField(
-                  labelText: 'CEP:',
-                  hintText: 'XXXXX-XXX',
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      cep = value;
-                    });
-                  },
-                  onSubmitted: (value) async {
-                    String endereco = await CepService.recuperaCep(cep);
-                    if (endereco != "") {
-                      setState(() {
-                        // tem q colocar as parada aq kkkkk
-                      });
-                    }
-                  },
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Cidade:',
-                  hintText: 'Digite sua cidade',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    cidade = value;
-                  },
-                  onSubmitted: (value) {},
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Rua:',
-                  hintText: 'Digite sua rua',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    rua = value;
-                  },
-                  onSubmitted: (value) {},
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Complemento:',
-                  hintText: 'Digite o complemento',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    complemento = value;
-                  },
-                  onSubmitted: (value) {},
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Bairro:',
-                  hintText: 'Digite o bairro',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    bairro = value;
-                  },
-                  onSubmitted: (value) {},
-                ),
-                SizedBox(height: 15),
-                CustomInputField(
-                  labelText: 'Estado:',
-                  hintText: 'Digite o estado',
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  onChanged: (value) {
-                    estado = value;
-                  },
-                  onSubmitted: (value) {},
-                ),
-                SizedBox(height: 20),
-                CustomButton(
-                  text: 'Salvar',
-                  onPressed: () async {
-                    if (cidade.isEmpty ||
-                        rua.isEmpty ||
-                        bairro.isEmpty ||
-                        estado.isEmpty ||
-                        cep.isEmpty) {
-                      Preencha.dialogo(context);
-                    } else {
-                      Navigator.pop(context); // Fecha o diálogo
-                    }
-                  },
-                ),
-              ],
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Cidade:',
+                    hintText: 'Digite sua cidade',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      cidade = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Rua:',
+                    hintText: 'Digite sua rua',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      rua = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Complemento:',
+                    hintText: 'Digite o complemento',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      complemento = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Bairro:',
+                    hintText: 'Digite o bairro',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      bairro = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Estado:',
+                    hintText: 'Digite o estado',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      estado = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Salvar',
+                    onPressed: () async {
+                      if (cidade.isEmpty ||
+                          rua.isEmpty ||
+                          bairro.isEmpty ||
+                          estado.isEmpty ||
+                          cep.isEmpty) {
+                        Preencha.dialogo(context);
+                      } else {
+                        Navigator.pop(context); // Fecha o diálogo
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

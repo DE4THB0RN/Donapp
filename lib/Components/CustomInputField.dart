@@ -7,6 +7,7 @@ class CustomInputField extends StatelessWidget {
   final bool obscureText;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
+  final TextEditingController? controller;
 
   const CustomInputField({
     required this.labelText,
@@ -15,6 +16,7 @@ class CustomInputField extends StatelessWidget {
     this.obscureText = false,
     required this.onChanged,
     required this.onSubmitted,
+    this.controller,
     Key? key,
   }) : super(key: key);
 
@@ -33,6 +35,7 @@ class CustomInputField extends StatelessWidget {
         ),
         SizedBox(height: 5),
         TextField(
+          controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,
           decoration: InputDecoration(
