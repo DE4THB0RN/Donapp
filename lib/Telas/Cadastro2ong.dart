@@ -1,6 +1,7 @@
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/Preencha.dart';
@@ -342,16 +343,17 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     CustomButton(
                       text: 'Terminar',
                       onPressed: () async {
-                        String? email_ong = prefs.getString('email_ONG');
-                        List<Map<String, dynamic>> ong_full =
-                            await SQLONG.pegaUmaONGEmail2(email_ong!);
-                        int id_ong = ong_full.first['id'];
-                        nome = ong_full.first['nome'];
-                        cnpj = ong_full.first['cnpj'];
-                        email = ong_full.first['email'];
-                        senha = ong_full.first['senha'];
-                        desc = ong_full.first['desc'];
-                        await SQLONG.atualizaONG(id_ong, nome, cnpj, email,
+                        String? emailOng = prefs.getString('email_ONG');
+                        emailOng = cipher.xorDecode(emailOng!);
+                        List<Map<String, dynamic>> ongFull =
+                            await SQLONG.pegaUmaONGEmail2(emailOng);
+                        int idOng = ongFull.first['id'];
+                        nome = ongFull.first['nome'];
+                        cnpj = ongFull.first['cnpj'];
+                        email = ongFull.first['email'];
+                        senha = ongFull.first['senha'];
+                        desc = ongFull.first['desc'];
+                        await SQLONG.atualizaONG(idOng, nome, cnpj, email,
                             senha, desc, perfil, banner);
 
                         if (localidades.isNotEmpty) {
@@ -363,7 +365,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                 localidades[i].bairro,
                                 localidades[i].cidade,
                                 localidades[i].estado,
-                                id_ong);
+                                idOng);
                           }
                         }
                         Navigator.pushReplacementNamed(context, 'Home');
