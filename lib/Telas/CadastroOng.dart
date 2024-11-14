@@ -161,7 +161,7 @@ class _CadastroOngState extends State<CadastroOng> {
   }
 
   void _printaBD() async {
-    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONG();
+    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
     for (dynamic i in ONGfull) {
       print(i['nome']);
       print(i['senha']);

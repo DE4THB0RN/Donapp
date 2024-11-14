@@ -47,6 +47,11 @@ class SQLONG {
     return db.query('ONG', orderBy: "id");
   }
 
+  static Future<List<Map<String, dynamic>>> pegaONGLimit() async {
+    final db = await SQLONG.db();
+    return db.query('ONG', orderBy: "id", limit: 20);
+  }
+
   static Future<List<Map<String, dynamic>>> pegaUmaONG(int id) async {
     final db = await SQLONG.db();
     return db.query('ONG', where: "id = ?", whereArgs: [id], limit: 1);
