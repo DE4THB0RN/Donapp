@@ -17,6 +17,8 @@ class CadastroOng extends StatefulWidget {
 class _CadastroOngState extends State<CadastroOng> {
   late SharedPreferences prefs;
 
+  
+
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }

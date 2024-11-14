@@ -41,11 +41,26 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   String cidade = '';
   String estado = '';
 
+  TextEditingController controlRua = TextEditingController();
+  TextEditingController controlBairro = TextEditingController();
+  TextEditingController controlCidade = TextEditingController();
+  TextEditingController controlEstado = TextEditingController();
+
   void _addLocalidade() {
     setState(() {
       localidades.add(''); // Adiciona um item vazio na lista
       _controllers
           .add(TextEditingController()); // Cria um controller para o novo input
+    });
+  }
+
+  void _retrieveData() {
+    // Simulate data retrieval
+    setState(() {
+      controlRua.text = rua;
+      controlBairro.text = bairro;
+      controlCidade.text = cidade;
+      controlEstado.text = estado;
     });
   }
 
@@ -129,11 +144,11 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         List<String> dados = endereco.split("/");
                         setState(() {
                           rua = dados[0];
-                          complemento = dados[1];
                           bairro = dados[2];
                           cidade = dados[3];
                           estado = dados[4];
                         });
+                        _retrieveData();
                       }
                     },
                   ),
@@ -147,6 +162,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       cidade = value;
                     },
                     onSubmitted: (value) {},
+                    controller: controlCidade,
                   ),
                   SizedBox(height: 15),
                   CustomInputField(
@@ -158,6 +174,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       rua = value;
                     },
                     onSubmitted: (value) {},
+                    controller: controlRua,
                   ),
                   SizedBox(height: 15),
                   CustomInputField(
@@ -180,6 +197,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       bairro = value;
                     },
                     onSubmitted: (value) {},
+                    controller: controlBairro,
                   ),
                   SizedBox(height: 15),
                   CustomInputField(
@@ -191,6 +209,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       estado = value;
                     },
                     onSubmitted: (value) {},
+                    controller: controlEstado,
                   ),
                   SizedBox(height: 20),
                   CustomButton(
