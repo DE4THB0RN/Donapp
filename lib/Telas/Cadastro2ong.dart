@@ -93,7 +93,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   //   }
   // }
 
-  void _openEditUserPopup(BuildContext context) {
+  void _openEditLocal(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -310,7 +310,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     CustomButton(
                       text: 'Adicionar Localidade',
                       //onPressed: _addLocalidade,
-                      onPressed: () {},
+                      onPressed: () {
+                        _openEditLocal(context);
+                      },
                     ),
                     SizedBox(height: 20),
                     CustomButton(
