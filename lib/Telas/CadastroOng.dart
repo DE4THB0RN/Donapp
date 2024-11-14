@@ -60,6 +60,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           nome = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -71,17 +72,19 @@ class _CadastroOngState extends State<CadastroOng> {
                           email = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'CNPJ:',
-                      hintText: 'XX. XXX. XXX/XXXX-XX.',
+                      hintText: 'XX.XXX.XXX/XXXX-XX',
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
                         setState(() {
                           CNPJ = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -96,6 +99,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           print(senha);
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 20),
                     CustomButton(

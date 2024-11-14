@@ -6,6 +6,7 @@ class CustomInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSubmitted;
 
   const CustomInputField({
     required this.labelText,
@@ -13,6 +14,7 @@ class CustomInputField extends StatelessWidget {
     required this.keyboardType,
     this.obscureText = false,
     required this.onChanged,
+    required this.onSubmitted,
     Key? key,
   }) : super(key: key);
 
@@ -40,6 +42,7 @@ class CustomInputField extends StatelessWidget {
             fillColor: Colors.white,
           ),
           onChanged: onChanged,
+          onSubmitted: onSubmitted,
         ),
       ],
     );

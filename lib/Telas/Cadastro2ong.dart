@@ -1,4 +1,9 @@
+import 'package:donapp/BD/cep_service.dart';
+import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/ImageInputField.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
 
 import 'package:flutter/material.dart';
@@ -14,8 +19,6 @@ class Cadastro2Ong extends StatefulWidget {
 
 class _Cadastro2OngState extends State<Cadastro2Ong> {
   late SharedPreferences prefs;
-  List<String> localidades = []; // Lista para armazenar os valores de cada localidade
-  List<TextEditingController> _controllers = []; // Lista de controllers para os inputs
 
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -25,28 +28,188 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   int id = -1;
   String perfil = '';
   String banner = '';
-  String CNPJ = '';
+  String email = '';
+  String nome = '';
+  String cnpj = '';
   String senha = '';
+  String desc = '';
+  List<String> localidades =
+      []; // Lista para armazenar os valores de cada localidade
+  List<TextEditingController> _controllers =
+      []; // Lista de controllers para os inputs
+  String cep = '';
+  String rua = '';
+  String complemento = '';
+  String bairro = '';
+  String cidade = '';
+  String estado = '';
 
   void _addLocalidade() {
     setState(() {
       localidades.add(''); // Adiciona um item vazio na lista
-      _controllers.add(TextEditingController()); // Cria um controller para o novo input
+      _controllers
+          .add(TextEditingController()); // Cria um controller para o novo input
     });
   }
 
   void _removeLocalidade(int index) {
     setState(() {
       // Remove o valor da lista de localidades e o controller correspondente
-      localidades.removeAt(index); 
+      localidades.removeAt(index);
       _controllers[index].dispose(); // Libera o controller removido
-      _controllers.removeAt(index); 
-      
+      _controllers.removeAt(index);
+
       // Sincroniza os valores restantes dos controllers com a lista de localidades
       for (int i = 0; i < _controllers.length; i++) {
         localidades[i] = _controllers[i].text;
       }
     });
+  }
+
+  // void _setarDados() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? emailtoken = prefs.getString('email');
+
+  //   if (emailtoken != null) {
+  //     setState(() {
+  //       email = cipher.xorDecode(emailtoken);
+  //     });
+  //     List<Map<String, dynamic>> ONG = await SQLONG.pegaUmaONGEmail2(email);
+  //     if (id == -1) {
+  //       id = ONG.first['id'];
+  //       email = ONG.first['email'];
+  //       nome = ONG.first['nome'];
+  //       cnpj = ONG.first['cnpj'];
+  //       senha = ONG.first['senha'];
+  //       desc = ONG.first['desc'];
+  //     }
+  //     await SQLONG.atualizaONG(
+  //         id, nome, cnpj, email, senha, desc, perfil, banner);
+  //     if (localidades.isNotEmpty) {
+  //       for (dynamic i in localidades) {
+  //         await SQLLocal.adicionarLocal(localidades[i], id);
+  //       }
+  //     }
+  //   }
+  // }
+
+  void _openEditUserPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                CustomInputField(
+                  labelText: 'CEP:',
+                  hintText: 'XXXXX-XXX',
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() {
+                      cep = value;
+                    });
+                  },
+                  onSubmitted: (value) async {
+                    String endereco = await CepService.recuperaCep(cep);
+                    if (endereco != "") {
+                      setState(() {
+                        // tem q colocar as parada aq kkkkk
+                      });
+                    }
+                  },
+                ),
+                SizedBox(height: 15),
+                CustomInputField(
+                  labelText: 'Cidade:',
+                  hintText: 'Digite sua cidade',
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  onChanged: (value) {
+                    cidade = value;
+                  },
+                  onSubmitted: (value) {},
+                ),
+                SizedBox(height: 15),
+                CustomInputField(
+                  labelText: 'Rua:',
+                  hintText: 'Digite sua rua',
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  onChanged: (value) {
+                    rua = value;
+                  },
+                  onSubmitted: (value) {},
+                ),
+                SizedBox(height: 15),
+                CustomInputField(
+                  labelText: 'Complemento:',
+                  hintText: 'Digite o complemento',
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  onChanged: (value) {
+                    complemento = value;
+                  },
+                  onSubmitted: (value) {},
+                ),
+                SizedBox(height: 15),
+                CustomInputField(
+                  labelText: 'Bairro:',
+                  hintText: 'Digite o bairro',
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  onChanged: (value) {
+                    bairro = value;
+                  },
+                  onSubmitted: (value) {},
+                ),
+                SizedBox(height: 15),
+                CustomInputField(
+                  labelText: 'Estado:',
+                  hintText: 'Digite o estado',
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  onChanged: (value) {
+                    estado = value;
+                  },
+                  onSubmitted: (value) {},
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                  text: 'Salvar',
+                  onPressed: () async {
+                    if (cidade.isEmpty ||
+                        rua.isEmpty ||
+                        bairro.isEmpty ||
+                        estado.isEmpty ||
+                        cep.isEmpty) {
+                      Preencha.dialogo(context);
+                    } else {
+                      Navigator.pop(context); // Fecha o diálogo
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -123,9 +286,12 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                   hintText: 'Digite a localidade',
                                   keyboardType: TextInputType.text,
                                   onChanged: (value) {
-                                    localidades[i] = value; // Atualiza a lista com o valor inserido
+                                    localidades[i] =
+                                        value; // Atualiza a lista com o valor inserido
                                   },
-                                  key: ValueKey(_controllers[i]), // Garante que o widget seja reconstruído corretamente
+                                  onSubmitted: (value) {},
+                                  key: ValueKey(_controllers[
+                                      i]), // Garante que o widget seja reconstruído corretamente
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -143,14 +309,13 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     SizedBox(height: 10),
                     CustomButton(
                       text: 'Adicionar Localidade',
-                      onPressed: _addLocalidade,
+                      //onPressed: _addLocalidade,
+                      onPressed: () {},
                     ),
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Terminar',
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, 'Login');
-                      },
+                      onPressed: () {},
                     ),
                   ],
                 ),
@@ -161,13 +326,4 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       ),
     );
   }
-
-  
-  
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Cadastro2Ong(),
-  ));
 }
