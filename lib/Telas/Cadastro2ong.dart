@@ -1,4 +1,6 @@
 import 'package:donapp/BD/cep_service.dart';
+import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/Preencha.dart';
@@ -339,7 +341,33 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     SizedBox(height: 20),
                     CustomButton(
                       text: 'Terminar',
-                      onPressed: () {},
+                      onPressed: () async {
+                        String? email_ong = prefs.getString('email_ONG');
+                        List<Map<String, dynamic>> ong_full =
+                            await SQLONG.pegaUmaONGEmail2(email_ong!);
+                        int id_ong = ong_full.first['id'];
+                        nome = ong_full.first['nome'];
+                        cnpj = ong_full.first['cnpj'];
+                        email = ong_full.first['email'];
+                        senha = ong_full.first['senha'];
+                        desc = ong_full.first['desc'];
+                        await SQLONG.atualizaONG(id_ong, nome, cnpj, email,
+                            senha, desc, perfil, banner);
+
+                        if (localidades.isNotEmpty) {
+                          for (int i = 0; i < localidades.length; i++) {
+                            await SQLLocal.adicionarLocal(
+                                localidades[i].cep,
+                                localidades[i].rua,
+                                localidades[i].complemento,
+                                localidades[i].bairro,
+                                localidades[i].cidade,
+                                localidades[i].estado,
+                                id_ong);
+                          }
+                        }
+                        Navigator.pushReplacementNamed(context, 'Home');
+                      },
                     ),
                   ],
                 ),
