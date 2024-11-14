@@ -143,6 +143,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   onChanged: (value) {
                     cidade = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 15),
                 CustomInputField(
@@ -153,6 +154,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   onChanged: (value) {
                     rua = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 15),
                 CustomInputField(
@@ -163,6 +165,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   onChanged: (value) {
                     complemento = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 15),
                 CustomInputField(
@@ -173,6 +176,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   onChanged: (value) {
                     bairro = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 15),
                 CustomInputField(
@@ -183,6 +187,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   onChanged: (value) {
                     estado = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 20),
                 CustomButton(
@@ -195,60 +200,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         cep.isEmpty) {
                       Preencha.dialogo(context);
                     } else {
-                      //Pega o usuario dessas coisas
-                      List<Map<String, dynamic>> userfull =
-                          await SQLUser.pegaUmUsuarioEmail(email, senha);
-                      if (id == -1) {
-                        id = userfull.first['id'];
-                        datanasc = userfull.first['dataNasc'];
-                      }
-
-                      //Transforma a senha em md5
-                      String senhamd = generateMd5(senhaedit);
-
-                      // Altera o usuário no banco de dados
-                      await SQLUser.atualizaUsuario(
-                          id, nomeedit, datanasc, email, senhamd);
-
-                      // Inicializa o SharedPreferences
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        nome = nomeedit;
-                        senha = senhaedit;
-                      });
-
-                      // Altera os tokens armazenados
-                      nomeedit = cipher.xorEncode(nomeedit);
-                      senhaedit = cipher.xorEncode(senhaedit);
-                      await prefs.setString('nome', nomeedit);
-                      await prefs.setString('senha', senhaedit);
-
                       Navigator.pop(context); // Fecha o diálogo
                     }
                   },
-                ),
-                SizedBox(height: 10),
-                CustomButton(
-                  text: 'Sair da Conta',
-                  onPressed: () async {
-                    // Inicializa o SharedPreferences
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-
-                    // Remove os tokens armazenados
-                    await prefs.remove('email');
-                    await prefs.remove('senha');
-                    await prefs.remove('nome');
-
-                    Navigator.pop(context); // Fecha o diálogo
-                    Navigator.pushReplacementNamed(context, 'Login');
-                  },
-                ),
-                SizedBox(height: 10),
-                CustomButton(
-                  text: 'Excluir Conta',
-                  onPressed: () {},
                 ),
               ],
             ),
@@ -335,6 +289,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                     localidades[i] =
                                         value; // Atualiza a lista com o valor inserido
                                   },
+                                  onSubmitted: (value) {},
                                   key: ValueKey(_controllers[
                                       i]), // Garante que o widget seja reconstruído corretamente
                                 ),

@@ -166,6 +166,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                       nomeedit = value;
                     });
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 15),
                 CustomInputField(
@@ -176,6 +177,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                   onChanged: (value) {
                     senhaedit = value;
                   },
+                  onSubmitted: (value) {},
                 ),
                 SizedBox(height: 20),
                 CustomButton(

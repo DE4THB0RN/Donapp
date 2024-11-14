@@ -57,6 +57,7 @@ class __LoginpageState extends State<LoginpageState> {
                     onChanged: (value) {
                       email = value;
                     },
+                    onSubmitted: (value) {},
                   ),
                   SizedBox(height: 15),
                   CustomInputField(
@@ -67,6 +68,7 @@ class __LoginpageState extends State<LoginpageState> {
                     onChanged: (value) {
                       senha = value;
                     },
+                    onSubmitted: (value) {},
                   ),
                   SizedBox(height: 20),
                   CustomButton(

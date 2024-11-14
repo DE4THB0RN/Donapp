@@ -60,6 +60,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           nome = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -71,6 +72,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           email = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -82,6 +84,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           CNPJ = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -96,6 +99,7 @@ class _CadastroOngState extends State<CadastroOng> {
                           print(senha);
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 20),
                     CustomButton(

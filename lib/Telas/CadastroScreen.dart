@@ -61,6 +61,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           nome = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomInputField(
@@ -72,6 +73,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           email = value;
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 15),
                     CustomDateInputField(
@@ -97,6 +99,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                           print(senha);
                         });
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 20),
                     CustomButton(
