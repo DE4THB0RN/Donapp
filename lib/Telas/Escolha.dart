@@ -1,3 +1,5 @@
+import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +30,17 @@ class _EscolhaState extends State<Escolha> {
         mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    dores();
+  }
+
+  void dores() async {
+    await SQLLocal.dropDataBaseLocal();
+    await SQLONG.dropDataBaseONG();
   }
 }
 
