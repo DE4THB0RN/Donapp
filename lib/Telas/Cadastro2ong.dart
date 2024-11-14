@@ -1,11 +1,8 @@
 import 'package:donapp/BD/cep_service.dart';
-import 'package:donapp/BD/sql_ONG.dart';
-import 'package:donapp/BD/sql_local_ONG.dart';
-import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
-
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -103,7 +100,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: Padinho.medio,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -219,9 +216,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: Padinho.pequeno,
             child: Container(
-              padding: const EdgeInsets.all(20.0),
+              padding: Padinho.medio,
               decoration: BoxDecoration(
                 color: AppColor.appBarColor,
                 borderRadius: BorderRadius.circular(20.0),

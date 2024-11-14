@@ -111,6 +111,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       onChanged: (value) {
                         senhaconfirm = value;
                       },
+                      onSubmitted: (value) {},
                     ),
                     SizedBox(height: 20),
                     CustomButton(
