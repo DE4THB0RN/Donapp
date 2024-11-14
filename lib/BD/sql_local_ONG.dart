@@ -8,7 +8,7 @@ String cidade = '';
 String estado = '';
 
 class SQLLocal {
-  static Future<void> criaOng(sql.Database database) async {
+  static Future<void> criaOngLocal(sql.Database database) async {
     await database.execute("""CREATE TABLE local_ONG(
  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
  cep TEXT,
@@ -28,7 +28,7 @@ class SQLLocal {
       'local_ONG.db',
       version: 1,
       onCreate: (sql.Database database, int version) async {
-        await criaOng(database);
+        await criaOngLocal(database);
       },
     );
   }
