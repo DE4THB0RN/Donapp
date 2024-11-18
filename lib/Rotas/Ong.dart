@@ -12,17 +12,32 @@ class ONG extends StatefulWidget {
 }
 
 class _ONGState extends State<ONG> {
+  late final int ongId;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is int) {
+      ongId = args; // Recupera o ID como int
+    } else {
+      throw Exception('ID da ONG não foi fornecido ou é inválido.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: AppBarra2(),
-      body: _body(),
-      bottomNavigationBar: Bottombarra()
+      body: _body(ongId),
+      bottomNavigationBar: Bottombarra(),
     );
   }
+}
 
-  _body() {
-    return Ongpage();
-  }
+_body(int id) {
+  return Ongpage(
+    ongId: id,
+  );
 }

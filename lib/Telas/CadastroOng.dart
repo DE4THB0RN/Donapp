@@ -1,5 +1,4 @@
 import 'package:donapp/BD/sql_ONG.dart';
-import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Color.dart';
@@ -152,32 +151,5 @@ class _CadastroOngState extends State<CadastroOng> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _printaBD();
-  }
-
-  void _printaBD() async {
-    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
-    for (dynamic i in ONGfull) {
-      print(i['nome']);
-      print(i['senha']);
-      print(i['cnpj']);
-      print(i['email']);
-    }
-
-    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
-    for (dynamic i in Localfull) {
-      print(i['cep']);
-      print(i['rua']);
-      print(i['complemento']);
-      print(i['bairro']);
-      print(i['cidade']);
-      print(i['estado']);
-      print(i['id_ong']);
-    }
   }
 }

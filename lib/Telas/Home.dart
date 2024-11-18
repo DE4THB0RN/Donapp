@@ -1,3 +1,5 @@
+import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,35 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: HomeScreen(),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _printaBD();
+  }
+
+  void _printaBD() async {
+    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
+    for (dynamic i in ONGfull) {
+      print(i['nome']);
+      print(i['senha']);
+      print(i['cnpj']);
+      print(i['email']);
+      print(i['foto_perfil']);
+      print(i['foto_banner']);
+    }
+
+    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
+    for (dynamic i in Localfull) {
+      print(i['cep']);
+      print(i['rua']);
+      print(i['complemento']);
+      print(i['bairro']);
+      print(i['cidade']);
+      print(i['estado']);
+      print(i['id_ong']);
+    }
   }
 }
 
@@ -109,7 +140,11 @@ class NGOCard extends StatelessWidget {
         ),
       ),
       onTap: () => {
-        Navigator.pushReplacementNamed(context, 'ONG'),
+        Navigator.pushReplacementNamed(
+          context,
+          'ONG',
+          arguments: {'id': 1},
+        ),
       },
     );
   }

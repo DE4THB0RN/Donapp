@@ -1,17 +1,23 @@
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
 import 'package:donapp/Theme/Color.dart';
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Ongpage extends StatefulWidget {
-  const Ongpage({super.key});
+  final int ongId;
+
+  const Ongpage({super.key, required this.ongId});
 
   @override
   State<Ongpage> createState() => _OngpageState();
 }
 
 class _OngpageState extends State<Ongpage> {
+  late SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +27,10 @@ class _OngpageState extends State<Ongpage> {
           children: [
             // Stack para sobrepor elementos (Banner + Imagem principal)
             Stack(
-              alignment: Alignment.center, // Centraliza a imagem principal
+              alignment: Alignment.center,
               children: [
                 Container(
-                  height: 250,
+                  height: 300,
                   color: Colors.transparent,
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -44,7 +50,7 @@ class _OngpageState extends State<Ongpage> {
                 // Imagem principal sobreposta no centro
                 Positioned(
                   top: 120, // Ajusta a posição vertical da imagem
-                  left: 20,
+                  left: 30,
                   child: CircleAvatar(
                     radius: 60, // Tamanho da imagem
                     backgroundColor: Colors.black, //color
@@ -56,43 +62,45 @@ class _OngpageState extends State<Ongpage> {
                 ),
 
                 Positioned(
-                    bottom: 0,
-                    right: 40,
-                    child: Row(
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _openDoacaoPopup(context);
-                          },
-                          icon: Icon(Icons.wallet_giftcard),
-                          label: Text('Doar'),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            print("Seguir!");
-                          },
-                          icon: Icon(Icons.favorite),
-                          label: Text('Seguir'),
-                        ),
-                        SizedBox(width: 20),
-                        Text(
-                          'ONG 1',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ))
+                  left: 150,
+                  top: 200,
+                  child: Text(
+                    'ONG 1',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  left: 8,
+                  top: 250,
+                  child: Row(children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        _openDoacaoPopup(context);
+                      },
+                      icon: Icon(Icons.wallet_giftcard),
+                      label: Text('Doar'),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        print("Seguir!");
+                      },
+                      icon: Icon(Icons.favorite),
+                      label: Text('Seguir'),
+                    ),
+                  ]),
+                ),
               ],
             ),
 
-            SizedBox(height: 20), // Espaçamento para ajustar abaixo do banner
-
             // Informações da ONG
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: Padinho.pequeno,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey, // Cor de fundo do container
@@ -111,34 +119,32 @@ class _OngpageState extends State<Ongpage> {
               ),
             ),
 
-            SizedBox(height: 20),
-
-            //Carousel
-            FlutterCarousel(
-              options: FlutterCarouselOptions(
-                height: 400.0,
-                showIndicator: true,
-                slideIndicator: CircularSlideIndicator(),
-              ),
-              items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
-                  .map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Image.asset(
-                        i,
-                        fit: BoxFit.cover,
+            Padding(
+              padding: Padinho.pequeno,
+              child: FlutterCarousel(
+                options: FlutterCarouselOptions(
+                  height: 400.0,
+                  showIndicator: true,
+                  slideIndicator: CircularSlideIndicator(),
+                ),
+                items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
+                    .map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
                         width: MediaQuery.of(context).size.width,
-                      ),
-                    );
-                  },
-                );
-              }).toList(),
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Image.asset(
+                          i,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
             ),
-
-            SizedBox(height: 20),
 
             //Mapa
             Column(
@@ -151,9 +157,8 @@ class _OngpageState extends State<Ongpage> {
                     fontSize: 20,
                   ),
                 ),
-                SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: Padinho.pequeno,
                   child: Container(
                     height: 450,
                     width: 450,
@@ -168,24 +173,25 @@ class _OngpageState extends State<Ongpage> {
               ],
             ),
 
-            SizedBox(height: 20),
-
             //Publicações
-            Column(
-              children: [
-                Text(
-                  "Publicações",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+            Padding(
+              padding: Padinho.pequeno,
+              child: Column(
+                children: [
+                  Text(
+                    "Publicações",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                buildCard('assets/dog1.png', 'Salvando animais!',
-                    'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
-                buildCard('assets/dog2.png', 'Novos abrigos',
-                    'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
-              ],
+                  buildCard('assets/dog1.png', 'Salvando animais!',
+                      'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
+                  buildCard('assets/dog2.png', 'Novos abrigos',
+                      'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
+                ],
+              ),
             ),
           ],
         ),
@@ -196,7 +202,7 @@ class _OngpageState extends State<Ongpage> {
 
 Widget buildCard(String imagePath, String title, String description) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    padding: Padinho.pequeno,
     child: Container(
       child: Row(
         children: [
@@ -330,4 +336,26 @@ void _openDoacaoPopup(BuildContext context) {
       );
     },
   );
+}
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // Remove a faixa de debug
+      title: 'ONG Page',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const Ongpage(
+        ongId: 1,
+      ),
+    );
+  }
 }
