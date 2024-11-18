@@ -5,10 +5,12 @@ class LocalCard extends StatelessWidget {
   final String rua;
   final String bairro;
   final String complemento;
+  final int numero;
 
   const LocalCard({
     required this.rua,
     required this.bairro,
+    required this.numero,
     required this.complemento,
     Key? key,
   }) : super(key: key);
@@ -48,6 +50,14 @@ class LocalCard extends StatelessWidget {
               color: AppColor.appBarColor,
             ),
           ),
+          if (numero != 0)
+            Text(
+              'Número: $numero',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColor.appBarColor,
+              ),
+            ),
           if (complemento.isNotEmpty)
             Text(
               'Complemento: $complemento',

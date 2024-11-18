@@ -39,6 +39,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   List<LocalCard> localCards = [];
   String cep = '';
   String rua = '';
+  int numero = 0;
   String complemento = '';
   String bairro = '';
   String cidade = '';
@@ -55,6 +56,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       localCards.add(LocalCard(
           rua: localidade.rua,
           bairro: localidade.bairro,
+          numero: localidade.numero,
           complemento: localidade.complemento));
     });
   }
@@ -175,6 +177,15 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   ),
                   SizedBox(height: 15),
                   CustomInputField(
+                    labelText: 'Número:',
+                    hintText: 'Digite o número',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      numero = int.parse(value);
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  CustomInputField(
                     labelText: 'Complemento:',
                     hintText: 'Digite o complemento',
                     keyboardType: TextInputType.text,
@@ -213,17 +224,18 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                           rua.isEmpty ||
                           bairro.isEmpty ||
                           estado.isEmpty ||
-                          cep.isEmpty) {
+                          cep.isEmpty ||
+                          numero == 0) {
                         Preencha.dialogo(context);
                       } else {
                         Localclass local;
                         if (complemento.isEmpty) {
-                          local =
-                              Localclass(cep, rua, '', bairro, cidade, estado);
+                          local = Localclass(
+                              cep, rua, '', numero, bairro, cidade, estado);
                           _addLocalidade(local);
                         } else {
-                          local = Localclass(
-                              cep, rua, complemento, bairro, cidade, estado);
+                          local = Localclass(cep, rua, complemento, numero,
+                              bairro, cidade, estado);
                           _addLocalidade(local);
                         }
                         Navigator.pop(context); // Fecha o diálogo
@@ -331,6 +343,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                           cep = '';
                           rua = '';
                           complemento = '';
+                          numero = 0;
                           bairro = '';
                           cidade = '';
                           estado = '';
@@ -363,6 +376,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                                 localidades[i].cep,
                                 localidades[i].rua,
                                 localidades[i].complemento,
+                                localidades[i].numero,
                                 localidades[i].bairro,
                                 localidades[i].cidade,
                                 localidades[i].estado,

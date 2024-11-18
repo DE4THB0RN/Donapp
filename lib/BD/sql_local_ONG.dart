@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 String cep = '';
 String rua = '';
 String complemento = '';
+int numero = 0;
 String bairro = '';
 String cidade = '';
 String estado = '';
@@ -14,6 +15,7 @@ class SQLLocal {
  cep TEXT,
  rua TEXT,
  complemento TEXT,
+ numero INTEGER,
  bairro TEXT,
  cidade TEXT,
  estado TEXT,
@@ -33,13 +35,21 @@ class SQLLocal {
     );
   }
 
-  static Future<int> adicionarLocal(String cep, String rua, String complemento,
-      String bairro, String cidade, String estado, int idOng) async {
+  static Future<int> adicionarLocal(
+      String cep,
+      String rua,
+      String complemento,
+      int numero,
+      String bairro,
+      String cidade,
+      String estado,
+      int idOng) async {
     final db = await SQLLocal.db();
     final dados = {
       'cep': cep,
       'rua': rua,
       'complemento': complemento,
+      'numero': numero,
       'bairro': bairro,
       'cidade': cidade,
       'estado': estado,
@@ -67,6 +77,7 @@ class SQLLocal {
     String cep,
     String rua,
     String complemento,
+    int numero,
     String bairro,
     String cidade,
     String estado,
@@ -76,6 +87,7 @@ class SQLLocal {
       'cep': cep,
       'rua': rua,
       'complemento': complemento,
+      'numero': numero,
       'bairro': bairro,
       'cidade': cidade,
       'estado': estado,

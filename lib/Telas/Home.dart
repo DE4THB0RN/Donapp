@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   void _printaBD() async {
     List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
     for (dynamic i in ONGfull) {
+      print(i['id']);
       print(i['nome']);
       print(i['senha']);
       print(i['cnpj']);
@@ -39,6 +40,7 @@ class _HomeState extends State<Home> {
     for (dynamic i in Localfull) {
       print(i['cep']);
       print(i['rua']);
+      print(i['numero']);
       print(i['complemento']);
       print(i['bairro']);
       print(i['cidade']);

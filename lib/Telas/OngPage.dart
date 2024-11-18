@@ -74,13 +74,25 @@ class _OngpageState extends State<Ongpage> {
                 Positioned(
                   top: 120, // Ajusta a posição vertical da imagem
                   left: 30,
-                  child: CircleAvatar(
-                    radius: 60, // Tamanho da imagem
-                    backgroundColor: Colors.black, //color
+                  child: Container(
+                    width: 120, // Diâmetro do círculo
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // Garante o formato circular
+                      color: Colors.black, // Cor de fundo (borda)
+                    ),
                     child: Padding(
-                      padding: const EdgeInsets.all(1), // Border radius
-                      child: ClipOval(
-                          child: Image.memory(base64Decode(objetoONG.perfil))),
+                      padding: const EdgeInsets.all(1), // Espessura da borda
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape:
+                              BoxShape.circle, // Formato circular para a imagem
+                          image: DecorationImage(
+                            fit: BoxFit.cover, // Ajusta a imagem ao contêiner
+                            image: MemoryImage(base64Decode(objetoONG.perfil)),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -5,7 +5,7 @@ class CustomInputField extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final bool obscureText;
-  final ValueChanged<String> onChanged;
+  final ValueChanged onChanged;
   final ValueChanged<String> onSubmitted;
   final TextEditingController? controller;
 
