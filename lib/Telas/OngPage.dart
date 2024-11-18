@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +21,25 @@ class Ongpage extends StatefulWidget {
 
 class _OngpageState extends State<Ongpage> {
   late SharedPreferences prefs;
+
+  Ongclass objetoONG = Ongclass.ongClassNull();
+
+  void createOng(int id) async {
+    List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
+    setState(() {
+      objetoONG.banner = ongFull.first['foto_banner'];
+      objetoONG.perfil = ongFull.first['foto_perfil'];
+      objetoONG.desc = ongFull.first['desc'];
+      objetoONG.nome = ongFull.first['nome'];
+      objetoONG.id = id;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    createOng(widget.ongId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +61,8 @@ class _OngpageState extends State<Ongpage> {
                       height: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(
-                              'assets/dogfeliz.png'), // Imagem do banner
+                          image: MemoryImage(base64Decode(
+                              objetoONG.banner)), // Imagem do banner
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -56,7 +79,8 @@ class _OngpageState extends State<Ongpage> {
                     backgroundColor: Colors.black, //color
                     child: Padding(
                       padding: const EdgeInsets.all(1), // Border radius
-                      child: ClipOval(child: Image.asset('assets/beagle.png')),
+                      child: ClipOval(
+                          child: Image.memory(base64Decode(objetoONG.perfil))),
                     ),
                   ),
                 ),
@@ -65,7 +89,7 @@ class _OngpageState extends State<Ongpage> {
                   left: 150,
                   top: 200,
                   child: Text(
-                    'ONG 1',
+                    objetoONG.nome,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -336,26 +360,4 @@ void _openDoacaoPopup(BuildContext context) {
       );
     },
   );
-}
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // Remove a faixa de debug
-      title: 'ONG Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Ongpage(
-        ongId: 1,
-      ),
-    );
-  }
 }

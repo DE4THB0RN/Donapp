@@ -143,7 +143,7 @@ class NGOCard extends StatelessWidget {
         Navigator.pushReplacementNamed(
           context,
           'ONG',
-          arguments: {'id': 1},
+          arguments: 1,
         ),
       },
     );

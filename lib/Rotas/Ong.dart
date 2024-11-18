@@ -12,14 +12,14 @@ class ONG extends StatefulWidget {
 }
 
 class _ONGState extends State<ONG> {
-  late final int ongId;
+  late int ongId;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is int) {
-      ongId = args; // Recupera o ID como int
+      ongId = args;
     } else {
       throw Exception('ID da ONG não foi fornecido ou é inválido.');
     }
