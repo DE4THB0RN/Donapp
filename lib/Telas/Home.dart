@@ -2,7 +2,7 @@ import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,71 +14,34 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: HomeScreen(),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _printaBD();
-  }
-
-  void _printaBD() async {
-    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
-    for (dynamic i in ONGfull) {
-      print(i['id']);
-      print(i['nome']);
-      print(i['senha']);
-      print(i['cnpj']);
-      print(i['email']);
-      print(i['foto_perfil']);
-      print(i['foto_banner']);
-    }
-
-    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
-    for (dynamic i in Localfull) {
-      print(i['cep']);
-      print(i['rua']);
-      print(i['numero']);
-      print(i['complemento']);
-      print(i['bairro']);
-      print(i['cidade']);
-      print(i['estado']);
-      print(i['id_ong']);
-    }
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
           Padding(
             padding: Padinho.pequeno,
-            child: FlutterCarousel(
-              options: FlutterCarouselOptions(
-                height: 400.0, // Altura do carrossel
-                showIndicator: true,
-                slideIndicator: CircularSlideIndicator(),
+            child: CarouselSlider(
+              options: CarouselOptions(
+                height: 250.0, // Altura fixa do carrossel
+                viewportFraction: 1.0, // Cada slide ocupa 100% da largura
+                enableInfiniteScroll: true, // Loop infinito
+                autoPlay: true, // Reprodução automática
+                autoPlayInterval: const Duration(seconds: 3),
+                enlargeCenterPage: false, // Não aumenta o slide central
               ),
               items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
-                  .map((i) {
+                  .map((imagePath) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                      width:
+                          MediaQuery.of(context).size.width, // Largura da tela
                       child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            8.0), // Opcional: bordas arredondadas
                         child: Image.asset(
-                          i,
+                          imagePath,
                           fit: BoxFit
-                              .cover, // Ajusta a imagem para cobrir todo o espaço
-                          width: MediaQuery.of(context).size.width,
-                          height: 250.0, // Altura específica para as imagens
+                              .cover, // Faz com que a imagem cubra toda a área
                         ),
                       ),
                     );
@@ -124,6 +87,37 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _printaBD();
+  }
+
+  void _printaBD() async {
+    List<Map<String, dynamic>> ONGfull = await SQLONG.pegaONGLimit();
+    for (dynamic i in ONGfull) {
+      print(i['id']);
+      print(i['nome']);
+      print(i['senha']);
+      print(i['cnpj']);
+      print(i['email']);
+      print(i['foto_perfil']);
+      print(i['foto_banner']);
+    }
+
+    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
+    for (dynamic i in Localfull) {
+      print(i['cep']);
+      print(i['rua']);
+      print(i['numero']);
+      print(i['complemento']);
+      print(i['bairro']);
+      print(i['cidade']);
+      print(i['estado']);
+      print(i['id_ong']);
+    }
   }
 }
 
