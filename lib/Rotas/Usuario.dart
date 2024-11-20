@@ -16,13 +16,13 @@ class _UsuarioState extends State<Usuario> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: const AppBarra(),
       body: _body(),
-      bottomNavigationBar: Bottombarra(),
+      bottomNavigationBar: const Bottombarra(),
     );
   }
 
   _body() {
-    return Paginausuario();
+    return const Paginausuario();
   }
 }

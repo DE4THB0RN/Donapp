@@ -9,6 +9,8 @@ import 'package:donapp/Components/CustomInputField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroOng extends StatefulWidget {
+  const CadastroOng({super.key});
+
   @override
   _CadastroOngState createState() => _CadastroOngState();
 }
@@ -62,7 +64,7 @@ class _CadastroOngState extends State<CadastroOng> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Email:',
                       hintText: 'EmailExemplo@email.com',
@@ -74,7 +76,7 @@ class _CadastroOngState extends State<CadastroOng> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'CNPJ:',
                       hintText: 'XX.XXX.XXX/XXXX-XX',
@@ -86,7 +88,7 @@ class _CadastroOngState extends State<CadastroOng> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Senha:',
                       hintText: 'Digite sua senha:',
@@ -101,7 +103,7 @@ class _CadastroOngState extends State<CadastroOng> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
                       onPressed: () async {
@@ -136,7 +138,7 @@ class _CadastroOngState extends State<CadastroOng> {
                         }
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CustomButton(
                       text: 'Já tenho conta',
                       onPressed: () {

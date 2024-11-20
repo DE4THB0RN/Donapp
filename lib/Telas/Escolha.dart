@@ -15,6 +15,8 @@ class _EscolhaState extends State<Escolha> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             width: 600,
@@ -26,8 +28,6 @@ class _EscolhaState extends State<Escolha> {
             child: _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
           ),
         ],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
       ),
     );
   }
@@ -55,7 +55,7 @@ _botao(context, text, destino) {
       child: Text(
         '$text',
         style:
-            TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
+            const TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
       ),
     ),
   );

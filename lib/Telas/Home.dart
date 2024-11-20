@@ -3,6 +3,7 @@ import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:donapp/Components/NGOCard.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> {
                   .map((imagePath) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return Container(
+                    return SizedBox(
                       width:
                           MediaQuery.of(context).size.width, // Largura da tela
                       child: ClipRRect(
@@ -55,11 +56,11 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Seguidos',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 NGOCard(
                   title: 'ONG 1',
                   description: 'Somos uma ONG de ajudar animais',
@@ -121,74 +122,3 @@ class _HomeState extends State<Home> {
   }
 }
 
-class NGOCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String image;
-
-  NGOCard({
-    required this.title,
-    required this.description,
-    required this.image,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushReplacementNamed(
-        context,
-        'ONG',
-        arguments: 1,
-      ),
-      child: SizedBox(
-        width: double.infinity, // largura da tela
-        height: 150,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0), // espaçamento interno
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      8.0), // Bordas arredondadas na imagem
-                  child: Image.asset(
-                    image,
-                    width: 130,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 10), // espaço entre imagem e texto
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 20, // ajuste do tamanho do texto
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        description,
-                        style: const TextStyle(fontSize: 16),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

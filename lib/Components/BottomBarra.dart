@@ -17,19 +17,19 @@ class _BottombarraState extends State<Bottombarra> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {},
             color: AppColor.backgroundColor,
           ),
           IconButton(
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
             onPressed: () {
               Navigator.pushReplacementNamed(context, 'Home');
             },
             color: AppColor.backgroundColor,
           ),
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {},
             color: AppColor.backgroundColor,
           )

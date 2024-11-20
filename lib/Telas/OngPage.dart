@@ -77,7 +77,7 @@ class _OngpageState extends State<Ongpage> {
                   child: Container(
                     width: 120, // Diâmetro do círculo
                     height: 120,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle, // Garante o formato circular
                       color: Colors.black, // Cor de fundo (borda)
                     ),
@@ -102,7 +102,7 @@ class _OngpageState extends State<Ongpage> {
                   top: 200,
                   child: Text(
                     objetoONG.nome,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -118,16 +118,16 @@ class _OngpageState extends State<Ongpage> {
                       onPressed: () {
                         _openDoacaoPopup(context);
                       },
-                      icon: Icon(Icons.wallet_giftcard),
-                      label: Text('Doar'),
+                      icon: const Icon(Icons.wallet_giftcard),
+                      label: const Text('Doar'),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     ElevatedButton.icon(
                       onPressed: () {
                         print("Seguir!");
                       },
-                      icon: Icon(Icons.favorite),
-                      label: Text('Seguir'),
+                      icon: const Icon(Icons.favorite),
+                      label: const Text('Seguir'),
                     ),
                   ]),
                 ),
@@ -143,8 +143,8 @@ class _OngpageState extends State<Ongpage> {
                   borderRadius:
                       BorderRadius.circular(15), // Bordas arredondadas
                 ),
-                padding: EdgeInsets.all(10),
-                child: Column(
+                padding: const EdgeInsets.all(10),
+                child: const Column(
                   children: [
                     Text(
                       'Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição',
@@ -169,7 +169,7 @@ class _OngpageState extends State<Ongpage> {
                     builder: (BuildContext context) {
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Image.asset(
                           i,
                           fit: BoxFit.cover,
@@ -185,7 +185,7 @@ class _OngpageState extends State<Ongpage> {
             //Mapa
             Column(
               children: [
-                Text(
+                const Text(
                   "Nossa Localização",
                   textAlign: TextAlign.left,
                   style: TextStyle(
@@ -198,7 +198,7 @@ class _OngpageState extends State<Ongpage> {
                   child: Container(
                     height: 450,
                     width: 450,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage("assets/mapa.png"),
                         fit: BoxFit.cover,
@@ -214,7 +214,7 @@ class _OngpageState extends State<Ongpage> {
               padding: Padinho.pequeno,
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     "Publicações",
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -240,6 +240,10 @@ Widget buildCard(String imagePath, String title, String description) {
   return Padding(
     padding: Padinho.pequeno,
     child: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Row(
         children: [
           Container(
@@ -276,10 +280,6 @@ Widget buildCard(String imagePath, String title, String description) {
           SizedBox(width: 10),
         ],
       ),
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(15),
-      ),
     ),
   );
 }
@@ -305,14 +305,14 @@ void _openDoacaoPopup(BuildContext context) {
               Align(
                 alignment: Alignment.topRight,
                 child: IconButton(
-                  icon: Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.close, color: Colors.white),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
               ),
-              SizedBox(height: 10.0),
-              Text(
+              const SizedBox(height: 10.0),
+              const Text(
                 'Doação',
                 style: TextStyle(
                   fontSize: 20.0,
@@ -320,7 +320,7 @@ void _openDoacaoPopup(BuildContext context) {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               CustomInputFieldMoney(
                 labelText: 'Valor da Doação',
                 hintText: 'Digite o valor',
@@ -343,7 +343,7 @@ void _openDoacaoPopup(BuildContext context) {
                   }
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   String valor = valorController.text;
@@ -356,9 +356,9 @@ void _openDoacaoPopup(BuildContext context) {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   padding:
-                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+                      const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
                 ),
-                child: Text(
+                child: const Text(
                   'Confirmar',
                   style: TextStyle(
                     color: Colors.white,

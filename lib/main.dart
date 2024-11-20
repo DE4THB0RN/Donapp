@@ -38,15 +38,15 @@ class _DonappState extends State<Donapp> {
       initialRoute: '/',
       home: _body(),
       routes: {
-        'Escolha': (context) => Escolhascreen(),
-        'Cadastro_User': (context) => Cadastro(),
-        'Usuario': (context) => Usuario(),
-        'Home': (context) => Homecall(),
-        'ONG': (context) => ONG(),
-        'Login_User': (context) => Login(),
-        'Login_ONG': (context) => LoginONG(),
-        'Cadastro_ONG': (context) => ONG_Cadastro(),
-        'Cadastro_ONG2': (context) => ONG_Cadastro2(),
+        'Escolha': (context) => const Escolhascreen(),
+        'Cadastro_User': (context) => const Cadastro(),
+        'Usuario': (context) => const Usuario(),
+        'Home': (context) => const Homecall(),
+        'ONG': (context) => const ONG(),
+        'Login_User': (context) => const Login(),
+        'Login_ONG': (context) => const LoginONG(),
+        'Cadastro_ONG': (context) => const ONG_Cadastro(),
+        'Cadastro_ONG2': (context) => const ONG_Cadastro2(),
       },
     );
   }
@@ -59,5 +59,5 @@ _botao(cont, incrementar) {
 }
 
 _body() {
-  return Escolhascreen();
+  return const Escolhascreen();
 }

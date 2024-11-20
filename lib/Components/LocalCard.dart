@@ -12,8 +12,8 @@ class LocalCard extends StatelessWidget {
     required this.bairro,
     required this.numero,
     required this.complemento,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LocalCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -37,7 +37,7 @@ class LocalCard extends StatelessWidget {
         children: [
           Text(
             'Rua: $rua',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
               color: AppColor.appBarColor,
@@ -45,7 +45,7 @@ class LocalCard extends StatelessWidget {
           ),
           Text(
             'Bairro: $bairro',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: AppColor.appBarColor,
             ),
@@ -53,7 +53,7 @@ class LocalCard extends StatelessWidget {
           if (numero != 0)
             Text(
               'Número: $numero',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColor.appBarColor,
               ),
@@ -61,7 +61,7 @@ class LocalCard extends StatelessWidget {
           if (complemento.isNotEmpty)
             Text(
               'Complemento: $complemento',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColor.appBarColor,
               ),

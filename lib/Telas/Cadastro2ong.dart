@@ -15,6 +15,8 @@ import 'package:donapp/Components/CustomInputField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cadastro2Ong extends StatefulWidget {
+  const Cadastro2Ong({super.key});
+
   @override
   _Cadastro2OngState createState() => _Cadastro2OngState();
 }
@@ -124,7 +126,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -153,7 +155,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       }
                     },
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Cidade:',
                     hintText: 'Digite sua cidade',
@@ -164,7 +166,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     onSubmitted: (value) {},
                     controller: controlCidade,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Rua:',
                     hintText: 'Digite sua rua',
@@ -175,7 +177,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     onSubmitted: (value) {},
                     controller: controlRua,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Número:',
                     hintText: 'Digite o número',
@@ -194,7 +196,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Bairro:',
                     hintText: 'Digite o bairro',
@@ -205,7 +207,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     onSubmitted: (value) {},
                     controller: controlBairro,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Estado:',
                     hintText: 'Digite o estado',
@@ -216,7 +218,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                     onSubmitted: (value) {},
                     controller: controlEstado,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: 'Salvar',
                     onPressed: () async {
@@ -271,7 +273,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Imagem de Perfil',
                       style: TextStyle(
                         fontSize: 16,
@@ -287,8 +289,8 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       },
                       shape: ImageShape.circle,
                     ),
-                    SizedBox(height: 15),
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       'Imagem do Banner',
                       style: TextStyle(
                         fontSize: 16,
@@ -304,8 +306,8 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       },
                       shape: ImageShape.square,
                     ),
-                    SizedBox(height: 15),
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       'Localidades',
                       style: TextStyle(
                         fontSize: 16,
@@ -313,7 +315,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Column(
                       children: [
                         for (int i = 0; i < localidades.length; i++)
@@ -322,9 +324,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                               Expanded(
                                 child: localCards[i],
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.remove_circle,
                                   color: Colors.red,
                                 ),
@@ -334,7 +336,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                           ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CustomButton(
                       text: 'Adicionar Localidade',
                       //onPressed: _addLocalidade,
@@ -352,7 +354,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         _openEditLocal(context);
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomButton(
                       text: 'Terminar',
                       onPressed: () async {

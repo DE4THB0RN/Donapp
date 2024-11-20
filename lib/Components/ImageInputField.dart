@@ -13,8 +13,8 @@ class ImageInputField extends StatefulWidget {
   const ImageInputField({
     required this.onImageSelected,
     this.shape = ImageShape.square,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _ImageInputFieldState createState() => _ImageInputFieldState();

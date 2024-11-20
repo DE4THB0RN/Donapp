@@ -59,7 +59,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Senha:',
                     hintText: 'Digite sua senha:',
@@ -70,14 +70,14 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar com Google',
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, 'Home');
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar',
                     onPressed: () async {
@@ -105,14 +105,14 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Erro'),
-                                content: Text('ONG não encontrada'),
+                                title: const Text('Erro'),
+                                content: const Text('ONG não encontrada'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
@@ -122,7 +122,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                       }
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   CustomButton(
                     text: 'Criar conta',
                     onPressed: () {
@@ -143,14 +143,14 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro'),
-          content: Text('Senha incorreta'),
+          title: const Text('Erro'),
+          content: const Text('Senha incorreta'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
