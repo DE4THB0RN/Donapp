@@ -96,6 +96,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                             prefs.setString('email', emailtoken);
                             String senhatoken = cipher.xorEncode(senha);
                             prefs.setString('senha', senhatoken);
+                            prefs.setBool('is_ONG', true);
                             Navigator.pushReplacementNamed(context, 'Home');
                           } else {
                             _senhaErrada();

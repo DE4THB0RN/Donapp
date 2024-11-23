@@ -142,6 +142,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                                 prefs.setString('senha', senhatoken);
                                 String nometoken = cipher.xorEncode(nome);
                                 prefs.setString('nome', nometoken);
+                                prefs.setBool('is_ONG', false);
                                 Navigator.pushReplacementNamed(context, 'Home');
                               }
                             }
