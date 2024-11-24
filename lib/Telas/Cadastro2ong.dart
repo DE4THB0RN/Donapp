@@ -399,3 +399,9 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
     );
   }
 }
+
+void main() {
+  runApp(MaterialApp(
+    home: Cadastro2Ong(),
+  ));
+}
