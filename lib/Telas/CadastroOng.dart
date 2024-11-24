@@ -123,11 +123,11 @@ class _CadastroOngState extends State<CadastroOng> {
                             if (id != -1) {
                               if (_formKey.currentState!.validate()) {
                                 String emailtoken = cipher.xorEncode(email);
-                                prefs.setString('email_ONG', emailtoken);
+                                prefs.setString('email', emailtoken);
                                 String senhatoken = cipher.xorEncode(senha);
-                                prefs.setString('senha_ONG', senhatoken);
+                                prefs.setString('senha', senhatoken);
                                 String nometoken = cipher.xorEncode(nome);
-                                prefs.setString('nome_ONG', nometoken);
+                                prefs.setString('nome', nometoken);
                                 Navigator.pushReplacementNamed(
                                     context, 'Cadastro_ONG2');
                               }
