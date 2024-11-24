@@ -39,7 +39,11 @@ class _ProfileIconState extends State<ProfileIcon> {
           : () {
               final isONG = prefs.getBool('is_ONG') ?? false;
               if (isONG) {
-                Navigator.pushReplacementNamed(context, 'ONG');
+                Navigator.pushReplacementNamed(
+                  context,
+                  'ONG',
+                  arguments: _pegaId(),
+                );
               } else {
                 Navigator.pushReplacementNamed(context, 'Usuario');
               }
@@ -48,11 +52,12 @@ class _ProfileIconState extends State<ProfileIcon> {
   }
 
 
-  int _pegaId() async {
+  Future<int> _pegaId() async {
     final prefs = await SharedPreferences.getInstance();
-    String? emailcrip = prefs.getString('email');
-    String email = cipher.xorDecode(emailcrip!);
-    
+    String? emailtoken = prefs.getString('email');
+    String email = cipher.xorDecode(emaltoken);
+
+    int id = await SQLONG.pegaIdOng(email);
 
 
     return id;
