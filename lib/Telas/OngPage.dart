@@ -121,67 +121,68 @@ class _OngpageState extends State<Ongpage> {
                     ),
                   ),
                 ),
-              ],
-            ),
-            Column(
-              children: [
-                if (isOwnONG) ...[
-                  // Botões quando for a própria ONG
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+
+                Positioned(
+                  left: 8,
+                  top: 250,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ButtonEdited(
-                            icon: Icons.edit,
-                            label: 'Editar perfil',
-                            onPressed: () {
-                              print("Editar perfil");
-                            },
-                          ),
-                          const SizedBox(width: 10), // Espaço entre os botões
-                          ButtonEdited(
-                            icon: Icons.post_add,
-                            label: 'Fazer postagem',
-                            onPressed: () {
-                              print("Fazer postagem");
-                            },
-                          ),
-                        ],
-                      ),
-                      ButtonEdited(
-                        icon: Icons.history,
-                        label: 'Histórico de doações',
-                        onPressed: () {
-                          print("Histórico de doações");
-                        },
-                      ),
+                      if (isOwnONG) ...[
+                        // Botões quando for a própria ONG
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ButtonEdited(
+                              icon: Icons.edit,
+                              label: 'Editar perfil',
+                              onPressed: () {
+                                print("Editar perfil");
+                              },
+                            ),
+                            const SizedBox(width: 10), // Espaço entre os botões
+                            ButtonEdited(
+                              icon: Icons.post_add,
+                              label: 'Fazer postagem',
+                              onPressed: () {
+                                print("Fazer postagem");
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20), // Espaço entre as linhas
+                        ButtonEdited(
+                          icon: Icons.history,
+                          label: 'Histórico de doações',
+                          onPressed: () {
+                            print("Histórico de doações");
+                          },
+                        ),
+                      ] else ...[
+                        // Botões quando NÃO for a própria ONG
+                        Row(
+                          children: [
+                            ButtonEdited(
+                              icon: Icons.wallet_giftcard,
+                              label: 'Doar',
+                              onPressed: () {
+                                print("Doar");
+                              },
+                            ),
+                            const SizedBox(width: 10), // Espaço entre os botões
+                            ButtonEdited(
+                              icon: Icons.favorite,
+                              label: 'Seguir',
+                              onPressed: () {
+                                print("Seguir!");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
-                  const SizedBox(height: 10), // Espaço entre as linhas
-                ] else ...[
-                  // Botões quando NÃO for a própria ONG
-                  Row(
-                    children: [
-                      ButtonEdited(
-                        icon: Icons.wallet_giftcard,
-                        label: 'Doar',
-                        onPressed: () {
-                          print("Doar");
-                        },
-                      ),
-                      const SizedBox(width: 10), // Espaço entre os botões
-                      ButtonEdited(
-                        icon: Icons.favorite,
-                        label: 'Seguir',
-                        onPressed: () {
-                          print("Seguir!");
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ],
             ),
 

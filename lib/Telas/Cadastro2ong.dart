@@ -359,7 +359,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                       text: 'Terminar',
                       onPressed: () async {
                         prefs = await SharedPreferences.getInstance();
-                        String? emailOng = prefs.getString('email');
+                        String? emailOng = prefs.getString('email_ONG');
                         emailOng = cipher.xorDecode(emailOng!);
                         List<Map<String, dynamic>> ongFull =
                             await SQLONG.pegaUmaONGEmail2(emailOng);
