@@ -42,6 +42,7 @@ dependencies:
   encrypt_decrypt_plus: ^1.2.0
   image_picker: ^0.8.5+3
   flutter_image_compress: ^2.3.0
+  flutter_stripe: ^11.3.0
 
 dev_dependencies:
   flutter_test:

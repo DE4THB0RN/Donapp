@@ -34,6 +34,7 @@ class _OngpageState extends State<Ongpage> {
   List<LocalCard> localCards = [];
   String perfil = '';
   String banner = '';
+  bool isOng = false;
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -65,6 +66,7 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _carregarId();
+    _initPrefs();
   }
 
   Future<void> _carregarId() async {
@@ -72,6 +74,16 @@ class _OngpageState extends State<Ongpage> {
     setState(() {
       idLogado = id; // Atualiza o estado
     });
+  }
+
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    bool? isOnger = prefs.getBool('is_ONG');
+    if (isOnger != null) {
+      setState(() {
+        isOng = isOnger;
+      });
+    }
   }
 
   @override
@@ -143,15 +155,16 @@ class _OngpageState extends State<Ongpage> {
                     ),
                   ),
                 ),
-
-                Positioned(
-                  left: 8,
-                  top: 250,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (isOwnONG) ...[
-                        // Botões quando for a própria ONG
+              ],
+            ),
+            Column(
+              children: [
+                if (isOng) ...[
+                  if (isOwnONG) ...[
+                    // Botões quando for a própria ONG
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -180,31 +193,31 @@ class _OngpageState extends State<Ongpage> {
                             print("Histórico de doações");
                           },
                         ),
-                      ] else ...[
-                        // Botões quando NÃO for a própria ONG
-                        Row(
-                          children: [
-                            ButtonEdited(
-                              icon: Icons.wallet_giftcard,
-                              label: 'Doar',
-                              onPressed: () {
-                                print("Doar");
-                              },
-                            ),
-                            const SizedBox(width: 10), // Espaço entre os botões
-                            ButtonEdited(
-                              icon: Icons.favorite,
-                              label: 'Seguir',
-                              onPressed: () {
-                                print("Seguir!");
-                              },
-                            ),
-                          ],
-                        ),
                       ],
+                    ),
+                    const SizedBox(height: 10), // Espaço entre as linhas
+                  ]
+                ] else ...[
+                  Row(
+                    children: [
+                      ButtonEdited(
+                        icon: Icons.wallet_giftcard,
+                        label: 'Doar',
+                        onPressed: () {
+                          print("Doar");
+                        },
+                      ),
+                      const SizedBox(width: 10), // Espaço entre os botões
+                      ButtonEdited(
+                        icon: Icons.favorite,
+                        label: 'Seguir',
+                        onPressed: () {
+                          print("Seguir!");
+                        },
+                      ),
                     ],
                   ),
-                ),
+                ]
               ],
             ),
 
