@@ -32,16 +32,16 @@ class _EscolhaState extends State<Escolha> {
     );
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   dores();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    dores();
+  }
 
-  // void dores() async {
-  //   await SQLLocal.dropDataBaseLocal();
-  //   await SQLONG.dropDataBaseONG();
-  // }
+  void dores() async {
+    await SQLLocal.dropDataBaseLocal();
+    await SQLONG.dropDataBaseONG();
+  }
 }
 
 _botao(context, text, destino) {
@@ -54,8 +54,8 @@ _botao(context, text, destino) {
     child: Center(
       child: Text(
         '$text',
-        style:
-            const TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
+        style: const TextStyle(
+            fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
       ),
     ),
   );
