@@ -54,6 +54,13 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   TextEditingController controlCidade = TextEditingController();
   TextEditingController controlEstado = TextEditingController();
 
+  @override
+  void initState() {
+    perfil = '';
+    banner = '';
+    super.initState();
+  }
+
   void _addLocalidade(Localclass localidade) {
     setState(() {
       localidades.add(localidade); // Adiciona um item vazio na lista
