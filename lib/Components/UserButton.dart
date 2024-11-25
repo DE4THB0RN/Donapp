@@ -1,5 +1,4 @@
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Theme/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +13,6 @@ class ProfileIcon extends StatefulWidget {
 
 class _ProfileIconState extends State<ProfileIcon> {
   late SharedPreferences prefs;
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -24,30 +22,25 @@ class _ProfileIconState extends State<ProfileIcon> {
 
   Future<void> _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isLoading = false;
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.account_circle),
-      color: isLoading ? Colors.grey : AppColor.backgroundColor,
-      onPressed: isLoading
-          ? null
-          : () {
-              final isONG = prefs.getBool('is_ONG') ?? false;
-              if (isONG) {
-                Navigator.pushReplacementNamed(
-                  context,
-                  'ONG',
-                  arguments: _pegaId(),
-                );
-              } else {
-                Navigator.pushReplacementNamed(context, 'Usuario');
-              }
-            },
+      onPressed: () async {
+        bool? isONG = prefs.getBool('is_ONG');
+        if (isONG!) {
+          Navigator.pushReplacementNamed(
+            context,
+            'ONG',
+            arguments: await _pegaId(),
+          );
+        } else {
+          Navigator.pushReplacementNamed(context, 'Usuario');
+        }
+      },
     );
   }
 
@@ -57,7 +50,7 @@ class _ProfileIconState extends State<ProfileIcon> {
     String email = cipher.xorDecode(emailtoken!);
 
     int id = await SQLONG.pegaIdOng(email);
-
+    print(id);
     return id;
   }
 }

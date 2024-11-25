@@ -169,20 +169,20 @@ class _CadastroScreenState extends State<CadastroScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLogin();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _checkLogin();
+  // }
 
-  void _checkLogin() async {
-    prefs = await SharedPreferences.getInstance();
-    String? emailtoken = prefs.getString('email');
-    String? senhatoken = prefs.getString('senha');
-    String? nometoken = prefs.getString('nome');
+  // void _checkLogin() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   String? emailtoken = prefs.getString('email');
+  //   String? senhatoken = prefs.getString('senha');
+  //   String? nometoken = prefs.getString('nome');
 
-    if (emailtoken != null && senhatoken != null && nometoken != null) {
-      Navigator.pushReplacementNamed(context, 'Home');
-    }
-  }
+  //   if (emailtoken != null && senhatoken != null && nometoken != null) {
+  //     Navigator.pushReplacementNamed(context, 'Home');
+  //   }
+  // }
 }
