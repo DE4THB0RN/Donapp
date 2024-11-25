@@ -26,10 +26,7 @@ class _HomeState extends State<Home> {
 
       for (Ongclass i in ONGS) {
         CardsOng.add(NGOCard(
-          title: i.nome,
-          description: i.desc,
-          image: i.perfil,
-        ));
+            title: i.nome, description: i.desc, image: i.perfil, id: i.id));
       }
     });
   }

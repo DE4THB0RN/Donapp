@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class NGOCard extends StatefulWidget {
   final String title;
   final String description;
   final String image;
+  final int id;
 
   const NGOCard({
     Key? key,
     required this.title,
     required this.description,
     required this.image,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -23,7 +27,7 @@ class _NGOCardState extends State<NGOCard> {
       onTap: () => Navigator.pushReplacementNamed(
         context,
         'ONG',
-        arguments: 1,
+        arguments: widget.id,
       ),
       child: SizedBox(
         width: double.infinity, // largura da tela
@@ -40,8 +44,8 @@ class _NGOCardState extends State<NGOCard> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(
                       8.0), // Bordas arredondadas na imagem
-                  child: Image.asset(
-                    widget.image,
+                  child: Image.memory(
+                    base64Decode(widget.image),
                     width: 130,
                     height: double.infinity,
                     fit: BoxFit.cover,
