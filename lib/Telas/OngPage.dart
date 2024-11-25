@@ -14,6 +14,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/ImageInputField.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
@@ -31,6 +32,8 @@ class _OngpageState extends State<Ongpage> {
   int? idLogado = 0;
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
+  String perfil = '';
+  String banner = '';
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -164,7 +167,7 @@ class _OngpageState extends State<Ongpage> {
                               icon: Icons.post_add,
                               label: 'Fazer postagem',
                               onPressed: () {
-                                print("Fazer postagem");
+                                _openEditONGPopup(context);
                               },
                             ),
                           ],
@@ -330,7 +333,82 @@ class _OngpageState extends State<Ongpage> {
     print(id);
     return id;
   }
+
+  void _openEditONGPopup(BuildContext context) {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+
+                const Text(
+                      'Imagem de Perfil',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          perfil = imageString;
+                        });
+                      },
+                      shape: ImageShape.circle,
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      'Imagem do Banner',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          banner = imageString;
+                        });
+                      },
+                      shape: ImageShape.square,
+                    ),
+
+
+              ],
+            ), 
+          ),
+        );
+
+      }
+    );
+  }
+
+
 }
+
+
+
+
+
 
 Widget buildCard(String imagePath, String title, String description) {
   return Padding(
