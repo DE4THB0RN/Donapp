@@ -233,7 +233,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                     await prefs.remove('nome');
 
                     Navigator.pop(context); // Fecha o diálogo
-                    Navigator.pushReplacementNamed(context, 'Login');
+                    Navigator.pushReplacementNamed(context, 'Escolha');
                   },
                 ),
                 const SizedBox(height: 10),
@@ -311,7 +311,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                       print('apagado');
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
-                      Navigator.pushReplacementNamed(context, 'Login');
+                      Navigator.pushReplacementNamed(context, 'Escolha');
                     },
                     child: const Text(
                       'Sim',
