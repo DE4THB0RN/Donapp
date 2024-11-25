@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
 import 'package:donapp/Components/OngClass.dart';
+import 'package:donapp/Components/ButtonEdited.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:donapp/Components/Helper.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
@@ -23,6 +25,7 @@ class _OngpageState extends State<Ongpage> {
   late SharedPreferences prefs;
 
   Ongclass objetoONG = Ongclass.ongClassNull();
+  int? idLogado = 0;
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -39,10 +42,19 @@ class _OngpageState extends State<Ongpage> {
   void initState() {
     super.initState();
     createOng(widget.ongId);
+    _carregarId();
+  }
+
+  Future<void> _carregarId() async {
+    final int id = await _pegaId(); // Aguarda o ID
+    setState(() {
+      idLogado = id; // Atualiza o estado
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isOwnONG = objetoONG.id == idLogado;
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -113,23 +125,65 @@ class _OngpageState extends State<Ongpage> {
                 Positioned(
                   left: 8,
                   top: 250,
-                  child: Row(children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        _openDoacaoPopup(context);
-                      },
-                      icon: const Icon(Icons.wallet_giftcard),
-                      label: const Text('Doar'),
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print("Seguir!");
-                      },
-                      icon: const Icon(Icons.favorite),
-                      label: const Text('Seguir'),
-                    ),
-                  ]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (isOwnONG) ...[
+                        // Botões quando for a própria ONG
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            
+                            ButtonEdited(
+                              icon: Icons.edit,
+                              label: 'Editar perfil',
+                              onPressed: () {
+                                print("Editar perfil");
+                              },
+                            ),
+                            const SizedBox(width: 10), // Espaço entre os botões
+                            ButtonEdited(
+                              icon: Icons.post_add,
+                              label: 'Fazer postagem',
+                              onPressed: () {
+                                print("Fazer postagem");
+                              },
+                            ),
+                            
+                          ],
+                        ),
+                        const SizedBox(height: 10), // Espaço entre as linhas
+                        ButtonEdited(
+                          icon: Icons.history,
+                          label: 'Histórico de doações',
+                          onPressed: () {
+                            print("Histórico de doações");
+                          },
+                        ),
+                      ] else ...[
+                        // Botões quando NÃO for a própria ONG
+                        Row(
+                          children: [
+                            ButtonEdited(
+                              icon: Icons.wallet_giftcard,
+                              label: 'Doar',
+                              onPressed: () {
+                                print("Doar");
+                              },
+                            ),
+                            const SizedBox(width: 10), // Espaço entre os botões
+                            ButtonEdited(
+                              icon: Icons.favorite,
+                              label: 'Seguir',
+                              onPressed: () {
+                                print("Seguir!");
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -233,6 +287,16 @@ class _OngpageState extends State<Ongpage> {
         ),
       ),
     );
+  }
+
+  Future<int> _pegaId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? emailtoken = prefs.getString('email');
+    String email = cipher.xorDecode(emailtoken!);
+
+    int id = await SQLONG.pegaIdOng(email);
+    print(id);
+    return id;
   }
 }
 
