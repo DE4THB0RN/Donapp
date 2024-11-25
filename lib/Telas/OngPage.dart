@@ -133,7 +133,6 @@ class _OngpageState extends State<Ongpage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            
                             ButtonEdited(
                               icon: Icons.edit,
                               label: 'Editar perfil',
@@ -149,10 +148,9 @@ class _OngpageState extends State<Ongpage> {
                                 print("Fazer postagem");
                               },
                             ),
-                            
                           ],
                         ),
-                        const SizedBox(height: 10), // Espaço entre as linhas
+                        const SizedBox(height: 20), // Espaço entre as linhas
                         ButtonEdited(
                           icon: Icons.history,
                           label: 'Histórico de doações',
