@@ -380,7 +380,7 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         email = ongFull.first['email'];
                         senha = ongFull.first['senha'];
                         desc = ongFull.first['desc'];
-                        if (perfil.isNotEmpty && banner.isNotEmpty) {
+                        if (perfil != '' && banner != '') {
                           await SQLONG.atualizaONG(idOng, nome, cnpj, email,
                               senha, desc, perfil, banner);
                         } else if (perfil == '' && banner == '') {

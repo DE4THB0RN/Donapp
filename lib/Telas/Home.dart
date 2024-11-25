@@ -35,6 +35,13 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initializeCards();
+    _printaBD();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -100,12 +107,6 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _printaBD();
   }
 
   void _printaBD() async {
