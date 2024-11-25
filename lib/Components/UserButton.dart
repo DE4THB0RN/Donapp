@@ -51,17 +51,13 @@ class _ProfileIconState extends State<ProfileIcon> {
     );
   }
 
-
   Future<int> _pegaId() async {
     final prefs = await SharedPreferences.getInstance();
     String? emailtoken = prefs.getString('email');
-    String email = cipher.xorDecode(emaltoken);
+    String email = cipher.xorDecode(emailtoken!);
 
     int id = await SQLONG.pegaIdOng(email);
 
-
     return id;
   }
-
-
 }
