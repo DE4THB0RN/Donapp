@@ -20,16 +20,13 @@ class _HomeState extends State<Home> {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaONG();
     setState(() {
       for (dynamic i in ongFull) {
-        ONGS.add(Ongclass(i['nome'], i['desc'], i['foto_banner'],
-            i['foto_perfil'], i['id']));
+        ONGS.add(Ongclass(
+            i['nome'], i['desc'], i['foto_banner'], i['foto_perfil'], i['id']));
       }
 
       for (Ongclass i in ONGS) {
         CardsOng.add(NGOCard(
-          title: i.nome,
-          description: i.desc,
-          image: i.perfil,
-        ));
+            title: i.nome, description: i.desc, image: i.perfil, id: i.id));
       }
     });
   }

@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
+import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +29,31 @@ class _OngpageState extends State<Ongpage> {
 
   Ongclass objetoONG = Ongclass.ongClassNull();
   int? idLogado = 0;
-  bool isOng = false;
+  List<Localclass> localidades = [];
+  List<LocalCard> localCards = [];
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
+    List<Map<String, dynamic>> locais = await SQLLocal.pegaLocaisOng(id);
     setState(() {
       objetoONG.banner = ongFull.first['foto_banner'];
       objetoONG.perfil = ongFull.first['foto_perfil'];
       objetoONG.desc = ongFull.first['desc'];
       objetoONG.nome = ongFull.first['nome'];
       objetoONG.id = id;
+
+      for (dynamic i in locais) {
+        localidades.add(Localclass(i['cep'], i['rua'], i['complemento'],
+            i['numero'], i['bairro'], i['cidade'], i['estado']));
+      }
+
+      for (Localclass i in localidades) {
+        localCards.add(LocalCard(
+            rua: i.rua,
+            bairro: i.bairro,
+            numero: i.numero,
+            complemento: i.complemento));
+      }
     });
   }
 
@@ -44,17 +62,6 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _carregarId();
-    _initPrefs();
-  }
-
-  void _initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    bool? isOnger = prefs.getBool('isOng');
-    if (isOnger != null) {
-      setState(() {
-        isOng = isOnger;
-      });
-    }
   }
 
   Future<void> _carregarId() async {
@@ -174,29 +181,25 @@ class _OngpageState extends State<Ongpage> {
                   const SizedBox(height: 10), // Espaço entre as linhas
                 ] else ...[
                   // Botões quando NÃO for a própria ONG
-                  if (isOng)
-                    ...[]
-                  else ...[
-                    Row(
-                      children: [
-                        ButtonEdited(
-                          icon: Icons.wallet_giftcard,
-                          label: 'Doar',
-                          onPressed: () {
-                            print("Doar");
-                          },
-                        ),
-                        const SizedBox(width: 10), // Espaço entre os botões
-                        ButtonEdited(
-                          icon: Icons.favorite,
-                          label: 'Seguir',
-                          onPressed: () {
-                            print("Seguir!");
-                          },
-                        ),
-                      ],
-                    ),
-                  ]
+                  Row(
+                    children: [
+                      ButtonEdited(
+                        icon: Icons.wallet_giftcard,
+                        label: 'Doar',
+                        onPressed: () {
+                          print("Doar");
+                        },
+                      ),
+                      const SizedBox(width: 10), // Espaço entre os botões
+                      ButtonEdited(
+                        icon: Icons.favorite,
+                        label: 'Seguir',
+                        onPressed: () {
+                          print("Seguir!");
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ],
             ),
@@ -271,6 +274,21 @@ class _OngpageState extends State<Ongpage> {
                         fit: BoxFit.cover,
                       ),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: Padinho.pequeno,
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < localidades.length; i++)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: localCards[i],
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ),
               ],
