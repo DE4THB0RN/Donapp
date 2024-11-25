@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
+import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +29,31 @@ class _OngpageState extends State<Ongpage> {
 
   Ongclass objetoONG = Ongclass.ongClassNull();
   int? idLogado = 0;
+  List<Localclass> localidades = [];
+  List<LocalCard> localCards = [];
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
+    List<Map<String, dynamic>> locais = await SQLLocal.pegaLocaisOng(id);
     setState(() {
       objetoONG.banner = ongFull.first['foto_banner'];
       objetoONG.perfil = ongFull.first['foto_perfil'];
       objetoONG.desc = ongFull.first['desc'];
       objetoONG.nome = ongFull.first['nome'];
       objetoONG.id = id;
+
+      for (dynamic i in locais) {
+        localidades.add(Localclass(i['cep'], i['rua'], i['complemento'],
+            i['numero'], i['bairro'], i['cidade'], i['estado']));
+      }
+
+      for (Localclass i in localidades) {
+        localCards.add(LocalCard(
+            rua: i.rua,
+            bairro: i.bairro,
+            numero: i.numero,
+            complemento: i.complemento));
+      }
     });
   }
 
@@ -256,6 +275,21 @@ class _OngpageState extends State<Ongpage> {
                         fit: BoxFit.cover,
                       ),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: Padinho.pequeno,
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < localidades.length; i++)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: localCards[i],
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ),
               ],

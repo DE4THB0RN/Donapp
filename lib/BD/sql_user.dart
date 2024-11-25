@@ -82,4 +82,12 @@ class SQLUser {
     return db.query('usuario',
         where: "email = ?", whereArgs: [email], limit: 1);
   }
+
+  static Future<void> dropDataBaseUser() async {
+    try {
+      await sql.deleteDatabase('usuario.db');
+    } catch (err) {
+      print("varios erro");
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:donapp/BD/sql_ONG.dart';
-import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -13,6 +13,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Ongclass> ONGS = [];
+  List<NGOCard> CardsOng = [];
+
+  void initializeCards() async {
+    List<Map<String, dynamic>> ongFull = await SQLONG.pegaONG();
+    setState(() {
+      for (dynamic i in ongFull) {
+        ONGS.add(Ongclass(
+            i['nome'], i['desc'], i['foto_banner'], i['foto_perfil'], i['id']));
+      }
+
+      for (Ongclass i in ONGS) {
+        CardsOng.add(NGOCard(
+            title: i.nome, description: i.desc, image: i.perfil, id: i.id));
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeCards();
+    _printaBD();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -61,26 +86,17 @@ class _HomeState extends State<Home> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                NGOCard(
-                  title: 'ONG 1',
-                  description: 'Somos uma ONG de ajudar animais',
-                  image: 'assets/beagle.png',
-                ),
-                NGOCard(
-                  title: 'ONG 2',
-                  description: 'Doamos alimentos para os pobres',
-                  image: 'assets/dog1.png',
-                ),
-                NGOCard(
-                  title: 'ONG 3',
-                  description: 'Somos uma ONG que doa roupas para os sem teto',
-                  image: 'assets/dog2.png',
-                ),
-                NGOCard(
-                  title: 'ONG 4',
-                  description:
-                      'Somos uma ONG que salva crianças em situação de fome e pobreza',
-                  image: 'assets/dog3.png',
+                Column(
+                  children: [
+                    for (int i = 0; i < ONGS.length; i++)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CardsOng[i],
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
               ],
             ),
@@ -88,12 +104,6 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _printaBD();
   }
 
   void _printaBD() async {
@@ -108,17 +118,16 @@ class _HomeState extends State<Home> {
       print(i['foto_banner']);
     }
 
-    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
-    for (dynamic i in Localfull) {
-      print(i['cep']);
-      print(i['rua']);
-      print(i['numero']);
-      print(i['complemento']);
-      print(i['bairro']);
-      print(i['cidade']);
-      print(i['estado']);
-      print(i['id_ong']);
-    }
+    // List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
+    // for (dynamic i in Localfull) {
+    //   print(i['cep']);
+    //   print(i['rua']);
+    //   print(i['numero']);
+    //   print(i['complemento']);
+    //   print(i['bairro']);
+    //   print(i['cidade']);
+    //   print(i['estado']);
+    //   print(i['id_ong']);
+    // }
   }
 }
-

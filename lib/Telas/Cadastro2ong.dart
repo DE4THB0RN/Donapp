@@ -1,6 +1,7 @@
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/Components/GenericImages.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
@@ -11,6 +12,7 @@ import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
+import 'package:flutter/services.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,6 +53,13 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
   TextEditingController controlBairro = TextEditingController();
   TextEditingController controlCidade = TextEditingController();
   TextEditingController controlEstado = TextEditingController();
+
+  @override
+  void initState() {
+    perfil = '';
+    banner = '';
+    super.initState();
+  }
 
   void _addLocalidade(Localclass localidade) {
     setState(() {
@@ -369,8 +378,26 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         email = ongFull.first['email'];
                         senha = ongFull.first['senha'];
                         desc = ongFull.first['desc'];
-                        await SQLONG.atualizaONG(idOng, nome, cnpj, email,
-                            senha, desc, perfil, banner);
+                        if (perfil != '' && banner != '') {
+                          await SQLONG.atualizaONG(idOng, nome, cnpj, email,
+                              senha, desc, perfil, banner);
+                        } else if (perfil == '' && banner == '') {
+                          await SQLONG.atualizaONG(
+                              idOng,
+                              nome,
+                              cnpj,
+                              email,
+                              senha,
+                              desc,
+                              await genericProfile(),
+                              await genericBanner());
+                        } else if (perfil == '') {
+                          await SQLONG.atualizaONG(idOng, nome, cnpj, email,
+                              senha, desc, await genericProfile(), banner);
+                        } else if (banner == '') {
+                          await SQLONG.atualizaONG(idOng, nome, cnpj, email,
+                              senha, desc, perfil, await genericBanner());
+                        }
 
                         if (localidades.isNotEmpty) {
                           for (int i = 0; i < localidades.length; i++) {
@@ -398,10 +425,4 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Cadastro2Ong(),
-  ));
 }
