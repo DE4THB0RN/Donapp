@@ -26,6 +26,7 @@ class _OngpageState extends State<Ongpage> {
 
   Ongclass objetoONG = Ongclass.ongClassNull();
   int? idLogado = 0;
+  bool isOng = false;
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -43,6 +44,17 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _carregarId();
+    _initPrefs();
+  }
+
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    bool? isOnger = prefs.getBool('isOng');
+    if (isOnger != null) {
+      setState(() {
+        isOng = isOnger;
+      });
+    }
   }
 
   Future<void> _carregarId() async {
@@ -162,25 +174,29 @@ class _OngpageState extends State<Ongpage> {
                   const SizedBox(height: 10), // Espaço entre as linhas
                 ] else ...[
                   // Botões quando NÃO for a própria ONG
-                  Row(
-                    children: [
-                      ButtonEdited(
-                        icon: Icons.wallet_giftcard,
-                        label: 'Doar',
-                        onPressed: () {
-                          print("Doar");
-                        },
-                      ),
-                      const SizedBox(width: 10), // Espaço entre os botões
-                      ButtonEdited(
-                        icon: Icons.favorite,
-                        label: 'Seguir',
-                        onPressed: () {
-                          print("Seguir!");
-                        },
-                      ),
-                    ],
-                  ),
+                  if (isOng)
+                    ...[]
+                  else ...[
+                    Row(
+                      children: [
+                        ButtonEdited(
+                          icon: Icons.wallet_giftcard,
+                          label: 'Doar',
+                          onPressed: () {
+                            print("Doar");
+                          },
+                        ),
+                        const SizedBox(width: 10), // Espaço entre os botões
+                        ButtonEdited(
+                          icon: Icons.favorite,
+                          label: 'Seguir',
+                          onPressed: () {
+                            print("Seguir!");
+                          },
+                        ),
+                      ],
+                    ),
+                  ]
                 ],
               ],
             ),
