@@ -54,8 +54,8 @@ _botao(context, text, destino) {
     child: Center(
       child: Text(
         '$text',
-        style:
-            const TextStyle(fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
+        style: const TextStyle(
+            fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
       ),
     ),
   );
