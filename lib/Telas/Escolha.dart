@@ -35,7 +35,7 @@ class _EscolhaState extends State<Escolha> {
   @override
   void initState() {
     super.initState();
-    dores();
+    //dores();
   }
 
   void dores() async {
