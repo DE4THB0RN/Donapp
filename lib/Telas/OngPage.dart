@@ -31,6 +31,7 @@ class _OngpageState extends State<Ongpage> {
   int? idLogado = 0;
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
+  bool isOng = false;
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -62,6 +63,7 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _carregarId();
+    _initPrefs();
   }
 
   Future<void> _carregarId() async {
@@ -69,6 +71,16 @@ class _OngpageState extends State<Ongpage> {
     setState(() {
       idLogado = id; // Atualiza o estado
     });
+  }
+
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    bool? isOnger = prefs.getBool('is_ONG');
+    if (isOnger != null) {
+      setState(() {
+        isOng = isOnger;
+      });
+    }
   }
 
   @override
@@ -144,43 +156,44 @@ class _OngpageState extends State<Ongpage> {
             ),
             Column(
               children: [
-                if (isOwnONG) ...[
-                  // Botões quando for a própria ONG
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ButtonEdited(
-                            icon: Icons.edit,
-                            label: 'Editar perfil',
-                            onPressed: () {
-                              print("Editar perfil");
-                            },
-                          ),
-                          const SizedBox(width: 10), // Espaço entre os botões
-                          ButtonEdited(
-                            icon: Icons.post_add,
-                            label: 'Fazer postagem',
-                            onPressed: () {
-                              print("Fazer postagem");
-                            },
-                          ),
-                        ],
-                      ),
-                      ButtonEdited(
-                        icon: Icons.history,
-                        label: 'Histórico de doações',
-                        onPressed: () {
-                          print("Histórico de doações");
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10), // Espaço entre as linhas
+                if (isOng) ...[
+                  if (isOwnONG) ...[
+                    // Botões quando for a própria ONG
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ButtonEdited(
+                              icon: Icons.edit,
+                              label: 'Editar perfil',
+                              onPressed: () {
+                                print("Editar perfil");
+                              },
+                            ),
+                            const SizedBox(width: 10), // Espaço entre os botões
+                            ButtonEdited(
+                              icon: Icons.post_add,
+                              label: 'Fazer postagem',
+                              onPressed: () {
+                                print("Fazer postagem");
+                              },
+                            ),
+                          ],
+                        ),
+                        ButtonEdited(
+                          icon: Icons.history,
+                          label: 'Histórico de doações',
+                          onPressed: () {
+                            print("Histórico de doações");
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10), // Espaço entre as linhas
+                  ]
                 ] else ...[
-                  // Botões quando NÃO for a própria ONG
                   Row(
                     children: [
                       ButtonEdited(
@@ -200,7 +213,7 @@ class _OngpageState extends State<Ongpage> {
                       ),
                     ],
                   ),
-                ],
+                ]
               ],
             ),
 
