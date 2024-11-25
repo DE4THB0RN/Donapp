@@ -56,8 +56,10 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
 
   @override
   void initState() {
-    perfil = '';
-    banner = '';
+    setState(() {
+      perfil = '';
+      banner = '';
+    });
     super.initState();
   }
 
