@@ -129,6 +129,13 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                       Navigator.pushReplacementNamed(context, 'Cadastro_ONG');
                     },
                   ),
+                  SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Voltar',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Escolha');
+                    },
+                  ),
                 ],
               ),
             ),

@@ -39,98 +39,111 @@ class __LoginpageState extends State<LoginpageState> {
         child: Center(
           child: Padding(
             padding: Padinho.medio,
-            child: Container(
-              padding: Padinho.medio,
-              decoration: BoxDecoration(
-                color:
-                    AppColor.appBarColor, // Cor de fundo para a área de inputs
-                borderRadius: BorderRadius.circular(20.0), // Borda arredondada
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomInputField(
-                    labelText: 'Email:',
-                    hintText: 'EmailExemplo@email.com',
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    onSubmitted: (value) {},
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: Padinho.medio,
+                  decoration: BoxDecoration(
+                    color: AppColor.appBarColor,
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  SizedBox(height: 15),
-                  CustomInputField(
-                    labelText: 'Senha:',
-                    hintText: 'Digite sua senha:',
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                    onChanged: (value) {
-                      senha = value;
-                    },
-                    onSubmitted: (value) {},
-                  ),
-                  SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Entrar com Google',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Home');
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Entrar',
-                    onPressed: () async {
-                      _initPrefs();
-                      if (email.isEmpty || senha.isEmpty) {
-                        Preencha.dialogo(context);
-                      } else {
-                        senha = generateMd5(senha);
-                        await _pegarUser();
-                        if (_usuario.isNotEmpty) {
-                          if (_usuario.first['senha'] == senha) {
-                            String nome = _usuario.first['nome'];
-                            nome = cipher.xorEncode(nome);
-                            prefs.setString('nome', nome);
-                            String emailtoken = cipher.xorEncode(email);
-                            prefs.setString('email', emailtoken);
-                            String senhatoken = cipher.xorEncode(senha);
-                            prefs.setString('senha', senhatoken);
-                            Navigator.pushReplacementNamed(context, 'Home');
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomInputField(
+                        labelText: 'Email:',
+                        hintText: 'EmailExemplo@email.com',
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        onSubmitted: (String value) {},
+                      ),
+                      const SizedBox(height: 15),
+                      CustomInputField(
+                        labelText: 'Senha:',
+                        hintText: 'Digite sua senha:',
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        onChanged: (value) {
+                          senha = value;
+                        },
+                        onSubmitted: (String value) {},
+                      ),
+                      const SizedBox(height: 20),
+                      CustomButton(
+                        text: 'Entrar com Google',
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, 'Home');
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      CustomButton(
+                        text: 'Entrar',
+                        onPressed: () async {
+                          _initPrefs();
+                          if (email.isEmpty || senha.isEmpty) {
+                            Preencha.dialogo(context);
                           } else {
-                            _senhaErrada();
-                          }
-                        } else if (_usuario.isEmpty) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Erro'),
-                                content: Text('Usuário não encontrado'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text('OK'),
-                                  ),
-                                ],
+                            senha = generateMd5(senha);
+                            await _pegarUser();
+                            if (_usuario.isNotEmpty) {
+                              if (_usuario.first['senha'] == senha) {
+                                String nome = _usuario.first['nome'];
+                                nome = cipher.xorEncode(nome);
+                                prefs.setString('nome', nome);
+                                String emailtoken = cipher.xorEncode(email);
+                                prefs.setString('email', emailtoken);
+                                String senhatoken = cipher.xorEncode(senha);
+                                prefs.setString('senha', senhatoken);
+                                Navigator.pushReplacementNamed(context, 'Home');
+                              } else {
+                                _senhaErrada();
+                              }
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Erro'),
+                                    content:
+                                        const Text('Usuário não encontrado'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }
-                      }
-                    },
+                            }
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        text: 'Criar conta',
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, 'Cadastro_User');
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  CustomButton(
-                    text: 'Criar conta',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Cadastro_User');
-                    },
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                // Botão Voltar no final
+                CustomButton(
+                  text: 'Voltar',
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, 'Escolha');
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -143,14 +156,14 @@ class __LoginpageState extends State<LoginpageState> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro'),
-          content: Text('Senha incorreta'),
+          title: const Text('Erro'),
+          content: const Text('Senha incorreta'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
