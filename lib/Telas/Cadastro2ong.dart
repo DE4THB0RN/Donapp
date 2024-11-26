@@ -70,7 +70,8 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
           rua: localidade.rua,
           bairro: localidade.bairro,
           numero: localidade.numero,
-          complemento: localidade.complemento));
+          complemento: localidade.complemento,
+          id: localidade.id));
     });
   }
 
@@ -244,11 +245,11 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
                         Localclass local;
                         if (complemento.isEmpty) {
                           local = Localclass(
-                              cep, rua, '', numero, bairro, cidade, estado);
+                              cep, rua, '', numero, bairro, cidade, estado, 0);
                           _addLocalidade(local);
                         } else {
                           local = Localclass(cep, rua, complemento, numero,
-                              bairro, cidade, estado);
+                              bairro, cidade, estado, 0);
                           _addLocalidade(local);
                         }
                         Navigator.pop(context); // Fecha o diálogo

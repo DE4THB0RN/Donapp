@@ -13,6 +13,7 @@ import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
 import 'package:donapp/Components/PostCard.dart';
+import 'package:donapp/Components/PostClass.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
@@ -39,6 +40,8 @@ class _OngpageState extends State<Ongpage> {
   int? idLogado = 0;
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
+  List<Postclass> postagens = [];
+  List<Postcard> postCards = [];
   bool isOng = false;
   double valor = 0.0;
   String editbanner = '';
@@ -54,6 +57,7 @@ class _OngpageState extends State<Ongpage> {
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
     List<Map<String, dynamic>> locais = await SQLLocal.pegaLocaisOng(id);
+    List<Map<String, dynamic>> posts = await SqlPost.pegaPostsOng(id);
     setState(() {
       objetoONG.banner = ongFull.first['foto_banner'];
       objetoONG.perfil = ongFull.first['foto_perfil'];
@@ -63,15 +67,31 @@ class _OngpageState extends State<Ongpage> {
 
       for (dynamic i in locais) {
         localidades.add(Localclass(i['cep'], i['rua'], i['complemento'],
-            i['numero'], i['bairro'], i['cidade'], i['estado']));
+            i['numero'], i['bairro'], i['cidade'], i['estado'], i['id']));
       }
 
       for (Localclass i in localidades) {
         localCards.add(LocalCard(
-            rua: i.rua,
-            bairro: i.bairro,
-            numero: i.numero,
-            complemento: i.complemento));
+          rua: i.rua,
+          bairro: i.bairro,
+          numero: i.numero,
+          complemento: i.complemento,
+          id: i.id,
+        ));
+      }
+
+      for (dynamic i in posts) {
+        postagens
+            .add(Postclass(i['titulo'], i['descricao'], i['imagem'], i['id']));
+      }
+
+      for (Postclass i in postagens) {
+        postCards.add(Postcard(
+          image: i.imagem,
+          title: i.titulo,
+          description: i.coment,
+          id: i.id,
+        ));
       }
     });
   }
@@ -336,16 +356,14 @@ class _OngpageState extends State<Ongpage> {
                       fontSize: 20,
                     ),
                   ),
-                  Postcard(
-                      imagePath: 'assets/dog1.png',
-                      title: 'Salvando animais!',
-                      description:
-                          'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
-                  Postcard(
-                      imagePath: 'assets/dog2.png',
-                      title: 'Novos abrigos',
-                      description:
-                          'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
+                  for (int i = 0; i < postagens.length; i++)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: postCards[i],
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -672,7 +690,7 @@ class _OngpageState extends State<Ongpage> {
                     keyboardType: TextInputType.text,
                     obscureText: false,
                     onChanged: (value) {
-                      titulo = value;
+                      postTitulo = value;
                     },
                     onSubmitted: (value) {},
                   ),
@@ -683,7 +701,7 @@ class _OngpageState extends State<Ongpage> {
                     keyboardType: TextInputType.text,
                     obscureText: false,
                     onChanged: (value) {
-                      coment = value;
+                      postComent = value;
                     },
                     onSubmitted: (value) {},
                   ),
@@ -691,7 +709,15 @@ class _OngpageState extends State<Ongpage> {
                   CustomButton(
                     text: 'Postar',
                     onPressed: () async {
-                      Navigator.pop(context);
+                      if (postComent.isEmpty ||
+                          postImage.isEmpty ||
+                          postTitulo.isEmpty) {
+                        Preencha.dialogo(context);
+                      } else {
+                        SqlPost.adicionarPost(
+                            postTitulo, postComent, postImage, widget.ongId);
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ],

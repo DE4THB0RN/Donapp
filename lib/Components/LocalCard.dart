@@ -6,12 +6,14 @@ class LocalCard extends StatelessWidget {
   final String bairro;
   final String complemento;
   final int numero;
+  final int id;
 
   const LocalCard({
     required this.rua,
     required this.bairro,
     required this.numero,
     required this.complemento,
+    required this.id,
     super.key,
   });
 
