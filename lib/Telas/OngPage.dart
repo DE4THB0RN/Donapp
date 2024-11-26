@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_user.dart';
-import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/CustomInputField.dart';
+import 'package:donapp/Components/CustomInputFieldMoney.dart';
+import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
@@ -35,6 +38,11 @@ class _OngpageState extends State<Ongpage> {
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
   bool isOng = false;
+  double valor = 0.0;
+  String banner = '';
+  String perfil = '';
+  String titulo = '';
+  String coment = '';
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -66,16 +74,16 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _initPrefs();
-    if (isOng) {
-      _carregarId();
-    }
+    _carregarId();
   }
 
   Future<void> _carregarId() async {
-    final int id = await _pegaId(); // Aguarda o ID
-    setState(() {
-      idLogado = id; // Atualiza o estado
-    });
+    if (isOng) {
+      final int id = await _pegaId(); // Aguarda o ID
+      setState(() {
+        idLogado = id; // Atualiza o estado
+      });
+    }
   }
 
   void _initPrefs() async {
@@ -174,7 +182,7 @@ class _OngpageState extends State<Ongpage> {
                               icon: Icons.edit,
                               label: 'Editar perfil',
                               onPressed: () {
-                                print("Editar perfil");
+                                _openEditONGPopup(context);
                               },
                             ),
                             const SizedBox(width: 10), // Espaço entre os botões
@@ -182,7 +190,7 @@ class _OngpageState extends State<Ongpage> {
                               icon: Icons.post_add,
                               label: 'Fazer postagem',
                               onPressed: () {
-                                print("Fazer postagem");
+                                _openCreatePost(context);
                               },
                             ),
                           ],
@@ -394,23 +402,9 @@ class _OngpageState extends State<Ongpage> {
                 CustomInputFieldMoney(
                   labelText: 'Valor da Doação',
                   hintText: 'Digite o valor',
-                  keyboardType: TextInputType.number,
                   controller: valorController,
                   onChanged: (value) {
-                    if (value.isNotEmpty) {
-                      // Remove caracteres que não são números
-                      String numericValue =
-                          value.replaceAll(RegExp(r'[^0-9]'), '');
-                      // Formata o valor como dinheiro
-                      String formattedValue =
-                          currencyFormat.format(int.parse(numericValue) / 100);
-                      // Atualiza o controlador para exibir o valor formatado
-                      valorController.value = TextEditingValue(
-                        text: formattedValue,
-                        selection: TextSelection.collapsed(
-                            offset: formattedValue.length),
-                      );
-                    }
+                    valor = UtilBrasilFields.converterMoedaParaDouble(value);
                   },
                 ),
                 const SizedBox(height: 20.0),
@@ -446,5 +440,136 @@ class _OngpageState extends State<Ongpage> {
 
   Future<void> salvarDoacaoNoBanco(int idOng, int idUser, double valor) async {
     await SQLDonate.adicionarDonate(idOng, idUser, valor);
+  }
+
+  void _openEditONGPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Imagem de Perfil',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        perfil = imageString;
+                      });
+                    },
+                    shape: ImageShape.circle,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Imagem do Banner',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        banner = imageString;
+                      });
+                    },
+                    shape: ImageShape.square,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _openCreatePost(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Imagem do Post',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        banner = imageString;
+                      });
+                    },
+                    shape: ImageShape.square,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Titulo:',
+                    hintText: 'Digite o Titulo',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      titulo = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Descrição:',
+                    hintText: 'Digite sua Descrição',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      coment = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
