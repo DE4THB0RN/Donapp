@@ -331,6 +331,15 @@ class _OngpageState extends State<Ongpage> {
                   padding: Padinho.pequeno,
                   child: Column(
                     children: [
+                      if(isOwnONG) ...[
+                        ButtonEdited(
+                          icon: Icons.add,
+                          label: 'Adicionar Local',
+                          onPressed: () {
+                            print("Adicionar Local");
+                          },
+                        ),
+                      ],
                       for (int i = 0; i < localidades.length; i++)
                         Row(
                           children: [
@@ -358,12 +367,38 @@ class _OngpageState extends State<Ongpage> {
                       fontSize: 20,
                     ),
                   ),
+                  
                   for (int i = 0; i < postagens.length; i++)
                     Row(
                       children: [
                         Expanded(
                           child: postCards[i],
+                          
+                    
+                          
                         ),
+                        if (isOwnONG) ...[
+                          SizedBox(width: 8),
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                color: Colors.lightBlue,
+                                onPressed: () {
+                                  print("Editar postagem");
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                color: Colors.red,
+                                onPressed: () {
+                                  print("Deletar postagem");
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+
                       ],
                     ),
                 ],
