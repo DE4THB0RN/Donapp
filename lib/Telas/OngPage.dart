@@ -8,6 +8,7 @@ import 'package:donapp/Components/CustomImputFiledMoney.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
+import 'package:donapp/Components/PostCard.dart';
 import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -324,10 +325,16 @@ class _OngpageState extends State<Ongpage> {
                       fontSize: 20,
                     ),
                   ),
-                  buildCard('assets/dog1.png', 'Salvando animais!',
-                      'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
-                  buildCard('assets/dog2.png', 'Novos abrigos',
-                      'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
+                  Postcard(
+                      imagePath: 'assets/dog1.png',
+                      title: 'Salvando animais!',
+                      description:
+                          'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
+                  Postcard(
+                      imagePath: 'assets/dog2.png',
+                      title: 'Novos abrigos',
+                      description:
+                          'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
                 ],
               ),
             ),
@@ -440,52 +447,4 @@ class _OngpageState extends State<Ongpage> {
   Future<void> salvarDoacaoNoBanco(int idOng, int idUser, double valor) async {
     await SQLDonate.adicionarDonate(idOng, idUser, valor);
   }
-}
-
-Widget buildCard(String imagePath, String title, String description) {
-  return Padding(
-    padding: Padinho.pequeno,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 150,
-            width: 150,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SizedBox(width: 5),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  description,
-                  textAlign: TextAlign.justify,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
-    ),
-  );
 }
