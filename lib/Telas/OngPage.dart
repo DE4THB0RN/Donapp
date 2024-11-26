@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/CustomImputFiledMoney.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
@@ -62,8 +64,10 @@ class _OngpageState extends State<Ongpage> {
   void initState() {
     super.initState();
     createOng(widget.ongId);
-    _carregarId();
     _initPrefs();
+    if (isOng) {
+      _carregarId();
+    }
   }
 
   Future<void> _carregarId() async {
@@ -200,7 +204,7 @@ class _OngpageState extends State<Ongpage> {
                         icon: Icons.wallet_giftcard,
                         label: 'Doar',
                         onPressed: () {
-                          print("Doar");
+                          _openDoacaoPopup(context);
                         },
                       ),
                       const SizedBox(width: 10), // Espaço entre os botões
@@ -342,6 +346,100 @@ class _OngpageState extends State<Ongpage> {
     print(id);
     return id;
   }
+
+  void _openDoacaoPopup(BuildContext context) {
+    final TextEditingController valorController = TextEditingController();
+    final NumberFormat currencyFormat =
+        NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                const Text(
+                  'Doação',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                CustomInputFieldMoney(
+                  labelText: 'Valor da Doação',
+                  hintText: 'Digite o valor',
+                  keyboardType: TextInputType.number,
+                  controller: valorController,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      // Remove caracteres que não são números
+                      String numericValue =
+                          value.replaceAll(RegExp(r'[^0-9]'), '');
+                      // Formata o valor como dinheiro
+                      String formattedValue =
+                          currencyFormat.format(int.parse(numericValue) / 100);
+                      // Atualiza o controlador para exibir o valor formatado
+                      valorController.value = TextEditingValue(
+                        text: formattedValue,
+                        selection: TextSelection.collapsed(
+                            offset: formattedValue.length),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    String valor = valorController.text;
+                    print('Valor da doação: $valor');
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 30.0),
+                  ),
+                  child: const Text(
+                    'Confirmar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> salvarDoacaoNoBanco(int idOng, int idUser, double valor) async {
+    await SQLDonate.adicionarDonate(idOng, idUser, valor);
+  }
 }
 
 Widget buildCard(String imagePath, String title, String description) {
@@ -389,95 +487,5 @@ Widget buildCard(String imagePath, String title, String description) {
         ],
       ),
     ),
-  );
-}
-
-void _openDoacaoPopup(BuildContext context) {
-  final TextEditingController valorController = TextEditingController();
-  final NumberFormat currencyFormat =
-      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: AppColor.appBarColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              const Text(
-                'Doação',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              CustomInputFieldMoney(
-                labelText: 'Valor da Doação',
-                hintText: 'Digite o valor',
-                keyboardType: TextInputType.number,
-                controller: valorController,
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    // Remove caracteres que não são números
-                    String numericValue =
-                        value.replaceAll(RegExp(r'[^0-9]'), '');
-                    // Formata o valor como dinheiro
-                    String formattedValue =
-                        currencyFormat.format(int.parse(numericValue) / 100);
-                    // Atualiza o controlador para exibir o valor formatado
-                    valorController.value = TextEditingValue(
-                      text: formattedValue,
-                      selection: TextSelection.collapsed(
-                          offset: formattedValue.length),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  String valor = valorController.text;
-                  print('Valor da doação: $valor');
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 30.0),
-                ),
-                child: const Text(
-                  'Confirmar',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
   );
 }
