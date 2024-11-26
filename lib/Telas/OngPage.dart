@@ -5,6 +5,7 @@ import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomInputFieldMoney.dart';
 import 'package:donapp/Components/ImageInputField.dart';
@@ -492,6 +493,54 @@ class _OngpageState extends State<Ongpage> {
                     },
                     shape: ImageShape.square,
                   ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Nome:',
+                    hintText: 'Digite o Nome da Ong',
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    onChanged: (value) {
+                      titulo = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Descrição:',
+                    hintText: 'Digite a descrição da Ong',
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    onChanged: (value) {
+                      titulo = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Salvar',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Salvar',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Sair da conta',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Excluir conta',
+                    onPressed: () async {},
+                  ),
                 ],
               ),
             ),
@@ -543,7 +592,7 @@ class _OngpageState extends State<Ongpage> {
                     labelText: 'Titulo:',
                     hintText: 'Digite o Titulo',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
+                    obscureText: false,
                     onChanged: (value) {
                       titulo = value;
                     },
@@ -554,11 +603,18 @@ class _OngpageState extends State<Ongpage> {
                     labelText: 'Descrição:',
                     hintText: 'Digite sua Descrição',
                     keyboardType: TextInputType.text,
-                    obscureText: true,
+                    obscureText: false,
                     onChanged: (value) {
                       coment = value;
                     },
                     onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Postar',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
@@ -619,6 +675,83 @@ class _OngpageState extends State<Ongpage> {
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
+                    },
+                    child: const Text(
+                      'Sim',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openConfirmDeletePopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          content: const Text(
+            'Tem certeza de que deseja excluir a conta?',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context); // Fecha apenas o pop-up de confirmação
+                    },
+                    child: const Text(
+                      'Não',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      print('Hora de apagar');
+                      String emailONG =
+                          cipher.xorDecode(prefs.getString('email')!);
+                      List<Map<String, dynamic>> Ongfull =
+                          await SQLONG.pegaUmaONGEmail2(emailONG);
+                      // if (id == -1) {
+                      //   id = userfull.first['id'];
+                      // }
+
+                      // await SQLUser.apagaUsuario(id);
+
+                      // SharedPreferences prefs =
+                      //     await SharedPreferences.getInstance();
+
+                      // // Remove os tokens armazenados
+                      // await prefs.remove('email');
+                      // await prefs.remove('senha');
+                      // await prefs.remove('nome');
+                      // print('apagado');
+                      Navigator.pop(context);
+                      Navigator.pop(context); // Fecha o pop-up de confirmação
+                      Navigator.pushReplacementNamed(context, 'Escolha');
                     },
                     child: const Text(
                       'Sim',
