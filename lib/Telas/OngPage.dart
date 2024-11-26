@@ -1,11 +1,17 @@
 import 'dart:convert';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
-import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/CustomInputField.dart';
+import 'package:donapp/Components/CustomInputFieldMoney.dart';
+import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
+import 'package:donapp/Components/PostCard.dart';
 import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -14,7 +20,6 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Components/ImageInputField.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
@@ -32,9 +37,12 @@ class _OngpageState extends State<Ongpage> {
   int? idLogado = 0;
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
-  String perfil = '';
-  String banner = '';
   bool isOng = false;
+  double valor = 0.0;
+  String banner = '';
+  String perfil = '';
+  String titulo = '';
+  String coment = '';
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -65,15 +73,17 @@ class _OngpageState extends State<Ongpage> {
   void initState() {
     super.initState();
     createOng(widget.ongId);
-    _carregarId();
     _initPrefs();
+    _carregarId();
   }
 
   Future<void> _carregarId() async {
-    final int id = await _pegaId(); // Aguarda o ID
-    setState(() {
-      idLogado = id; // Atualiza o estado
-    });
+    if (isOng) {
+      final int id = await _pegaId(); // Aguarda o ID
+      setState(() {
+        idLogado = id; // Atualiza o estado
+      });
+    }
   }
 
   void _initPrefs() async {
@@ -172,7 +182,7 @@ class _OngpageState extends State<Ongpage> {
                               icon: Icons.edit,
                               label: 'Editar perfil',
                               onPressed: () {
-                                print("Editar perfil");
+                                _openEditONGPopup(context);
                               },
                             ),
                             const SizedBox(width: 10), // Espaço entre os botões
@@ -180,12 +190,11 @@ class _OngpageState extends State<Ongpage> {
                               icon: Icons.post_add,
                               label: 'Fazer postagem',
                               onPressed: () {
-                                _openEditONGPopup(context);
+                                _openCreatePost(context);
                               },
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20), // Espaço entre as linhas
                         ButtonEdited(
                           icon: Icons.history,
                           label: 'Histórico de doações',
@@ -204,7 +213,7 @@ class _OngpageState extends State<Ongpage> {
                         icon: Icons.wallet_giftcard,
                         label: 'Doar',
                         onPressed: () {
-                          print("Doar");
+                          _openDoacaoPopup(context);
                         },
                       ),
                       const SizedBox(width: 10), // Espaço entre os botões
@@ -324,10 +333,16 @@ class _OngpageState extends State<Ongpage> {
                       fontSize: 20,
                     ),
                   ),
-                  buildCard('assets/dog1.png', 'Salvando animais!',
-                      'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
-                  buildCard('assets/dog2.png', 'Novos abrigos',
-                      'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
+                  Postcard(
+                      imagePath: 'assets/dog1.png',
+                      title: 'Salvando animais!',
+                      description:
+                          'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
+                  Postcard(
+                      imagePath: 'assets/dog2.png',
+                      title: 'Novos abrigos',
+                      description:
+                          'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
                 ],
               ),
             ),
@@ -347,9 +362,13 @@ class _OngpageState extends State<Ongpage> {
     return id;
   }
 
-  void _openEditONGPopup(BuildContext context) {
+  void _openDoacaoPopup(BuildContext context) {
+    final TextEditingController valorController = TextEditingController();
+    final NumberFormat currencyFormat =
+        NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
     showDialog(
-      context: context, 
+      context: context,
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: AppColor.appBarColor,
@@ -370,193 +389,187 @@ class _OngpageState extends State<Ongpage> {
                     },
                   ),
                 ),
-
+                const SizedBox(height: 10.0),
                 const Text(
-                      'Imagem de Perfil',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  'Doação',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                CustomInputFieldMoney(
+                  labelText: 'Valor da Doação',
+                  hintText: 'Digite o valor',
+                  controller: valorController,
+                  onChanged: (value) {
+                    valor = UtilBrasilFields.converterMoedaParaDouble(value);
+                  },
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    String valor = valorController.text;
+                    print('Valor da doação: $valor');
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    ImageInputField(
-                      onImageSelected: (imageString) {
-                        setState(() {
-                          perfil = imageString;
-                        });
-                      },
-                      shape: ImageShape.circle,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 30.0),
+                  ),
+                  child: const Text(
+                    'Confirmar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
                     ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      'Imagem do Banner',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    ImageInputField(
-                      onImageSelected: (imageString) {
-                        setState(() {
-                          banner = imageString;
-                        });
-                      },
-                      shape: ImageShape.square,
-                    ),
-
-
+                  ),
+                ),
               ],
-            ), 
+            ),
           ),
         );
-
-      }
+      },
     );
   }
 
+  Future<void> salvarDoacaoNoBanco(int idOng, int idUser, double valor) async {
+    await SQLDonate.adicionarDonate(idOng, idUser, valor);
+  }
 
-}
-
-
-
-
-
-
-Widget buildCard(String imagePath, String title, String description) {
-  return Padding(
-    padding: Padinho.pequeno,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 150,
-            width: 150,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
+  void _openEditONGPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Imagem de Perfil',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        perfil = imageString;
+                      });
+                    },
+                    shape: ImageShape.circle,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    'Imagem do Banner',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        banner = imageString;
+                      });
+                    },
+                    shape: ImageShape.square,
+                  ),
+                ],
               ),
             ),
-          ),
-          SizedBox(width: 5),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  description,
-                  textAlign: TextAlign.justify,
-                ),
-              ],
+          );
+        });
+  }
+
+  void _openCreatePost(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
             ),
-          ),
-          SizedBox(width: 10),
-        ],
-      ),
-    ),
-  );
-}
-
-void _openDoacaoPopup(BuildContext context) {
-  final TextEditingController valorController = TextEditingController();
-  final NumberFormat currencyFormat =
-      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: AppColor.appBarColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              const Text(
-                'Doação',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              CustomInputFieldMoney(
-                labelText: 'Valor da Doação',
-                hintText: 'Digite o valor',
-                keyboardType: TextInputType.number,
-                controller: valorController,
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    // Remove caracteres que não são números
-                    String numericValue =
-                        value.replaceAll(RegExp(r'[^0-9]'), '');
-                    // Formata o valor como dinheiro
-                    String formattedValue =
-                        currencyFormat.format(int.parse(numericValue) / 100);
-                    // Atualiza o controlador para exibir o valor formatado
-                    valorController.value = TextEditingValue(
-                      text: formattedValue,
-                      selection: TextSelection.collapsed(
-                          offset: formattedValue.length),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  String valor = valorController.text;
-                  print('Valor da doação: $valor');
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 30.0),
-                ),
-                child: const Text(
-                  'Confirmar',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
+                  const Text(
+                    'Imagem do Post',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        banner = imageString;
+                      });
+                    },
+                    shape: ImageShape.square,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Titulo:',
+                    hintText: 'Digite o Titulo',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      titulo = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Descrição:',
+                    hintText: 'Digite sua Descrição',
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    onChanged: (value) {
+                      coment = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
+            ),
+          );
+        });
+  }
 }

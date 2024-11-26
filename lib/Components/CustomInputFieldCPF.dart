@@ -1,20 +1,20 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class CustomInputFieldMoney extends StatelessWidget {
+class CustomInputFieldCPF extends StatelessWidget {
   final String labelText;
   final String hintText;
-  final TextInputType keyboardType;
-  final bool obscureText;
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
+  final ValueChanged onChanged;
+  final ValueChanged<String> onSubmitted;
+  final TextEditingController? controller;
 
-  const CustomInputFieldMoney({
+  const CustomInputFieldCPF({
     required this.labelText,
     required this.hintText,
-    required this.keyboardType,
-    this.obscureText = false,
-    required this.controller,
     required this.onChanged,
+    required this.onSubmitted,
+    this.controller,
     super.key,
   });
 
@@ -32,10 +32,14 @@ class CustomInputFieldMoney extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        TextField(
+        TextFormField(
           controller: controller,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            CpfOuCnpjFormatter(),
+          ],
+          obscureText: false,
           decoration: InputDecoration(
             hintText: hintText,
             border: const OutlineInputBorder(),
@@ -43,6 +47,7 @@ class CustomInputFieldMoney extends StatelessWidget {
             fillColor: Colors.white,
           ),
           onChanged: onChanged,
+          onFieldSubmitted: onSubmitted,
         ),
       ],
     );

@@ -30,7 +30,8 @@ class SQLDonate {
     );
   }
 
-  static Future<int> adicionarLocal(int idOng, int idUser, double valor) async {
+  static Future<int> adicionarDonate(
+      int idOng, int idUser, double valor) async {
     final db = await SQLDonate.db();
     final dados = {'id_ong': idOng, 'id_user': idUser, 'valor': valor};
     final id = await db.insert('donate', dados,
