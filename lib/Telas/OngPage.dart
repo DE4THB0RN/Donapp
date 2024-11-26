@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
-import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/CustomInputFieldMoney.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
@@ -11,7 +12,6 @@ import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
 
@@ -394,9 +394,8 @@ Widget buildCard(String imagePath, String title, String description) {
 
 void _openDoacaoPopup(BuildContext context) {
   final TextEditingController valorController = TextEditingController();
-  final NumberFormat currencyFormat =
-      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
+  double valor = 0.0;
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -432,23 +431,9 @@ void _openDoacaoPopup(BuildContext context) {
               CustomInputFieldMoney(
                 labelText: 'Valor da Doação',
                 hintText: 'Digite o valor',
-                keyboardType: TextInputType.number,
                 controller: valorController,
                 onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    // Remove caracteres que não são números
-                    String numericValue =
-                        value.replaceAll(RegExp(r'[^0-9]'), '');
-                    // Formata o valor como dinheiro
-                    String formattedValue =
-                        currencyFormat.format(int.parse(numericValue) / 100);
-                    // Atualiza o controlador para exibir o valor formatado
-                    valorController.value = TextEditingValue(
-                      text: formattedValue,
-                      selection: TextSelection.collapsed(
-                          offset: formattedValue.length),
-                    );
-                  }
+                  valor = UtilBrasilFields.converterMoedaParaDouble(value);
                 },
               ),
               const SizedBox(height: 20.0),
