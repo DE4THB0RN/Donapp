@@ -1,4 +1,5 @@
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -146,5 +147,13 @@ class _HomeState extends State<Home> {
     //   print(i['estado']);
     //   print(i['id_ong']);
     // }
+
+    List<Map<String, dynamic>> DonateFull = await SQLDonate.pegaDonates();
+    for (dynamic i in DonateFull) {
+      print(i['id']);
+      print(i['id_ong']);
+      print(i['id_user']);
+      print(i['valor']);
+    }
   }
 }

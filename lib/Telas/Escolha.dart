@@ -1,4 +1,5 @@
 import 'package:donapp/BD/sql_ONG.dart';
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Theme/Color.dart';
@@ -43,6 +44,7 @@ class _EscolhaState extends State<Escolha> {
     await SQLLocal.dropDataBaseLocal();
     await SQLONG.dropDataBaseONG();
     await SQLUser.dropDataBaseUser();
+    await SQLDonate.dropDataBaseDonate();
   }
 }
 

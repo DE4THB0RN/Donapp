@@ -1,11 +1,11 @@
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class CustomInputFieldMoney extends StatelessWidget {
   final String labelText;
   final String hintText;
-  final ValueChanged onChanged;
+  final ValueChanged<double> onChanged;
   final TextEditingController? controller;
 
   const CustomInputFieldMoney({
@@ -33,20 +33,58 @@ class CustomInputFieldMoney extends StatelessWidget {
         TextFormField(
           controller: controller,
           keyboardType: TextInputType.number,
-          obscureText: false,
           decoration: InputDecoration(
             hintText: hintText,
-            border: const OutlineInputBorder(),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
             filled: true,
             fillColor: Colors.white,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
           ),
-          onChanged: onChanged,
           inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            RealInputFormatter(),
+            _CentavosInputFormatter(), // Novo formatter para começar com centavos
           ],
+          onChanged: (value) {
+            // Remove símbolos e converte para double
+            final numericValue =
+                double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), '')) ??
+                    0.0;
+            onChanged(numericValue);
+          },
         ),
       ],
+    );
+  }
+}
+
+class _CentavosInputFormatter extends TextInputFormatter {
+  final NumberFormat _currencyFormat =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Remove caracteres não numéricos
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (digitsOnly.isEmpty) {
+      return TextEditingValue(
+        text: 'R\$0,00',
+        selection: TextSelection.collapsed(offset: 4),
+      );
+    }
+
+    // Converte para centavos
+    final double value = double.parse(digitsOnly) / 100;
+
+    // Formata como moeda
+    final newText = _currencyFormat.format(value);
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }

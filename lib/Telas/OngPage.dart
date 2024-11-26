@@ -5,14 +5,15 @@ import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomInputFieldMoney.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
-import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
 import 'package:donapp/Components/PostCard.dart';
+import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -361,8 +362,6 @@ class _OngpageState extends State<Ongpage> {
 
   void _openDoacaoPopup(BuildContext context) {
     final TextEditingController valorController = TextEditingController();
-    final NumberFormat currencyFormat =
-        NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
     showDialog(
       context: context,
@@ -401,15 +400,18 @@ class _OngpageState extends State<Ongpage> {
                   hintText: 'Digite o valor',
                   controller: valorController,
                   onChanged: (value) {
-                    valor = UtilBrasilFields.converterMoedaParaDouble(value);
+                    valor = value / 100;
+                    print("doação é $valor reais");
                   },
                 ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(
-                  onPressed: () {
-                    String valor = valorController.text;
-                    print('Valor da doação: $valor');
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    if (valor == 0.0) {
+                      Preencha.donationZero(context);
+                    } else {
+                      _openConfirmDonationPopup(context);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -433,10 +435,6 @@ class _OngpageState extends State<Ongpage> {
         );
       },
     );
-  }
-
-  Future<void> salvarDoacaoNoBanco(int idOng, int idUser, double valor) async {
-    await SQLDonate.adicionarDonate(idOng, idUser, valor);
   }
 
   void _openEditONGPopup(BuildContext context) {
@@ -541,11 +539,7 @@ class _OngpageState extends State<Ongpage> {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Excluir conta',
-                    onPressed: () async {
-                      
-
-
-                    },
+                    onPressed: () async {},
                   ),
                 ],
               ),
@@ -615,11 +609,85 @@ class _OngpageState extends State<Ongpage> {
                     },
                     onSubmitted: (value) {},
                   ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Postar',
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
           );
         });
+  }
+
+  void _openConfirmDonationPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          content: const Text(
+            'Deseja mesmo fazer a doação?',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context); // Fecha apenas o pop-up de confirmação
+                    },
+                    child: const Text(
+                      'Não',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      print('Hora de pagar');
+                      // Ação para sumir com esse popup de bomba
+                      String emailUser =
+                          cipher.xorDecode(prefs.getString('email')!);
+                      List<Map<String, dynamic>> User =
+                          await SQLUser.pegaUmUsuarioEmail2(emailUser);
+                      int userID = User.first['id'];
+                      await SQLDonate.adicionarDonate(
+                          widget.ongId, userID, valor);
+                      Navigator.pop(context);
+                      Navigator.pop(context); // Fecha o pop-up de confirmação
+                      Preencha.donationSuccess(context);
+                    },
+                    child: const Text(
+                      'Sim',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _openConfirmDeletePopup(BuildContext context) {
@@ -662,10 +730,11 @@ class _OngpageState extends State<Ongpage> {
                   ),
                   child: TextButton(
                     onPressed: () async {
-                      // print('Hora de apagar');
-                      // // Ação para excluir a conta
-                      // List<Map<String, dynamic>> userfull =
-                      //     await SQLUser.pegaUmUsuarioEmail(email, senha);
+                      print('Hora de apagar');
+                      String emailONG =
+                          cipher.xorDecode(prefs.getString('email')!);
+                      List<Map<String, dynamic>> Ongfull =
+                          await SQLONG.pegaUmaONGEmail2(emailONG);
                       // if (id == -1) {
                       //   id = userfull.first['id'];
                       // }
@@ -697,6 +766,4 @@ class _OngpageState extends State<Ongpage> {
       },
     );
   }
-
-
 }
