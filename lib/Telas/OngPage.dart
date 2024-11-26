@@ -74,16 +74,6 @@ class _OngpageState extends State<Ongpage> {
     super.initState();
     createOng(widget.ongId);
     _initPrefs();
-    _carregarId();
-  }
-
-  Future<void> _carregarId() async {
-    if (isOng) {
-      final int id = await _pegaId(); // Aguarda o ID
-      setState(() {
-        idLogado = id; // Atualiza o estado
-      });
-    }
   }
 
   void _initPrefs() async {
@@ -92,6 +82,12 @@ class _OngpageState extends State<Ongpage> {
     if (isOnger != null) {
       setState(() {
         isOng = isOnger;
+      });
+    }
+    if (isOng) {
+      final int id = await _pegaId(); // Aguarda o ID
+      setState(() {
+        idLogado = id; // Atualiza o estado
       });
     }
   }
