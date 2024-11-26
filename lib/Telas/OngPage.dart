@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
-import 'package:donapp/BD/sql_user.dart';
-import 'package:donapp/Components/CustomImputFiledMoney.dart';
+import 'package:donapp/Components/CustomInputFieldMoney.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
@@ -387,7 +387,6 @@ class _OngpageState extends State<Ongpage> {
                 CustomInputFieldMoney(
                   labelText: 'Valor da Doação',
                   hintText: 'Digite o valor',
-                  keyboardType: TextInputType.number,
                   controller: valorController,
                   onChanged: (value) {
                     if (value.isNotEmpty) {
@@ -409,7 +408,9 @@ class _OngpageState extends State<Ongpage> {
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: () {
-                    String valor = valorController.text;
+                    String valor = UtilBrasilFields.converterMoedaParaDouble(
+                            valorController.text)
+                        .toString();
                     print('Valor da doação: $valor');
                     Navigator.pop(context);
                   },
