@@ -8,6 +8,7 @@ import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomInputFieldMoney.dart';
+import 'package:donapp/Components/DoacaoCard.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
@@ -20,6 +21,7 @@ import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/confirmPoPup.dart';
@@ -222,7 +224,7 @@ class _OngpageState extends State<Ongpage> {
                           icon: Icons.history,
                           label: 'Histórico de doações',
                           onPressed: () {
-                            print("Histórico de doações");
+                            _openHistoricoPopup(context);
                           },
                         ),
                       ],
@@ -263,10 +265,10 @@ class _OngpageState extends State<Ongpage> {
                       BorderRadius.circular(15), // Bordas arredondadas
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Column(
+                child: Column(
                   children: [
                     Text(
-                      'Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição',
+                      objetoONG.desc,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -714,7 +716,7 @@ class _OngpageState extends State<Ongpage> {
                           postTitulo.isEmpty) {
                         Preencha.dialogo(context);
                       } else {
-                        SqlPost.adicionarPost(
+                        await SqlPost.adicionarPost(
                             postTitulo, postComent, postImage, widget.ongId);
                         Navigator.pop(context);
                       }
@@ -774,8 +776,11 @@ class _OngpageState extends State<Ongpage> {
                       List<Map<String, dynamic>> User =
                           await SQLUser.pegaUmUsuarioEmail2(emailUser);
                       int userID = User.first['id'];
+                      DateTime time = DateTime.now();
+                      String diaDonate =
+                          DateFormat("dd MMMM yyyy").format(time);
                       await SQLDonate.adicionarDonate(
-                          widget.ongId, userID, valor);
+                          widget.ongId, userID, valor, diaDonate);
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
@@ -829,5 +834,74 @@ class _OngpageState extends State<Ongpage> {
         Navigator.pop(context);
       },
     );
+  }
+
+  void _openHistoricoPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Histórico de Doações',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    "totalArrecadado",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'Arrecadados',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DoacaoCard(dia: "26/11", valor: 1234.56),
+                          DoacaoCard(dia: "25/11", valor: 567.89),
+                          DoacaoCard(dia: "24/11", valor: 34.50),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
