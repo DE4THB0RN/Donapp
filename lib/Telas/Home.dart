@@ -4,6 +4,7 @@ import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/Components/NGOCard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,6 +16,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Ongclass> ONGS = [];
   List<NGOCard> CardsOng = [];
+  late SharedPreferences _prefs;
+  bool isOng = false;
 
   void initializeCards() async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaONG();
@@ -29,6 +32,16 @@ class _HomeState extends State<Home> {
             title: i.nome, description: i.desc, image: i.perfil, id: i.id));
       }
     });
+  }
+
+  void _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    bool? isOnger = _prefs.getBool('is_ONG');
+    if (isOnger != null) {
+      setState(() {
+        isOng = isOnger;
+      });
+    }
   }
 
   @override
@@ -81,11 +94,15 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Seguidos',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
+                if (isOng)
+                  ...[]
+                else ...[
+                  const Text(
+                    'Seguidos',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                ],
                 Column(
                   children: [
                     for (int i = 0; i < ONGS.length; i++)
