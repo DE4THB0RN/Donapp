@@ -33,13 +33,8 @@ class _DoacaoCardState extends State<DoacaoCard> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: Colors.grey.shade400, width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 4.0,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        
+        
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

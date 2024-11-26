@@ -464,6 +464,50 @@ class _OngpageState extends State<Ongpage> {
                     print("doação é $valor reais");
                   },
                 ),
+                const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Nome:',
+                      hintText: 'Digite o Nome no cartão',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Cartão:',
+                      hintText: 'Digite o Numero do Cartão',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Data de expiração:',
+                      hintText: 'Digite a data de expiração',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Data de expiração:',
+                      hintText: 'Digite a data de expiração',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: () async {
