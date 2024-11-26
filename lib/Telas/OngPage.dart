@@ -1,22 +1,22 @@
 import 'dart:convert';
 
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
 import 'package:donapp/Components/CustomInputFieldMoney.dart';
+import 'package:donapp/Components/DoacaoCard.dart';
 import 'package:donapp/Components/ImageInputField.dart';
 import 'package:donapp/Components/LocalCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Components/ButtonEdited.dart';
 import 'package:donapp/Components/PostCard.dart';
+import 'package:donapp/Components/PostClass.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Components/localClass.dart';
-import 'package:donapp/Components/ConfirmPopup.dart';
-import 'package:donapp/Components/DonationCard.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +24,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/confirmPoPup.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
@@ -41,16 +42,24 @@ class _OngpageState extends State<Ongpage> {
   int? idLogado = 0;
   List<Localclass> localidades = [];
   List<LocalCard> localCards = [];
+  List<Postclass> postagens = [];
+  List<Postcard> postCards = [];
   bool isOng = false;
   double valor = 0.0;
-  String banner = '';
-  String perfil = '';
-  String titulo = '';
-  String coment = '';
+  String editbanner = '';
+  String editperfil = '';
+  String editdescricao = '';
+  String editnome = '';
+  String editemail = '';
+  String editsenha = '';
+  String postTitulo = '';
+  String postComent = '';
+  String postImage = '';
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
     List<Map<String, dynamic>> locais = await SQLLocal.pegaLocaisOng(id);
+    List<Map<String, dynamic>> posts = await SqlPost.pegaPostsOng(id);
     setState(() {
       objetoONG.banner = ongFull.first['foto_banner'];
       objetoONG.perfil = ongFull.first['foto_perfil'];
@@ -60,15 +69,31 @@ class _OngpageState extends State<Ongpage> {
 
       for (dynamic i in locais) {
         localidades.add(Localclass(i['cep'], i['rua'], i['complemento'],
-            i['numero'], i['bairro'], i['cidade'], i['estado']));
+            i['numero'], i['bairro'], i['cidade'], i['estado'], i['id']));
       }
 
       for (Localclass i in localidades) {
         localCards.add(LocalCard(
-            rua: i.rua,
-            bairro: i.bairro,
-            numero: i.numero,
-            complemento: i.complemento));
+          rua: i.rua,
+          bairro: i.bairro,
+          numero: i.numero,
+          complemento: i.complemento,
+          id: i.id,
+        ));
+      }
+
+      for (dynamic i in posts) {
+        postagens
+            .add(Postclass(i['titulo'], i['descricao'], i['imagem'], i['id']));
+      }
+
+      for (Postclass i in postagens) {
+        postCards.add(Postcard(
+          image: i.imagem,
+          title: i.titulo,
+          description: i.coment,
+          id: i.id,
+        ));
       }
     });
   }
@@ -199,7 +224,7 @@ class _OngpageState extends State<Ongpage> {
                           icon: Icons.history,
                           label: 'Histórico de doações',
                           onPressed: () {
-                            print("Histórico de doações");
+                            _openHistoricoPopup(context);
                           },
                         ),
                       ],
@@ -240,10 +265,10 @@ class _OngpageState extends State<Ongpage> {
                       BorderRadius.circular(15), // Bordas arredondadas
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Column(
+                child: Column(
                   children: [
                     Text(
-                      'Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição',
+                      objetoONG.desc,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -333,16 +358,14 @@ class _OngpageState extends State<Ongpage> {
                       fontSize: 20,
                     ),
                   ),
-                  Postcard(
-                      imagePath: 'assets/dog1.png',
-                      title: 'Salvando animais!',
-                      description:
-                          'Inaugurada em 2003, a Cão Viver é uma das ONGs mais conhecidas para a adoção de cães e gatos em BH.'),
-                  Postcard(
-                      imagePath: 'assets/dog2.png',
-                      title: 'Novos abrigos',
-                      description:
-                          'Inauguramos novos abrigos para cães na localização X. Os novos abrigos tem capacidade para 400 cães'),
+                  for (int i = 0; i < postagens.length; i++)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: postCards[i],
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -448,102 +471,175 @@ class _OngpageState extends State<Ongpage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () {
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    const Text(
+                      'Imagem de Perfil',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          editperfil = imageString;
+                        });
+                      },
+                      shape: ImageShape.circle,
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      'Imagem do Banner',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          editbanner = imageString;
+                        });
+                      },
+                      shape: ImageShape.square,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Nome:',
+                      hintText: 'Digite o Nome da Ong',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editnome = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Descrição:',
+                      hintText: 'Digite a descrição da Ong',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editdescricao = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Senha:',
+                      hintText: 'Digite a nova senha',
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      onChanged: (value) {
+                        editsenha = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Email:',
+                      hintText: 'Digite o novo email',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Salvar',
+                      onPressed: () async {
+                        List<Map<String, dynamic>> ONG =
+                            await SQLONG.pegaUmaONG(objetoONG.id);
+
+                        for (dynamic i in ONG) {
+                          print(i['id']);
+                          print(i['nome']);
+                          print(i['senha']);
+                          print(i['cnpj']);
+                          print(i['email']);
+                          print(i['foto_perfil']);
+                          print(i['foto_banner']);
+                        }
+
+                        if (editnome.isEmpty) {
+                          editnome = objetoONG.nome;
+                        }
+                        if (editdescricao.isEmpty) {
+                          editdescricao = objetoONG.desc;
+                        }
+                        if (editbanner.isEmpty) {
+                          editbanner = objetoONG.banner;
+                        }
+                        if (editperfil.isEmpty) {
+                          editperfil = objetoONG.perfil;
+                        }
+                        if (editsenha.isEmpty) {
+                          editsenha = ONG.first['senha'];
+                        }
+                        if (editemail.isEmpty) {
+                          editemail = ONG.first['email'];
+                        }
+                        await SQLONG.atualizaONG(
+                            objetoONG.id,
+                            editnome,
+                            ONG.first['cnpj'],
+                            editemail,
+                            generateMd5(editsenha),
+                            editdescricao,
+                            editperfil,
+                            editbanner);
+
+                        objetoONG.nome = editnome;
+                        objetoONG.desc = editdescricao;
+                        objetoONG.banner = editbanner;
+                        objetoONG.perfil = editperfil;
+
                         Navigator.pop(context);
                       },
                     ),
-                  ),
-                  const Text(
-                    'Imagem de Perfil',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Sair da conta',
+                      onPressed: () async {
+                        // Remove os tokens armazenados
+                        await prefs.remove('email');
+                        await prefs.remove('senha');
+                        await prefs.remove('nome');
+                        await prefs.setBool('is_ONG', false);
+
+                        Navigator.pop(context); // Fecha o pop-up de confirmação
+                        Navigator.pushReplacementNamed(context, 'Escolha');
+                      },
                     ),
-                  ),
-                  ImageInputField(
-                    onImageSelected: (imageString) {
-                      setState(() {
-                        perfil = imageString;
-                      });
-                    },
-                    shape: ImageShape.circle,
-                  ),
-                  const SizedBox(height: 15),
-                  const Text(
-                    'Imagem do Banner',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Excluir conta',
+                      onPressed: () async {
+                        _openConfirmDeletePopup();
+                      },
                     ),
-                  ),
-                  ImageInputField(
-                    onImageSelected: (imageString) {
-                      setState(() {
-                        banner = imageString;
-                      });
-                    },
-                    shape: ImageShape.square,
-                  ),
-                  const SizedBox(height: 15),
-                  CustomInputField(
-                    labelText: 'Nome:',
-                    hintText: 'Digite o Nome da Ong',
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                    onChanged: (value) {
-                      titulo = value;
-                    },
-                    onSubmitted: (value) {},
-                  ),
-                  const SizedBox(height: 15),
-                  CustomInputField(
-                    labelText: 'Descrição:',
-                    hintText: 'Digite a descrição da Ong',
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                    onChanged: (value) {
-                      titulo = value;
-                    },
-                    onSubmitted: (value) {},
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Salvar',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Salvar',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Sair da conta',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Excluir conta',
-                    onPressed: () async {},
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -584,7 +680,7 @@ class _OngpageState extends State<Ongpage> {
                   ImageInputField(
                     onImageSelected: (imageString) {
                       setState(() {
-                        banner = imageString;
+                        postImage = imageString;
                       });
                     },
                     shape: ImageShape.square,
@@ -596,7 +692,7 @@ class _OngpageState extends State<Ongpage> {
                     keyboardType: TextInputType.text,
                     obscureText: false,
                     onChanged: (value) {
-                      titulo = value;
+                      postTitulo = value;
                     },
                     onSubmitted: (value) {},
                   ),
@@ -607,7 +703,7 @@ class _OngpageState extends State<Ongpage> {
                     keyboardType: TextInputType.text,
                     obscureText: false,
                     onChanged: (value) {
-                      coment = value;
+                      postComent = value;
                     },
                     onSubmitted: (value) {},
                   ),
@@ -615,79 +711,16 @@ class _OngpageState extends State<Ongpage> {
                   CustomButton(
                     text: 'Postar',
                     onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void _openHistoricoPopup(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            backgroundColor: AppColor.appBarColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () {
+                      if (postComent.isEmpty ||
+                          postImage.isEmpty ||
+                          postTitulo.isEmpty) {
+                        Preencha.dialogo(context);
+                      } else {
+                        await SqlPost.adicionarPost(
+                            postTitulo, postComent, postImage, widget.ongId);
                         Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  const Text(
-                    'Histórico de Doações',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  const Text(
-                    totalArrecadado,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    'Arrecadados',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(3),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          DoacaoCard(dia: "26/11", valor: 1234.56),
-                          
-                          DoacaoCard(dia: "25/11", valor: 567.89),
-                          
-                          DoacaoCard(dia: "24/11", valor: 34.50),
-                        ],
-                      ),
-                    ),
+                      }
+                    },
                   ),
                 ],
               ),
@@ -743,8 +776,11 @@ class _OngpageState extends State<Ongpage> {
                       List<Map<String, dynamic>> User =
                           await SQLUser.pegaUmUsuarioEmail2(emailUser);
                       int userID = User.first['id'];
+                      DateTime time = DateTime.now();
+                      String diaDonate =
+                          DateFormat("dd MMMM yyyy").format(time);
                       await SQLDonate.adicionarDonate(
-                          widget.ongId, userID, valor);
+                          widget.ongId, userID, valor, diaDonate);
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
@@ -770,18 +806,27 @@ class _OngpageState extends State<Ongpage> {
       onConfirm: () async {
         print('Hora de apagar');
         String emailONG = cipher.xorDecode(prefs.getString('email')!);
-        List<Map<String, dynamic>> OngFull =
+        List<Map<String, dynamic>> ONG =
             await SQLONG.pegaUmaONGEmail2(emailONG);
+        int ongID = ONG.first['id'];
 
-        // Aqui você pode adicionar sua lógica de exclusão, como descomentar este trecho:
-        // await SQLUser.apagaUsuario(OngFull.first['id']);
-        // await prefs.remove('email');
-        // await prefs.remove('senha');
-        // await prefs.remove('nome');
-        // print('Dados apagados com sucesso!');
+        await SQLONG.apagaONG(ongID);
 
-        // Navegar para a tela inicial ou outra ação:
-        Navigator.pop(context); // Fecha o popup
+        List<Map<String, dynamic>> locaisList =
+            await SQLLocal.pegaLocaisOng(ongID);
+
+        for (dynamic i in locaisList) {
+          await SQLLocal.apagaLocal(i['id']);
+        }
+
+        // Remove os tokens armazenados
+        await prefs.remove('email');
+        await prefs.remove('senha');
+        await prefs.remove('nome');
+        await prefs.setBool('is_ONG', false);
+        // print('apagado');
+
+        Navigator.pop(context); // Fecha o pop-up de confirmação
         Navigator.pushReplacementNamed(context, 'Escolha');
       },
       onCancel: () {
@@ -789,5 +834,74 @@ class _OngpageState extends State<Ongpage> {
         Navigator.pop(context);
       },
     );
+  }
+
+  void _openHistoricoPopup(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Histórico de Doações',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    "totalArrecadado",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    'Arrecadados',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DoacaoCard(dia: "26/11", valor: 1234.56),
+                          DoacaoCard(dia: "25/11", valor: 567.89),
+                          DoacaoCard(dia: "24/11", valor: 34.50),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

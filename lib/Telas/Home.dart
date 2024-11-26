@@ -1,5 +1,7 @@
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -136,17 +138,17 @@ class _HomeState extends State<Home> {
       print(i['foto_banner']);
     }
 
-    // List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
-    // for (dynamic i in Localfull) {
-    //   print(i['cep']);
-    //   print(i['rua']);
-    //   print(i['numero']);
-    //   print(i['complemento']);
-    //   print(i['bairro']);
-    //   print(i['cidade']);
-    //   print(i['estado']);
-    //   print(i['id_ong']);
-    // }
+    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
+    for (dynamic i in Localfull) {
+      print(i['cep']);
+      print(i['rua']);
+      print(i['numero']);
+      print(i['complemento']);
+      print(i['bairro']);
+      print(i['cidade']);
+      print(i['estado']);
+      print(i['id_ong']);
+    }
 
     List<Map<String, dynamic>> DonateFull = await SQLDonate.pegaDonates();
     for (dynamic i in DonateFull) {
@@ -154,6 +156,15 @@ class _HomeState extends State<Home> {
       print(i['id_ong']);
       print(i['id_user']);
       print(i['valor']);
+    }
+
+    List<Map<String, dynamic>> PostsFull = await SqlPost.pegaPost();
+    for (dynamic i in PostsFull) {
+      print(i['id']);
+      print(i['id_ong']);
+      print(i['titulo']);
+      print(i['descricao']);
+      print(i['imagem']);
     }
   }
 }

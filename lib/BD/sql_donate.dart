@@ -14,6 +14,7 @@ class SQLDonate {
  id_ong INTEGER, 
  id_user INTEGER,
  valor REAL,
+ dataDonate DATE,
  FOREIGN KEY(id_ong) REFERENCES ONG(id),
  FOREIGN KEY(id_user) REFERENCES usuario(id)
  )
@@ -31,9 +32,14 @@ class SQLDonate {
   }
 
   static Future<int> adicionarDonate(
-      int idOng, int idUser, double valor) async {
+      int idOng, int idUser, double valor, String dataDonate) async {
     final db = await SQLDonate.db();
-    final dados = {'id_ong': idOng, 'id_user': idUser, 'valor': valor};
+    final dados = {
+      'id_ong': idOng,
+      'id_user': idUser,
+      'valor': valor,
+      'dataDonate': dataDonate
+    };
     final id = await db.insert('donate', dados,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;

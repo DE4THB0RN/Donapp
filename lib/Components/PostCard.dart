@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class Postcard extends StatefulWidget {
-  final String imagePath;
+  final String image;
   final String title;
   final String description;
+  final int id;
 
   const Postcard({
     Key? key,
-    required this.imagePath,
+    required this.image,
     required this.title,
     required this.description,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -34,7 +38,7 @@ class _PostcardState extends State<Postcard> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage(widget.imagePath),
+                  image: MemoryImage(base64Decode(widget.image)),
                   fit: BoxFit.cover,
                 ),
               ),
