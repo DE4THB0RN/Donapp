@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/CustomButton.dart';
 import 'package:donapp/Components/CustomInputField.dart';
@@ -19,9 +19,9 @@ import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
+import 'package:donapp/Components/confirmPoPup.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
@@ -41,10 +41,15 @@ class _OngpageState extends State<Ongpage> {
   List<LocalCard> localCards = [];
   bool isOng = false;
   double valor = 0.0;
-  String banner = '';
-  String perfil = '';
-  String titulo = '';
-  String coment = '';
+  String editbanner = '';
+  String editperfil = '';
+  String editdescricao = '';
+  String editnome = '';
+  String editemail = '';
+  String editsenha = '';
+  String postTitulo = '';
+  String postComent = '';
+  String postImage = '';
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
@@ -446,102 +451,175 @@ class _OngpageState extends State<Ongpage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () {
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    const Text(
+                      'Imagem de Perfil',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          editperfil = imageString;
+                        });
+                      },
+                      shape: ImageShape.circle,
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      'Imagem do Banner',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ImageInputField(
+                      onImageSelected: (imageString) {
+                        setState(() {
+                          editbanner = imageString;
+                        });
+                      },
+                      shape: ImageShape.square,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Nome:',
+                      hintText: 'Digite o Nome da Ong',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editnome = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Descrição:',
+                      hintText: 'Digite a descrição da Ong',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editdescricao = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Senha:',
+                      hintText: 'Digite a nova senha',
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      onChanged: (value) {
+                        editsenha = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
+                      labelText: 'Email:',
+                      hintText: 'Digite o novo email',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Salvar',
+                      onPressed: () async {
+                        List<Map<String, dynamic>> ONG =
+                            await SQLONG.pegaUmaONG(objetoONG.id);
+
+                        for (dynamic i in ONG) {
+                          print(i['id']);
+                          print(i['nome']);
+                          print(i['senha']);
+                          print(i['cnpj']);
+                          print(i['email']);
+                          print(i['foto_perfil']);
+                          print(i['foto_banner']);
+                        }
+
+                        if (editnome.isEmpty) {
+                          editnome = objetoONG.nome;
+                        }
+                        if (editdescricao.isEmpty) {
+                          editdescricao = objetoONG.desc;
+                        }
+                        if (editbanner.isEmpty) {
+                          editbanner = objetoONG.banner;
+                        }
+                        if (editperfil.isEmpty) {
+                          editperfil = objetoONG.perfil;
+                        }
+                        if (editsenha.isEmpty) {
+                          editsenha = ONG.first['senha'];
+                        }
+                        if (editemail.isEmpty) {
+                          editemail = ONG.first['email'];
+                        }
+                        await SQLONG.atualizaONG(
+                            objetoONG.id,
+                            editnome,
+                            ONG.first['cnpj'],
+                            editemail,
+                            generateMd5(editsenha),
+                            editdescricao,
+                            editperfil,
+                            editbanner);
+
+                        objetoONG.nome = editnome;
+                        objetoONG.desc = editdescricao;
+                        objetoONG.banner = editbanner;
+                        objetoONG.perfil = editperfil;
+
                         Navigator.pop(context);
                       },
                     ),
-                  ),
-                  const Text(
-                    'Imagem de Perfil',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Sair da conta',
+                      onPressed: () async {
+                        // Remove os tokens armazenados
+                        await prefs.remove('email');
+                        await prefs.remove('senha');
+                        await prefs.remove('nome');
+                        await prefs.setBool('is_ONG', false);
+
+                        Navigator.pop(context); // Fecha o pop-up de confirmação
+                        Navigator.pushReplacementNamed(context, 'Escolha');
+                      },
                     ),
-                  ),
-                  ImageInputField(
-                    onImageSelected: (imageString) {
-                      setState(() {
-                        perfil = imageString;
-                      });
-                    },
-                    shape: ImageShape.circle,
-                  ),
-                  const SizedBox(height: 15),
-                  const Text(
-                    'Imagem do Banner',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Excluir conta',
+                      onPressed: () async {
+                        _openConfirmDeletePopup();
+                      },
                     ),
-                  ),
-                  ImageInputField(
-                    onImageSelected: (imageString) {
-                      setState(() {
-                        banner = imageString;
-                      });
-                    },
-                    shape: ImageShape.square,
-                  ),
-                  const SizedBox(height: 15),
-                  CustomInputField(
-                    labelText: 'Nome:',
-                    hintText: 'Digite o Nome da Ong',
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                    onChanged: (value) {
-                      titulo = value;
-                    },
-                    onSubmitted: (value) {},
-                  ),
-                  const SizedBox(height: 15),
-                  CustomInputField(
-                    labelText: 'Descrição:',
-                    hintText: 'Digite a descrição da Ong',
-                    keyboardType: TextInputType.text,
-                    obscureText: false,
-                    onChanged: (value) {
-                      titulo = value;
-                    },
-                    onSubmitted: (value) {},
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Salvar',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Salvar',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Sair da conta',
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Excluir conta',
-                    onPressed: () async {},
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -582,7 +660,7 @@ class _OngpageState extends State<Ongpage> {
                   ImageInputField(
                     onImageSelected: (imageString) {
                       setState(() {
-                        banner = imageString;
+                        postImage = imageString;
                       });
                     },
                     shape: ImageShape.square,
@@ -690,79 +768,39 @@ class _OngpageState extends State<Ongpage> {
     );
   }
 
-  void _openConfirmDeletePopup(BuildContext context) {
-    showDialog(
+  void _openConfirmDeletePopup() async {
+    await showConfirmDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColor.appBarColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          content: const Text(
-            'Tem certeza de que deseja excluir a conta?',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(
-                          context); // Fecha apenas o pop-up de confirmação
-                    },
-                    child: const Text(
-                      'Não',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () async {
-                      print('Hora de apagar');
-                      String emailONG =
-                          cipher.xorDecode(prefs.getString('email')!);
-                      List<Map<String, dynamic>> Ongfull =
-                          await SQLONG.pegaUmaONGEmail2(emailONG);
-                      // if (id == -1) {
-                      //   id = userfull.first['id'];
-                      // }
+      message: 'Tem certeza de que deseja excluir a conta?',
+      onConfirm: () async {
+        print('Hora de apagar');
+        String emailONG = cipher.xorDecode(prefs.getString('email')!);
+        List<Map<String, dynamic>> ONG =
+            await SQLONG.pegaUmaONGEmail2(emailONG);
+        int ongID = ONG.first['id'];
 
-                      // await SQLUser.apagaUsuario(id);
+        await SQLONG.apagaONG(ongID);
 
-                      // SharedPreferences prefs =
-                      //     await SharedPreferences.getInstance();
+        List<Map<String, dynamic>> locaisList =
+            await SQLLocal.pegaLocaisOng(ongID);
 
-                      // // Remove os tokens armazenados
-                      // await prefs.remove('email');
-                      // await prefs.remove('senha');
-                      // await prefs.remove('nome');
-                      // print('apagado');
-                      Navigator.pop(context);
-                      Navigator.pop(context); // Fecha o pop-up de confirmação
-                      Navigator.pushReplacementNamed(context, 'Escolha');
-                    },
-                    child: const Text(
-                      'Sim',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+        for (dynamic i in locaisList) {
+          await SQLLocal.apagaLocal(i['id']);
+        }
+
+        // Remove os tokens armazenados
+        await prefs.remove('email');
+        await prefs.remove('senha');
+        await prefs.remove('nome');
+        await prefs.setBool('is_ONG', false);
+        // print('apagado');
+
+        Navigator.pop(context); // Fecha o pop-up de confirmação
+        Navigator.pushReplacementNamed(context, 'Escolha');
+      },
+      onCancel: () {
+        print('Exclusão cancelada.');
+        Navigator.pop(context);
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
+import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -136,17 +137,17 @@ class _HomeState extends State<Home> {
       print(i['foto_banner']);
     }
 
-    // List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
-    // for (dynamic i in Localfull) {
-    //   print(i['cep']);
-    //   print(i['rua']);
-    //   print(i['numero']);
-    //   print(i['complemento']);
-    //   print(i['bairro']);
-    //   print(i['cidade']);
-    //   print(i['estado']);
-    //   print(i['id_ong']);
-    // }
+    List<Map<String, dynamic>> Localfull = await SQLLocal.pegaLocal();
+    for (dynamic i in Localfull) {
+      print(i['cep']);
+      print(i['rua']);
+      print(i['numero']);
+      print(i['complemento']);
+      print(i['bairro']);
+      print(i['cidade']);
+      print(i['estado']);
+      print(i['id_ong']);
+    }
 
     List<Map<String, dynamic>> DonateFull = await SQLDonate.pegaDonates();
     for (dynamic i in DonateFull) {
