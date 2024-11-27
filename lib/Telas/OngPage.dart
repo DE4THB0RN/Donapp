@@ -24,7 +24,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Components/confirmPoPup.dart';
+import 'package:donapp/Components/ShowDialog.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
