@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
@@ -44,6 +46,7 @@ class _OngpageState extends State<Ongpage> {
   List<LocalCard> localCards = [];
   List<Postclass> postagens = [];
   List<Postcard> postCards = [];
+  List<DoacaoCard> donateCards = [];
   bool isOng = false;
   double valor = 0.0;
   String editbanner = '';
@@ -55,11 +58,27 @@ class _OngpageState extends State<Ongpage> {
   String postTitulo = '';
   String postComent = '';
   String postImage = '';
+  String localcep = '';
+  String localrua = '';
+  int localnumero = 0;
+  String localcomplemento = '';
+  String localbairro = '';
+  String localcidade = '';
+  String localestado = '';
+  int idPostToExclude = 0;
+  int idLocalToExclude = 0;
+  int setstatecontador = 0;
+
+  TextEditingController controlRua = TextEditingController();
+  TextEditingController controlBairro = TextEditingController();
+  TextEditingController controlCidade = TextEditingController();
+  TextEditingController controlEstado = TextEditingController();
 
   void createOng(int id) async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaUmaONG(id);
     List<Map<String, dynamic>> locais = await SQLLocal.pegaLocaisOng(id);
     List<Map<String, dynamic>> posts = await SqlPost.pegaPostsOng(id);
+    List<Map<String, dynamic>> donates = await SQLDonate.pegaDonatesOng(id);
     setState(() {
       objetoONG.banner = ongFull.first['foto_banner'];
       objetoONG.perfil = ongFull.first['foto_perfil'];
@@ -95,13 +114,16 @@ class _OngpageState extends State<Ongpage> {
           id: i.id,
         ));
       }
+
+      for (dynamic i in donates) {
+        donateCards.add(DoacaoCard(dia: i['dataDonate'], valor: i['valor']));
+      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    createOng(widget.ongId);
     _initPrefs();
   }
 
@@ -119,6 +141,17 @@ class _OngpageState extends State<Ongpage> {
         idLogado = id; // Atualiza o estado
       });
     }
+    createOng(widget.ongId);
+  }
+
+  void _retrieveData() {
+    // Simulate data retrieval
+    setState(() {
+      controlRua.text = localrua;
+      controlBairro.text = localbairro;
+      controlCidade.text = localcidade;
+      controlEstado.text = localestado;
+    });
   }
 
   @override
@@ -232,25 +265,28 @@ class _OngpageState extends State<Ongpage> {
                     const SizedBox(height: 10), // Espaço entre as linhas
                   ]
                 ] else ...[
-                  Row(
-                    children: [
-                      ButtonEdited(
-                        icon: Icons.wallet_giftcard,
-                        label: 'Doar',
-                        onPressed: () {
-                          _openDoacaoPopup(context);
-                        },
-                      ),
-                      const SizedBox(width: 10), // Espaço entre os botões
-                      ButtonEdited(
-                        icon: Icons.favorite,
-                        label: 'Seguir',
-                        onPressed: () {
-                          print("Seguir!");
-                        },
-                      ),
-                    ],
-                  ),
+                  Padding(
+                    padding: Padinho.pequeno,
+                    child: Row(
+                      children: [
+                        ButtonEdited(
+                          icon: Icons.wallet_giftcard,
+                          label: 'Doar',
+                          onPressed: () {
+                            _openDoacaoPopup(context);
+                          },
+                        ),
+                        const SizedBox(width: 10), // Espaço entre os botões
+                        ButtonEdited(
+                          icon: Icons.favorite,
+                          label: 'Seguir',
+                          onPressed: () {
+                            print("Seguir!");
+                          },
+                        ),
+                      ],
+                    ),
+                  )
                 ]
               ],
             ),
@@ -259,6 +295,7 @@ class _OngpageState extends State<Ongpage> {
             Padding(
               padding: Padinho.pequeno,
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey, // Cor de fundo do container
                   borderRadius:
@@ -331,12 +368,63 @@ class _OngpageState extends State<Ongpage> {
                   padding: Padinho.pequeno,
                   child: Column(
                     children: [
+                      if (isOwnONG) ...[
+                        ButtonEdited(
+                          icon: Icons.add,
+                          label: 'Adicionar Local',
+                          onPressed: () {
+                            _openCreateLocal(context);
+                          },
+                        ),
+                      ],
                       for (int i = 0; i < localidades.length; i++)
                         Row(
                           children: [
                             Expanded(
                               child: localCards[i],
                             ),
+                            if (isOwnONG) ...[
+                              SizedBox(width: 8),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    color: Colors.lightBlue,
+                                    onPressed: () async {
+                                      List<Map<String, dynamic>> lugar =
+                                          await SQLLocal.pegaUmLocalId(
+                                              localCards[i].id);
+                                      Localclass editlocal = Localclass(
+                                          lugar.first['cep'],
+                                          lugar.first['rua'],
+                                          lugar.first['complemento'],
+                                          lugar.first['numero'],
+                                          lugar.first['bairro'],
+                                          lugar.first['cidade'],
+                                          lugar.first['estado'],
+                                          lugar.first['id']);
+
+                                      _openEditLocal(context, editlocal);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    color: Colors.red,
+                                    onPressed: () async {
+                                      List<Map<String, dynamic>> local =
+                                          await SQLLocal.pegaUmLocalId(
+                                              localCards[i].id);
+                                      setState(() {
+                                        idLocalToExclude = local.first['id'];
+                                      });
+
+                                      _openConfirmDeleteLocal(
+                                          context, idLocalToExclude);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
                           ],
                         ),
                     ],
@@ -364,6 +452,42 @@ class _OngpageState extends State<Ongpage> {
                         Expanded(
                           child: postCards[i],
                         ),
+                        if (isOwnONG) ...[
+                          SizedBox(width: 8),
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                color: Colors.lightBlue,
+                                onPressed: () async {
+                                  List<Map<String, dynamic>> post =
+                                      await SqlPost.pegaUmPostId(
+                                          postCards[i].id);
+                                  Postclass editPost = Postclass(
+                                      post.first['titulo'],
+                                      post.first['descricao'],
+                                      post.first['imagem'],
+                                      post.first['id']);
+                                  _openEditPost(context, editPost);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                color: Colors.red,
+                                onPressed: () async {
+                                  List<Map<String, dynamic>> post =
+                                      await SqlPost.pegaUmPostId(
+                                          postCards[i].id);
+                                  setState(() {
+                                    idPostToExclude = post.first['id'];
+                                  });
+                                  _openConfirmDeletePost(
+                                      context, idPostToExclude);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                 ],
@@ -383,6 +507,163 @@ class _OngpageState extends State<Ongpage> {
     int id = await SQLONG.pegaIdOng(email);
     print(id);
     return id;
+  }
+
+  void _openEditLocal(BuildContext context, Localclass localedit) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: Padinho.medio,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  CustomInputField(
+                    labelText: 'CEP:',
+                    hintText: 'XXXXX-XXX',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        localcep = value;
+                      });
+                    },
+                    onSubmitted: (value) async {
+                      String endereco = await CepService.recuperaCep(localcep);
+                      if (endereco != "") {
+                        List<String> dados = endereco.split("/");
+                        setState(() {
+                          localrua = dados[0];
+                          localbairro = dados[2];
+                          localcidade = dados[3];
+                          localestado = dados[4];
+                        });
+                        _retrieveData();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Cidade:',
+                    hintText: 'Digite sua cidade',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localcidade = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlCidade,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Rua:',
+                    hintText: 'Digite sua rua',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localrua = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlRua,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Número:',
+                    hintText: 'Digite o número',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      localnumero = int.parse(value);
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  CustomInputField(
+                    labelText: 'Complemento:',
+                    hintText: 'Digite o complemento',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localcomplemento = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Bairro:',
+                    hintText: 'Digite o bairro',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localbairro = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlBairro,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Estado:',
+                    hintText: 'Digite o estado',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localestado = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlEstado,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Salvar',
+                    onPressed: () async {
+                      if (localcep.isEmpty) {
+                        localcep = localedit.cep;
+                      }
+                      if (localcidade.isEmpty) {
+                        localcidade = localedit.cidade;
+                      }
+                      if (localrua.isEmpty) {
+                        localrua = localedit.rua;
+                      }
+                      if (localbairro.isEmpty) {
+                        localbairro = localedit.bairro;
+                      }
+                      if (localestado.isEmpty) {
+                        localestado = localedit.estado;
+                      }
+                      if (localnumero == 0) {
+                        localnumero = localedit.numero;
+                      }
+                      if (localcomplemento.isEmpty) {
+                        localcomplemento = localedit.complemento;
+                      }
+                      await SQLLocal.atualizaLocal(
+                          widget.ongId,
+                          localedit.id,
+                          localcep,
+                          localrua,
+                          localcomplemento,
+                          localnumero,
+                          localbairro,
+                          localcidade,
+                          localestado);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _openDoacaoPopup(BuildContext context) {
@@ -625,7 +906,7 @@ class _OngpageState extends State<Ongpage> {
                         await prefs.remove('email');
                         await prefs.remove('senha');
                         await prefs.remove('nome');
-                        await prefs.setBool('is_ONG', false);
+                        await prefs.remove('is_ONG');
 
                         Navigator.pop(context); // Fecha o pop-up de confirmação
                         Navigator.pushReplacementNamed(context, 'Escolha');
@@ -729,6 +1010,95 @@ class _OngpageState extends State<Ongpage> {
         });
   }
 
+  void _openEditPost(BuildContext context, Postclass postatual) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: AppColor.appBarColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Text(
+                    'Imagem do Post',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ImageInputField(
+                    onImageSelected: (imageString) {
+                      setState(() {
+                        postImage = imageString;
+                      });
+                    },
+                    shape: ImageShape.square,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Titulo:',
+                    hintText: 'Digite o Titulo',
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    onChanged: (value) {
+                      postTitulo = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Descrição:',
+                    hintText: 'Digite sua Descrição',
+                    keyboardType: TextInputType.text,
+                    obscureText: false,
+                    onChanged: (value) {
+                      postComent = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Atualizar Post',
+                    onPressed: () async {
+                      if (postComent.isEmpty) {
+                        postComent = postatual.coment;
+                      }
+                      if (postImage.isEmpty) {
+                        postImage = postatual.imagem;
+                      }
+                      if (postTitulo.isEmpty) {
+                        postTitulo = postatual.titulo;
+                      }
+                      await SqlPost.atualizaPost(postatual.id, postTitulo,
+                          postComent, postImage, widget.ongId);
+                      setState(() {
+                        setstatecontador++;
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void _openConfirmDonationPopup(BuildContext context) {
     showDialog(
       context: context,
@@ -781,9 +1151,134 @@ class _OngpageState extends State<Ongpage> {
                           DateFormat("dd MMMM yyyy").format(time);
                       await SQLDonate.adicionarDonate(
                           widget.ongId, userID, valor, diaDonate);
+                      setState(() {
+                        setstatecontador++;
+                      });
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
+                    },
+                    child: const Text(
+                      'Sim',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openConfirmDeletePost(BuildContext context, int postId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          content: const Text(
+            'Deseja mesmo deletar o post',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context); // Fecha apenas o pop-up de confirmação
+                    },
+                    child: const Text(
+                      'Não',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      print('Hora de apagar');
+                      await SqlPost.apagaPost(postId);
+                      setState(() {
+                        setstatecontador++;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Sim',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openConfirmDeleteLocal(BuildContext context, int localId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          content: const Text(
+            'Deseja mesmo deletar a localização?',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(
+                          context); // Fecha apenas o pop-up de confirmação
+                    },
+                    child: const Text(
+                      'Não',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red, // Cor de fundo para o botão "Sim"
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      print('Hora de apagar');
+                      await SQLLocal.apagaLocal(localId);
+                      setState(() {
+                        setstatecontador++;
+                      });
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       'Sim',
@@ -823,7 +1318,7 @@ class _OngpageState extends State<Ongpage> {
         await prefs.remove('email');
         await prefs.remove('senha');
         await prefs.remove('nome');
-        await prefs.setBool('is_ONG', false);
+        await prefs.remove('is_ONG');
         // print('apagado');
 
         Navigator.pop(context); // Fecha o pop-up de confirmação
@@ -891,9 +1386,14 @@ class _OngpageState extends State<Ongpage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          DoacaoCard(dia: "26/11", valor: 1234.56),
-                          DoacaoCard(dia: "25/11", valor: 567.89),
-                          DoacaoCard(dia: "24/11", valor: 34.50),
+                          for (int i = 0; i < donateCards.length; i++)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: donateCards[i],
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -903,5 +1403,161 @@ class _OngpageState extends State<Ongpage> {
             ),
           );
         });
+  }
+
+  void _openCreateLocal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColor.appBarColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: Padinho.medio,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  CustomInputField(
+                    labelText: 'CEP:',
+                    hintText: 'XXXXX-XXX',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        localcep = value;
+                      });
+                    },
+                    onSubmitted: (value) async {
+                      String endereco = await CepService.recuperaCep(localcep);
+                      if (endereco != "") {
+                        List<String> dados = endereco.split("/");
+                        setState(() {
+                          localrua = dados[0];
+                          localbairro = dados[2];
+                          localcidade = dados[3];
+                          localestado = dados[4];
+                        });
+                        _retrieveData();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Cidade:',
+                    hintText: 'Digite sua cidade',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localidades = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlCidade,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Rua:',
+                    hintText: 'Digite sua rua',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localrua = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlRua,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Número:',
+                    hintText: 'Digite o número',
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      localnumero = int.parse(value);
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  CustomInputField(
+                    labelText: 'Complemento:',
+                    hintText: 'Digite o complemento',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localcomplemento = value;
+                    },
+                    onSubmitted: (value) {},
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Bairro:',
+                    hintText: 'Digite o bairro',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localbairro = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlBairro,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomInputField(
+                    labelText: 'Estado:',
+                    hintText: 'Digite o estado',
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      localestado = value;
+                    },
+                    onSubmitted: (value) {},
+                    controller: controlEstado,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Salvar',
+                    onPressed: () async {
+                      if (localcidade.isEmpty ||
+                          localrua.isEmpty ||
+                          localbairro.isEmpty ||
+                          localestado.isEmpty ||
+                          localcep.isEmpty ||
+                          localnumero == 0) {
+                        Preencha.dialogo(context);
+                      } else {
+                        if (localcomplemento.isEmpty) {
+                          SQLLocal.adicionarLocal(
+                              localcep,
+                              localrua,
+                              '',
+                              localnumero,
+                              localbairro,
+                              localcidade,
+                              localestado,
+                              widget.ongId);
+                        } else {
+                          SQLLocal.adicionarLocal(
+                              localcep,
+                              localrua,
+                              localcomplemento,
+                              localnumero,
+                              localbairro,
+                              localcidade,
+                              localestado,
+                              widget.ongId);
+                        }
+                        Navigator.pop(context); // Fecha o diálogo
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

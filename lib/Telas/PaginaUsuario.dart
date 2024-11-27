@@ -1,4 +1,6 @@
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/DoacaoCard.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -16,6 +18,7 @@ class Paginausuario extends StatefulWidget {
 }
 
 class _PaginausuarioState extends State<Paginausuario> {
+  late SharedPreferences prefs;
   String nome = 'Usuário';
   String senha = '';
   String email = '';
@@ -23,15 +26,16 @@ class _PaginausuarioState extends State<Paginausuario> {
   String senhaedit = '';
   int id = -1;
   String datanasc = '';
+  List<DoacaoCard> donateCards = [];
 
   @override
   void initState() {
     super.initState();
-    _setarDados();
+    _initPrefs();
   }
 
-  void _setarDados() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
     String? emailtoken = prefs.getString('email');
     String? senhatoken = prefs.getString('senha');
     String? nometoken = prefs.getString('nome');
@@ -41,6 +45,16 @@ class _PaginausuarioState extends State<Paginausuario> {
         senha = cipher.xorDecode(senhatoken);
         email = cipher.xorDecode(emailtoken);
       });
+    }
+    _createCards();
+  }
+
+  void _createCards() async {
+    List<Map<String, dynamic>> User = await SQLUser.pegaUmUsuarioEmail2(email);
+    List<Map<String, dynamic>> donates =
+        await SQLDonate.pegaDonatesUser(User.first['id']);
+    for (dynamic i in donates) {
+      donateCards.add(DoacaoCard(dia: i['dataDonate'], valor: i['valor']));
     }
   }
 
@@ -106,11 +120,14 @@ class _PaginausuarioState extends State<Paginausuario> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _donation('ONG 1', '01/01/2021', 'R\$ 100,00'),
-                        _donation('ONG 2', '02/01/2021', 'R\$ 200,00'),
-                        _donation('ONG 3', '03/01/2021', 'R\$ 300,00'),
-                        _donation('ONG 4', '04/01/2021', 'R\$ 400,00'),
-                        _donation('ONG 5', '05/01/2021', 'R\$ 500,00'),
+                        for (int i = 0; i < donateCards.length; i++)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: donateCards[i],
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -231,6 +248,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                     await prefs.remove('email');
                     await prefs.remove('senha');
                     await prefs.remove('nome');
+                    await prefs.remove('is_ONG');
 
                     Navigator.pop(context); // Fecha o diálogo
                     Navigator.pushReplacementNamed(context, 'Escolha');
@@ -308,6 +326,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                       await prefs.remove('email');
                       await prefs.remove('senha');
                       await prefs.remove('nome');
+                      await prefs.remove('is_ONG');
                       print('apagado');
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação

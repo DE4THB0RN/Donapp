@@ -52,6 +52,11 @@ class SqlPost {
     return db.query('post_ONG', where: "id_ong = ?", whereArgs: [idOng]);
   }
 
+  static Future<List<Map<String, dynamic>>> pegaUmPostId(int id) async {
+    final db = await SqlPost.db();
+    return db.query('post_ONG', where: "id = ?", whereArgs: [id], limit: 1);
+  }
+
   // talvez de merda
   static Future<int> atualizaPost(
       int id, String titulo, String descricao, String imagem, int idOng) async {
@@ -76,7 +81,7 @@ class SqlPost {
     }
   }
 
-  static Future<void> dropDataBaseLocal() async {
+  static Future<void> dropDataBasePost() async {
     try {
       await sql.deleteDatabase('post_ONG.db');
     } catch (err) {

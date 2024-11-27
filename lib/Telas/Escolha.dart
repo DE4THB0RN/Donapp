@@ -1,8 +1,10 @@
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
+import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Theme/Color.dart';
+import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 
 class Escolha extends StatefulWidget {
@@ -15,21 +17,24 @@ class Escolha extends StatefulWidget {
 class _EscolhaState extends State<Escolha> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 600,
-            child: _botao(context, 'Quero doar', 'Cadastro_User'),
-          ),
-          Padding(padding: EdgeInsets.all(60)),
-          SizedBox(
-            width: 600,
-            child: _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
-          ),
-        ],
+    return Padding(
+      padding: Padinho.grande,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 600,
+              child: _botao(context, 'Quero doar', 'Cadastro_User'),
+            ),
+            Padding(padding: EdgeInsets.all(60)),
+            SizedBox(
+              width: 600,
+              child: _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -45,6 +50,7 @@ class _EscolhaState extends State<Escolha> {
     await SQLONG.dropDataBaseONG();
     await SQLUser.dropDataBaseUser();
     await SQLDonate.dropDataBaseDonate();
+    await SqlPost.dropDataBasePost();
   }
 }
 
