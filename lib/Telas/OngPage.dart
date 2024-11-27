@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
@@ -315,23 +316,31 @@ class _OngpageState extends State<Ongpage> {
 
             Padding(
               padding: Padinho.pequeno,
-              child: FlutterCarousel(
-                options: FlutterCarouselOptions(
-                  height: 400.0,
-                  showIndicator: true,
-                  slideIndicator: CircularSlideIndicator(),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 300.0, // Altura fixa do carrossel
+                  viewportFraction: 1.0, // Cada slide ocupa 100% da largura
+                  enableInfiniteScroll: true, // Loop infinito
+                  autoPlay: true, // Reprodução automática
+                  autoPlayInterval: const Duration(seconds: 3),
+                  enlargeCenterPage: false, // Não aumenta o slide central
                 ),
                 items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
-                    .map((i) {
+                    .map((imagePath) {
                   return Builder(
                     builder: (BuildContext context) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Image.asset(
-                          i,
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width,
+                      return SizedBox(
+                        width: MediaQuery.of(context)
+                            .size
+                            .width, // Largura da tela
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Opcional: bordas arredondadas
+                          child: Image.asset(
+                            imagePath,
+                            fit: BoxFit
+                                .cover, // Faz com que a imagem cubra toda a área
+                          ),
                         ),
                       );
                     },
