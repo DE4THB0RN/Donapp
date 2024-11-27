@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/BD/cep_service.dart';
@@ -23,7 +22,6 @@ import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
@@ -319,9 +317,9 @@ class _OngpageState extends State<Ongpage> {
               child: CarouselSlider(
                 options: CarouselOptions(
                   height: 300.0, // Altura fixa do carrossel
-                  viewportFraction: 1.0, // Cada slide ocupa 100% da largura
+                  viewportFraction: 0.8, // Cada slide ocupa 100% da largura
                   enableInfiniteScroll: true, // Loop infinito
-                  autoPlay: true, // Reprodução automática
+                  autoPlay: false, // Reprodução automática
                   autoPlayInterval: const Duration(seconds: 3),
                   enlargeCenterPage: false, // Não aumenta o slide central
                 ),
@@ -329,13 +327,13 @@ class _OngpageState extends State<Ongpage> {
                     .map((imagePath) {
                   return Builder(
                     builder: (BuildContext context) {
-                      return SizedBox(
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         width: MediaQuery.of(context)
                             .size
                             .width, // Largura da tela
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Opcional: bordas arredondadas
+                          borderRadius: BorderRadius.circular(8.0),
                           child: Image.asset(
                             imagePath,
                             fit: BoxFit
