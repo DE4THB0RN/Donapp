@@ -66,7 +66,9 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     keyboardType: TextInputType.text,
                     obscureText: true,
                     onChanged: (value) {
-                      senha = value;
+                      setState(() {
+                        senha = value;
+                      });
                     },
                     onSubmitted: (value) {},
                   ),

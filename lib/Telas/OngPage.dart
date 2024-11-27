@@ -18,6 +18,7 @@ import 'package:donapp/Components/ButtonEdited.dart';
 import 'package:donapp/Components/PostCard.dart';
 import 'package:donapp/Components/PostClass.dart';
 import 'package:donapp/Components/Preencha.dart';
+import 'package:donapp/Components/confirmPopUp.dart';
 import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -25,7 +26,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Components/confirmPoPup.dart';
 
 class Ongpage extends StatefulWidget {
   final int ongId;
