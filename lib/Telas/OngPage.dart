@@ -505,8 +505,17 @@ class _OngpageState extends State<Ongpage> {
                       obscureText: false,
                       onChanged: (value) {
                         editemail = value;
-                      },
-                      onSubmitted: (value) {},
+                      },                      onSubmitted: (value) {},
+                    ),
+                      const SizedBox(height: 15),
+                      CustomInputField(
+                      labelText: 'CVC:',
+                      hintText: 'Digite CVC',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editemail = value;
+                      },                      onSubmitted: (value) {},
                     ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(
