@@ -73,9 +73,7 @@ class __LoginpageState extends State<LoginpageState> {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar com Google',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Home');
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(height: 20),
                   CustomButton(

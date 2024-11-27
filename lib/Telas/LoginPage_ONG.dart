@@ -73,9 +73,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar com Google',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Home');
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
@@ -86,10 +84,17 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                         Preencha.dialogo(context);
                       } else {
                         senha = generateMd5(senha);
-                        await _pegarONG();
-                        if (_usuario.isNotEmpty) {
-                          if (_usuario.first['senha'] == senha) {
-                            String nome = _usuario.first['nome'];
+                        //await _pegarONG();
+                        //por questão de debug mudei o _usuario por esse usuarioTry, queria ver se era lá o problema, mas n era n kkkk
+                        List<Map<String, dynamic>> usuarioTry =
+                            await SQLONG.pegaUmaONGEmail2(email);
+                        if (usuarioTry.isNotEmpty) {
+                          String senhaDebug = usuarioTry.first['senha'];
+                          String senhaTentando = senha;
+                          print(senhaTentando);
+                          print(senhaDebug);
+                          if (usuarioTry.first['senha'] == senha) {
+                            String nome = usuarioTry.first['nome'];
                             nome = cipher.xorEncode(nome);
                             prefs.setString('nome', nome);
                             String emailtoken = cipher.xorEncode(email);
@@ -101,7 +106,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                           } else {
                             _senhaErrada();
                           }
-                        } else if (_usuario.isEmpty) {
+                        } else if (usuarioTry.isEmpty) {
                           showDialog(
                             context: context,
                             builder: (context) {
