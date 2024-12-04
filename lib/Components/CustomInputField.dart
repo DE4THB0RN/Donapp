@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomInputField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final TextInputType keyboardType;
@@ -21,12 +21,17 @@ class CustomInputField extends StatelessWidget {
   });
 
   @override
+  State<CustomInputField> createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<CustomInputField> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          labelText,
+          widget.labelText,
           style: const TextStyle(
             fontSize: 16,
             color: Colors.white,
@@ -35,17 +40,17 @@ class CustomInputField extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
+          controller: widget.controller,
+          keyboardType: widget.keyboardType,
+          obscureText: widget.obscureText,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             border: const OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
           ),
-          onChanged: onChanged,
-          onSubmitted: onSubmitted,
+          onChanged: widget.onChanged,
+          onSubmitted: widget.onSubmitted,
         ),
       ],
     );

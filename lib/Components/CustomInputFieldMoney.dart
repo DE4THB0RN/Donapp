@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class CustomInputFieldMoney extends StatelessWidget {
+class CustomInputFieldMoney extends StatefulWidget {
   final String labelText;
   final String hintText;
   final ValueChanged<double> onChanged;
@@ -17,12 +17,17 @@ class CustomInputFieldMoney extends StatelessWidget {
   });
 
   @override
+  State<CustomInputFieldMoney> createState() => _CustomInputFieldMoneyState();
+}
+
+class _CustomInputFieldMoneyState extends State<CustomInputFieldMoney> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          labelText,
+          widget.labelText,
           style: const TextStyle(
             fontSize: 16,
             color: Colors.white,
@@ -31,10 +36,10 @@ class CustomInputFieldMoney extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         TextFormField(
-          controller: controller,
+          controller: widget.controller,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -51,7 +56,7 @@ class CustomInputFieldMoney extends StatelessWidget {
             final numericValue =
                 double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), '')) ??
                     0.0;
-            onChanged(numericValue);
+            widget.onChanged(numericValue);
           },
         ),
       ],

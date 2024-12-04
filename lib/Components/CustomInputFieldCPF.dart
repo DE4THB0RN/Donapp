@@ -2,7 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomInputFieldCPF extends StatelessWidget {
+class CustomInputFieldCPF extends StatefulWidget {
   final String labelText;
   final String hintText;
   final ValueChanged onChanged;
@@ -19,12 +19,17 @@ class CustomInputFieldCPF extends StatelessWidget {
   });
 
   @override
+  State<CustomInputFieldCPF> createState() => _CustomInputFieldCPFState();
+}
+
+class _CustomInputFieldCPFState extends State<CustomInputFieldCPF> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          labelText,
+          widget.labelText,
           style: const TextStyle(
             fontSize: 16,
             color: Colors.white,
@@ -33,7 +38,7 @@ class CustomInputFieldCPF extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         TextFormField(
-          controller: controller,
+          controller: widget.controller,
           keyboardType: TextInputType.number,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
@@ -41,13 +46,13 @@ class CustomInputFieldCPF extends StatelessWidget {
           ],
           obscureText: false,
           decoration: InputDecoration(
-            hintText: hintText,
+            hintText: widget.hintText,
             border: const OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
           ),
-          onChanged: onChanged,
-          onFieldSubmitted: onSubmitted,
+          onChanged: widget.onChanged,
+          onFieldSubmitted: widget.onSubmitted,
         ),
       ],
     );
