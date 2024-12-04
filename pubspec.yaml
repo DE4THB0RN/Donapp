@@ -47,6 +47,7 @@ dependencies:
   flutter_multi_formatter: ^2.13.0
   br_validators: ^2.0.3
   brasil_fields: ^1.9.1
+  google_maps_flutter: ^2.10.0
 
 dev_dependencies:
   flutter_test:
