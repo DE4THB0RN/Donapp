@@ -1099,46 +1099,12 @@ class _OngpageState extends State<Ongpage> {
         });
   }
 
-  void _openConfirmDonationPopup(BuildContext context) {
-    showDialog(
+  void _openConfirmDonationPopup() async {
+    await showConfirmDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColor.appBarColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          content: const Text(
-            'Deseja mesmo fazer a doação?',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(
-                          context); // Fecha apenas o pop-up de confirmação
-                    },
-                    child: const Text(
-                      'Não',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () async {
+      message: 'Deseja mesmo fazer a doação?',
+      onConfirm: () async {
+        
                       print('Hora de pagar');
                       // Ação para sumir com esse popup de bomba
                       String emailUser =
@@ -1157,61 +1123,20 @@ class _OngpageState extends State<Ongpage> {
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
-                    },
-                    child: const Text(
-                      'Sim',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+      },
+      onCancel: () {
+        
+        Navigator.pop(context);
       },
     );
   }
 
-  void _openConfirmDeletePost(BuildContext context, int postId) {
-    showDialog(
+  
+  void _openConfirmDeletePost() async {
+    await showConfirmDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColor.appBarColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          content: const Text(
-            'Deseja mesmo deletar o post',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(
-                          context); // Fecha apenas o pop-up de confirmação
-                    },
-                    child: const Text(
-                      'Não',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () async {
+      message: 'Deseja mesmo deletar o post?',
+      onConfirm: () async {
                       print('Hora de apagar');
                       await SqlPost.apagaPost(postId);
                       setState(() {
@@ -1219,60 +1144,18 @@ class _OngpageState extends State<Ongpage> {
                       });
                       Navigator.pop(context);
                     },
-                    child: const Text(
-                      'Sim',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+      onCancel: () {
+        
+        Navigator.pop(context);
       },
     );
   }
 
-  void _openConfirmDeleteLocal(BuildContext context, int localId) {
-    showDialog(
+  void _openConfirmDeleteLocal() async {
+    await showConfirmDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColor.appBarColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          content: const Text(
-            'Deseja mesmo deletar a localização?',
-            style: TextStyle(color: Colors.white),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(
-                          context); // Fecha apenas o pop-up de confirmação
-                    },
-                    child: const Text(
-                      'Não',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red, // Cor de fundo para o botão "Sim"
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextButton(
-                    onPressed: () async {
+      message: 'Deseja mesmo deletar a localização?',
+      onConfirm: () async {
                       print('Hora de apagar');
                       await SQLLocal.apagaLocal(localId);
                       setState(() {
@@ -1280,19 +1163,13 @@ class _OngpageState extends State<Ongpage> {
                       });
                       Navigator.pop(context);
                     },
-                    child: const Text(
-                      'Sim',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
+      onCancel: () {
+        
+        Navigator.pop(context);
       },
     );
   }
+
 
   void _openConfirmDeletePopup() async {
     await showConfirmDialog(
