@@ -128,6 +128,13 @@ class __LoginpageState extends State<LoginpageState> {
                       Navigator.pushReplacementNamed(context, 'Cadastro_User');
                     },
                   ),
+                  SizedBox(height: 20),
+                  CustomButton(
+                    text: 'Voltar',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Escolha');
+                    },
+                  ),
                 ],
               ),
             ),
