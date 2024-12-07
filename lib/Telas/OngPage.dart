@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
+import 'package:donapp/BD/sql_follow.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/BD/sql_user.dart';
@@ -47,6 +48,7 @@ class _OngpageState extends State<Ongpage> {
   List<Postcard> postCards = [];
   List<DoacaoCard> donateCards = [];
   bool isOng = false;
+  bool isFollowing = false;
   double valor = 0.0;
   String editbanner = '';
   String editperfil = '';
@@ -67,7 +69,6 @@ class _OngpageState extends State<Ongpage> {
   String localestado = '';
   int idPostToExclude = 0;
   int idLocalToExclude = 0;
-  int setstatecontador = 0;
 
   TextEditingController controlRua = TextEditingController();
   TextEditingController controlBairro = TextEditingController();
@@ -140,6 +141,17 @@ class _OngpageState extends State<Ongpage> {
       setState(() {
         idLogado = id; // Atualiza o estado
       });
+    } else {
+      String? emailUserTmp = prefs.getString('email');
+      emailUserTmp = cipher.xorDecode(emailUserTmp!);
+      List<Map<String, dynamic>> userTmp =
+          await SQLUser.pegaUmUsuarioEmail2(emailUserTmp);
+      int idUserTmp = userTmp.first['id'];
+      List<Map<String, dynamic>> followTmp =
+          await SQLFollow.pegafollowsUserOng(idUserTmp, widget.ongId);
+      if (followTmp.isNotEmpty) {
+        isFollowing = true;
+      }
     }
     createOng(widget.ongId);
   }
@@ -277,13 +289,46 @@ class _OngpageState extends State<Ongpage> {
                           },
                         ),
                         const SizedBox(width: 10), // Espaço entre os botões
-                        ButtonEdited(
-                          icon: Icons.favorite,
-                          label: 'Seguir',
-                          onPressed: () {
-                            print("Seguir!");
-                          },
-                        ),
+                        if (!isFollowing) ...[
+                          ButtonEdited(
+                            icon: Icons.favorite,
+                            label: 'Seguir',
+                            onPressed: () async {
+                              String? emailUserTmp = prefs.getString('email');
+                              emailUserTmp = cipher.xorDecode(emailUserTmp!);
+                              List<Map<String, dynamic>> userTmp =
+                                  await SQLUser.pegaUmUsuarioEmail2(
+                                      emailUserTmp);
+                              int idUserTmp = userTmp.first['id'];
+                              await SQLFollow.adicionarFollow(
+                                  idUserTmp, widget.ongId);
+                              setState(() {
+                                isFollowing = true;
+                              });
+                            },
+                          ),
+                        ] else ...[
+                          ButtonEdited(
+                            icon: Icons.favorite,
+                            label: 'Seguindo',
+                            onPressed: () async {
+                              String? emailUserTmp = prefs.getString('email');
+                              emailUserTmp = cipher.xorDecode(emailUserTmp!);
+                              List<Map<String, dynamic>> userTmp =
+                                  await SQLUser.pegaUmUsuarioEmail2(
+                                      emailUserTmp);
+                              int idUserTmp = userTmp.first['id'];
+                              List<Map<String, dynamic>> followTmp =
+                                  await SQLFollow.pegafollowsUserOng(
+                                      idUserTmp, widget.ongId);
+                              await SQLFollow.apagaFollow(
+                                  followTmp.first['id']);
+                              setState(() {
+                                isFollowing = false;
+                              });
+                            },
+                          ),
+                        ]
                       ],
                     ),
                   )

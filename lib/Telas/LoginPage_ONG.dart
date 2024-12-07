@@ -70,11 +70,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Entrar com Google',
-                    onPressed: () {},
-                  ),
+
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar',
@@ -135,14 +131,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                       Navigator.pushReplacementNamed(context, 'Cadastro_ONG');
                     },
                   ),
-                  SizedBox(height: 20),
-                  CustomButton(
-                    text: 'Voltar',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Escolha');
-                    },
-                  ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   // Botão Voltar no final
                   CustomButton(
                     text: 'Voltar',

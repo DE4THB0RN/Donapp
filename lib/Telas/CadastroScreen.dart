@@ -159,7 +159,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         Navigator.pushReplacementNamed(context, 'Login_User');
                       },
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     // Botão Voltar no final
                     CustomButton(
                       text: 'Voltar',

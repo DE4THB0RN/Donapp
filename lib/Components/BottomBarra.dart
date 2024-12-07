@@ -29,8 +29,10 @@ class _BottombarraState extends State<Bottombarra> {
             color: AppColor.backgroundColor,
           ),
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'SeguindoPage');
+            },
             color: AppColor.backgroundColor,
           )
         ],

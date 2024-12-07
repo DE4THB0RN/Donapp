@@ -24,7 +24,7 @@ class _EscolhaState extends State<Escolha> {
           // Imagem de fundo
           Positioned.fill(
             child: Image.asset(
-              "funciona.jpg",
+              "assets/funciona.jpg",
               fit: BoxFit.cover, // Ajusta a imagem ao tamanho da tela
             ),
           ),

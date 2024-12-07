@@ -72,11 +72,6 @@ class __LoginpageState extends State<LoginpageState> {
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
-                    text: 'Entrar com Google',
-                    onPressed: () {},
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
                     text: 'Entrar',
                     onPressed: () async {
                       _initPrefs();
@@ -128,7 +123,7 @@ class __LoginpageState extends State<LoginpageState> {
                       Navigator.pushReplacementNamed(context, 'Cadastro_User');
                     },
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   // Botão Voltar no final
                   CustomButton(
                     text: 'Voltar',

@@ -1,12 +1,5 @@
 import 'package:sqflite/sqflite.dart' as sql;
 
-String cep = '';
-String rua = '';
-String complemento = '';
-String bairro = '';
-String cidade = '';
-String estado = '';
-
 class SQLDonate {
   static Future<void> criaDonate(sql.Database database) async {
     await database.execute("""CREATE TABLE donate(

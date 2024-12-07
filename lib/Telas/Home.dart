@@ -7,8 +7,6 @@ import 'package:donapp/Components/NGOCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:donapp/Components/NGOCard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -128,19 +126,10 @@ class _HomeState extends State<Home> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: Padinho.pequeno,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (isOng)
-                  ...[]
-                else ...[
-                  const Text(
-                    'Seguidos',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                ],
                 Column(
                   children: [
                     for (int i = 0; i < filteredONGS.length; i++)
