@@ -6,7 +6,7 @@ class CustomDateInputField extends StatefulWidget {
   final String hintText;
   final Function(DateTime) onDateSelected;
 
-  CustomDateInputField({
+  const CustomDateInputField({super.key, 
     required this.labelText,
     required this.hintText,
     required this.onDateSelected,
@@ -43,18 +43,18 @@ class _CustomDateInputFieldState extends State<CustomDateInputField> {
       children: [
         Text(
           widget.labelText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         TextField(
           controller: _controller,
           decoration: InputDecoration(
             hintText: widget.hintText,
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
           ),

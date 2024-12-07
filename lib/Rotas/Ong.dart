@@ -29,9 +29,9 @@ class _ONGState extends State<ONG> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra2(),
+      appBar: const AppBarra2(),
       body: _body(ongId),
-      bottomNavigationBar: Bottombarra(),
+      bottomNavigationBar: const Bottombarra(),
     );
   }
 }

@@ -17,13 +17,13 @@ class _HomecallState extends State<Homecall> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra2(),
+      appBar: const AppBarra2(),
       body: _body(),
-      bottomNavigationBar: Bottombarra(),
+      bottomNavigationBar: const Bottombarra(),
     );
   }
 
   _body() {
-    return Home();
+    return const Home();
   }
 }

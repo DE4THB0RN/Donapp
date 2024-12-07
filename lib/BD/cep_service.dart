@@ -15,14 +15,6 @@ class CepService {
     String localidade = retorno["localidade"];
     String estado = retorno["estado"];
 
-    return (logradouro +
-        "/" +
-        complemento +
-        "/" +
-        bairro +
-        "/" +
-        localidade +
-        "/" +
-        estado);
+    return ("$logradouro/$complemento/$bairro/$localidade/$estado");
   }
 }

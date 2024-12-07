@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 import 'package:image_picker/image_picker.dart';
 
 enum ImageShape { square, circle }
@@ -13,8 +14,8 @@ class ImageInputField extends StatefulWidget {
   const ImageInputField({
     required this.onImageSelected,
     this.shape = ImageShape.square,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _ImageInputFieldState createState() => _ImageInputFieldState();

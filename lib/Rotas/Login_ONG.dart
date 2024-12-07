@@ -15,12 +15,12 @@ class _LoginONGState extends State<LoginONG> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: const AppBarra(),
       body: _body(),
     );
   }
 
   _body() {
-    return Loginpage_ONGState();
+    return const Loginpage_ONGState();
   }
 }

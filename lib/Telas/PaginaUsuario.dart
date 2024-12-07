@@ -1,4 +1,6 @@
+import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_user.dart';
+import 'package:donapp/Components/DoacaoCard.dart';
 import 'package:donapp/Components/Helper.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Theme/Padding.dart';
@@ -16,6 +18,7 @@ class Paginausuario extends StatefulWidget {
 }
 
 class _PaginausuarioState extends State<Paginausuario> {
+  late SharedPreferences prefs;
   String nome = 'Usuário';
   String senha = '';
   String email = '';
@@ -23,15 +26,16 @@ class _PaginausuarioState extends State<Paginausuario> {
   String senhaedit = '';
   int id = -1;
   String datanasc = '';
+  List<DoacaoCard> donateCards = [];
 
   @override
   void initState() {
     super.initState();
-    _setarDados();
+    _initPrefs();
   }
 
-  void _setarDados() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
     String? emailtoken = prefs.getString('email');
     String? senhatoken = prefs.getString('senha');
     String? nometoken = prefs.getString('nome');
@@ -41,6 +45,16 @@ class _PaginausuarioState extends State<Paginausuario> {
         senha = cipher.xorDecode(senhatoken);
         email = cipher.xorDecode(emailtoken);
       });
+    }
+    _createCards();
+  }
+
+  void _createCards() async {
+    List<Map<String, dynamic>> User = await SQLUser.pegaUmUsuarioEmail2(email);
+    List<Map<String, dynamic>> donates =
+        await SQLDonate.pegaDonatesUser(User.first['id']);
+    for (dynamic i in donates) {
+      donateCards.add(DoacaoCard(dia: i['dataDonate'], valor: i['valor']));
     }
   }
 
@@ -70,14 +84,14 @@ class _PaginausuarioState extends State<Paginausuario> {
                 Center(
                   child: Text(
                     nome,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 26,
                       color: Colors.black,
                       fontFamily: 'Katibeh',
                     ),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: Padinho.medio,
                   child: Center(
                     child: Text(
@@ -86,8 +100,8 @@ class _PaginausuarioState extends State<Paginausuario> {
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(40)),
-                Padding(
+                const Padding(padding: EdgeInsets.all(40)),
+                const Padding(
                   padding: Padinho.medio,
                   child: Center(
                     child: Text(
@@ -106,11 +120,14 @@ class _PaginausuarioState extends State<Paginausuario> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _donation('ONG 1', '01/01/2021', 'R\$ 100,00'),
-                        _donation('ONG 2', '02/01/2021', 'R\$ 200,00'),
-                        _donation('ONG 3', '03/01/2021', 'R\$ 300,00'),
-                        _donation('ONG 4', '04/01/2021', 'R\$ 400,00'),
-                        _donation('ONG 5', '05/01/2021', 'R\$ 500,00'),
+                        for (int i = 0; i < donateCards.length; i++)
+                          Row(
+                            children: [
+                              Expanded(
+                                child: donateCards[i],
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -121,7 +138,7 @@ class _PaginausuarioState extends State<Paginausuario> {
               top: 10,
               right: 10,
               child: IconButton(
-                icon: Icon(Icons.edit, color: Colors.black, size: 28),
+                icon: const Icon(Icons.edit, color: Colors.black, size: 28),
                 onPressed: () {
                   _openEditUserPopup(context);
                 },
@@ -151,7 +168,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    icon: Icon(Icons.close, color: Colors.white),
+                    icon: const Icon(Icons.close, color: Colors.white),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -168,7 +185,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                   },
                   onSubmitted: (value) {},
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 CustomInputField(
                   labelText: 'Senha:',
                   hintText: 'Digite sua senha',
@@ -179,7 +196,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                   },
                   onSubmitted: (value) {},
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomButton(
                   text: 'Salvar',
                   onPressed: () async {
@@ -219,7 +236,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                     }
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomButton(
                   text: 'Sair da Conta',
                   onPressed: () async {
@@ -231,12 +248,13 @@ class _PaginausuarioState extends State<Paginausuario> {
                     await prefs.remove('email');
                     await prefs.remove('senha');
                     await prefs.remove('nome');
+                    await prefs.remove('is_ONG');
 
                     Navigator.pop(context); // Fecha o diálogo
-                    Navigator.pushReplacementNamed(context, 'Login');
+                    Navigator.pushReplacementNamed(context, 'Escolha');
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomButton(
                   text: 'Excluir Conta',
                   onPressed: () {
@@ -260,7 +278,7 @@ class _PaginausuarioState extends State<Paginausuario> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          content: Text(
+          content: const Text(
             'Tem certeza de que deseja excluir a conta?',
             style: TextStyle(color: Colors.white),
           ),
@@ -278,7 +296,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                       Navigator.pop(
                           context); // Fecha apenas o pop-up de confirmação
                     },
-                    child: Text(
+                    child: const Text(
                       'Não',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -308,12 +326,13 @@ class _PaginausuarioState extends State<Paginausuario> {
                       await prefs.remove('email');
                       await prefs.remove('senha');
                       await prefs.remove('nome');
+                      await prefs.remove('is_ONG');
                       print('apagado');
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
-                      Navigator.pushReplacementNamed(context, 'Login');
+                      Navigator.pushReplacementNamed(context, 'Escolha');
                     },
-                    child: Text(
+                    child: const Text(
                       'Sim',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -332,7 +351,7 @@ class _PaginausuarioState extends State<Paginausuario> {
       child: SizedBox(
         width: 300,
         child: Padding(
-          padding: EdgeInsets.all(2),
+          padding: const EdgeInsets.all(2),
           child: Column(
             children: [
               Align(
@@ -345,7 +364,7 @@ class _PaginausuarioState extends State<Paginausuario> {
                         nomeOng.toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Padding(
+                      const Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(75, 0, 0, 0)),
                       Text(
                         data.toString(),

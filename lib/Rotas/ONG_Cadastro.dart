@@ -15,7 +15,7 @@ class _ONG_CadastroState extends State<ONG_Cadastro> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: const AppBarra(),
       body: _body(),
     );
   }

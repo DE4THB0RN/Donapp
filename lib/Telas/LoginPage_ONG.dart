@@ -59,7 +59,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   CustomInputField(
                     labelText: 'Senha:',
                     hintText: 'Digite sua senha:',
@@ -70,14 +70,12 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                     },
                     onSubmitted: (value) {},
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar com Google',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Home');
-                    },
+                    onPressed: () {},
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar',
                     onPressed: () async {
@@ -86,33 +84,41 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                         Preencha.dialogo(context);
                       } else {
                         senha = generateMd5(senha);
-                        await _pegarONG();
-                        if (_usuario.isNotEmpty) {
-                          if (_usuario.first['senha'] == senha) {
-                            String nome = _usuario.first['nome'];
+                        //await _pegarONG();
+                        //por questão de debug mudei o _usuario por esse usuarioTry, queria ver se era lá o problema, mas n era n kkkk
+                        List<Map<String, dynamic>> usuarioTry =
+                            await SQLONG.pegaUmaONGEmail2(email);
+                        if (usuarioTry.isNotEmpty) {
+                          String senhaDebug = usuarioTry.first['senha'];
+                          String senhaTentando = senha;
+                          print(senhaTentando);
+                          print(senhaDebug);
+                          if (usuarioTry.first['senha'] == senha) {
+                            String nome = usuarioTry.first['nome'];
                             nome = cipher.xorEncode(nome);
                             prefs.setString('nome', nome);
                             String emailtoken = cipher.xorEncode(email);
                             prefs.setString('email', emailtoken);
                             String senhatoken = cipher.xorEncode(senha);
                             prefs.setString('senha', senhatoken);
+                            prefs.setBool('is_ONG', true);
                             Navigator.pushReplacementNamed(context, 'Home');
                           } else {
                             _senhaErrada();
                           }
-                        } else if (_usuario.isEmpty) {
+                        } else if (usuarioTry.isEmpty) {
                           showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Erro'),
-                                content: Text('ONG não encontrada'),
+                                title: const Text('Erro'),
+                                content: const Text('ONG não encontrada'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
@@ -122,7 +128,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                       }
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   CustomButton(
                     text: 'Criar conta',
                     onPressed: () {
@@ -150,14 +156,14 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Erro'),
-          content: Text('Senha incorreta'),
+          title: const Text('Erro'),
+          content: const Text('Senha incorreta'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

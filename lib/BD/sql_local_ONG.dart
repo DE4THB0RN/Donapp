@@ -107,6 +107,11 @@ class SQLLocal {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> pegaUmLocalId(int id) async {
+    final db = await SQLLocal.db();
+    return db.query('local_ONG', where: "id = ?", whereArgs: [id], limit: 1);
+  }
+
   static Future<void> dropDataBaseLocal() async {
     try {
       await sql.deleteDatabase('local_ONG.db');

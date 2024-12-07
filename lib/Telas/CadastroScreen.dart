@@ -10,6 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroScreen extends StatefulWidget {
+  const CadastroScreen({super.key});
+
   @override
   _CadastroScreenState createState() => _CadastroScreenState();
 }
@@ -64,7 +66,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Email:',
                       hintText: 'EmailExemplo@email.com',
@@ -76,7 +78,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomDateInputField(
                       labelText: 'Data de Nascimento:',
                       hintText: 'Selecione a data de nascimento',
@@ -87,7 +89,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         });
                       },
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Senha:',
                       hintText: 'Digite sua senha:',
@@ -102,7 +104,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomInputField(
                       labelText: 'Confirme a senha:',
                       hintText: 'Digite sua senha novamente',
@@ -113,7 +115,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       },
                       onSubmitted: (value) {},
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomButton(
                       text: 'Registrar',
                       onPressed: () async {
@@ -140,6 +142,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                                 prefs.setString('senha', senhatoken);
                                 String nometoken = cipher.xorEncode(nome);
                                 prefs.setString('nome', nometoken);
+                                prefs.setBool('is_ONG', false);
                                 Navigator.pushReplacementNamed(context, 'Home');
                               }
                             }
@@ -149,7 +152,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         }
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CustomButton(
                       text: 'Já tenho conta',
                       onPressed: () {
@@ -174,20 +177,20 @@ class _CadastroScreenState extends State<CadastroScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLogin();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _checkLogin();
+  // }
 
-  void _checkLogin() async {
-    prefs = await SharedPreferences.getInstance();
-    String? emailtoken = prefs.getString('email');
-    String? senhatoken = prefs.getString('senha');
-    String? nometoken = prefs.getString('nome');
+  // void _checkLogin() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   String? emailtoken = prefs.getString('email');
+  //   String? senhatoken = prefs.getString('senha');
+  //   String? nometoken = prefs.getString('nome');
 
-    if (emailtoken != null && senhatoken != null && nometoken != null) {
-      Navigator.pushReplacementNamed(context, 'Home');
-    }
-  }
+  //   if (emailtoken != null && senhatoken != null && nometoken != null) {
+  //     Navigator.pushReplacementNamed(context, 'Home');
+  //   }
+  // }
 }

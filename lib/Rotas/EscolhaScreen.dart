@@ -15,12 +15,12 @@ class _EscolhascreenState extends State<Escolhascreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: const AppBarra(),
       body: _body(),
     );
   }
 
   _body() {
-    return Escolha();
+    return const Escolha();
   }
 }

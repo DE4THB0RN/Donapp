@@ -103,4 +103,15 @@ class SQLONG {
       print("varios erro");
     }
   }
+
+  static Future<int> pegaIdOng(String email) async {
+    final db = await SQLONG.db();
+    final result =
+        await db.query('ONG', where: "email = ?", whereArgs: [email]);
+    int? id_result = result.first['id'] as int?;
+    if (id_result == null) {
+      return -1;
+    }
+    return id_result;
+  }
 }

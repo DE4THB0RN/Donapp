@@ -15,12 +15,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
-      appBar: AppBarra(),
+      appBar: const AppBarra(),
       body: _body(),
     );
   }
 
   _body() {
-    return LoginpageState();
+    return const LoginpageState();
   }
 }
