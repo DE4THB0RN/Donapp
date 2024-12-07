@@ -360,24 +360,26 @@ class _OngpageState extends State<Ongpage> {
                   ),
                 ),
 
-                //mapa 
-                // Padding(
-                //   padding: Padinho.pequeno,
-                //   child: Container(
-                //     height: 450,
-                //     width: 450,
-                //     decoration: const BoxDecoration(
-                //       image: DecorationImage(
-                //         image: AssetImage("assets/mapa.png"),
-                //         fit: BoxFit.cover,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                //mapa
                 Padding(
                   padding: Padinho.pequeno,
-                  child: MapSample(),
+                  child: Container(
+                    height: 450,
+                    width: 450,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/mapa.png"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
+
+                //mapa
+                // Padding(
+                //   padding: Padinho.pequeno,
+                //   child: Mapsample(),
+                // ),
 
                 Padding(
                   padding: Padinho.pequeno,
