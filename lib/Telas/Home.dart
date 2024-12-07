@@ -1,7 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
 import 'package:donapp/BD/sql_local_ONG.dart';
 import 'package:donapp/BD/sql_post.dart';
+import 'package:donapp/Components/NGOCard.dart';
 import 'package:donapp/Components/OngClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +19,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Ongclass> ONGS = [];
+  List<Ongclass> ONGS = []; // Lista completa de ONGs
+  List<Ongclass> filteredONGS = []; // Lista de ONGs filtradas
   List<NGOCard> CardsOng = [];
   late SharedPreferences _prefs;
   bool isOng = false;
+  TextEditingController searchController = TextEditingController();
 
   void initializeCards() async {
     List<Map<String, dynamic>> ongFull = await SQLONG.pegaONG();
@@ -29,11 +33,30 @@ class _HomeState extends State<Home> {
         ONGS.add(Ongclass(
             i['nome'], i['desc'], i['foto_banner'], i['foto_perfil'], i['id']));
       }
+      filteredONGS = ONGS; // Inicializa com todos os dados
+      updateCards();
+    });
+  }
 
-      for (Ongclass i in ONGS) {
-        CardsOng.add(NGOCard(
-            title: i.nome, description: i.desc, image: i.perfil, id: i.id));
+  void updateCards() {
+    CardsOng.clear();
+    for (Ongclass i in filteredONGS) {
+      CardsOng.add(NGOCard(
+          title: i.nome, description: i.desc, image: i.perfil, id: i.id));
+    }
+  }
+
+  void filterONGs(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredONGS = ONGS; // Mostra todas as ONGs se a pesquisa estiver vazia
+      } else {
+        filteredONGS = ONGS
+            .where(
+                (ong) => ong.nome.toLowerCase().contains(query.toLowerCase()))
+            .toList(); // Filtra pelo nome
       }
+      updateCards();
     });
   }
 
@@ -63,33 +86,45 @@ class _HomeState extends State<Home> {
             padding: Padinho.pequeno,
             child: CarouselSlider(
               options: CarouselOptions(
-                height: 250.0, // Altura fixa do carrossel
-                viewportFraction: 1.0, // Cada slide ocupa 100% da largura
-                enableInfiniteScroll: true, // Loop infinito
-                autoPlay: true, // Reprodução automática
+                height: 250.0,
+                viewportFraction: 1.0,
+                enableInfiniteScroll: true,
+                autoPlay: true,
                 autoPlayInterval: const Duration(seconds: 3),
-                enlargeCenterPage: false, // Não aumenta o slide central
+                enlargeCenterPage: false,
               ),
               items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
                   .map((imagePath) {
                 return Builder(
                   builder: (BuildContext context) {
                     return SizedBox(
-                      width:
-                          MediaQuery.of(context).size.width, // Largura da tela
+                      width: MediaQuery.of(context).size.width,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            8.0), // Opcional: bordas arredondadas
+                        borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
                           imagePath,
-                          fit: BoxFit
-                              .cover, // Faz com que a imagem cubra toda a área
+                          fit: BoxFit.cover,
                         ),
                       ),
                     );
                   },
                 );
               }).toList(),
+            ),
+          ),
+          // Barra de pesquisa
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: filterONGs,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Pesquisar ONGs pelo nome...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
           ),
           Padding(
@@ -108,7 +143,7 @@ class _HomeState extends State<Home> {
                 ],
                 Column(
                   children: [
-                    for (int i = 0; i < ONGS.length; i++)
+                    for (int i = 0; i < filteredONGS.length; i++)
                       Row(
                         children: [
                           Expanded(

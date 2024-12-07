@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:donapp/BD/cep_service.dart';
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_donate.dart';
@@ -22,7 +22,6 @@ import 'package:donapp/Components/localClass.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:donapp/Components/Helper.dart';
@@ -55,6 +54,7 @@ class _OngpageState extends State<Ongpage> {
   String editnome = '';
   String editemail = '';
   String editsenha = '';
+  String editcnpj = '';
   String postTitulo = '';
   String postComent = '';
   String postImage = '';
@@ -167,7 +167,7 @@ class _OngpageState extends State<Ongpage> {
               alignment: Alignment.center,
               children: [
                 Container(
-                  height: 300,
+                  height: 250,
                   color: Colors.transparent,
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -315,23 +315,31 @@ class _OngpageState extends State<Ongpage> {
 
             Padding(
               padding: Padinho.pequeno,
-              child: FlutterCarousel(
-                options: FlutterCarouselOptions(
-                  height: 400.0,
-                  showIndicator: true,
-                  slideIndicator: CircularSlideIndicator(),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 300.0, // Altura fixa do carrossel
+                  viewportFraction: 0.8, // Cada slide ocupa 100% da largura
+                  enableInfiniteScroll: true, // Loop infinito
+                  autoPlay: false, // Reprodução automática
+                  autoPlayInterval: const Duration(seconds: 3),
+                  enlargeCenterPage: false, // Não aumenta o slide central
                 ),
                 items: ['assets/dog1.png', 'assets/dog2.png', 'assets/dog3.png']
-                    .map((i) {
+                    .map((imagePath) {
                   return Builder(
                     builder: (BuildContext context) {
                       return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Image.asset(
-                          i,
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        width: MediaQuery.of(context)
+                            .size
+                            .width, // Largura da tela
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            imagePath,
+                            fit: BoxFit
+                                .cover, // Faz com que a imagem cubra toda a área
+                          ),
                         ),
                       );
                     },
@@ -351,19 +359,26 @@ class _OngpageState extends State<Ongpage> {
                     fontSize: 20,
                   ),
                 ),
-                Padding(
-                  padding: Padinho.pequeno,
-                  child: Container(
-                    height: 450,
-                    width: 450,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/mapa.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
+
+                //mapa
+                // Padding(
+                //   padding: Padinho.pequeno,
+                //   child: Container(
+                //     height: 450,
+                //     width: 450,
+                //     decoration: const BoxDecoration(
+                //       image: DecorationImage(
+                //         image: AssetImage("assets/mapa.png"),
+                //         fit: BoxFit.cover,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: Padinho.pequeno,
+                //   child: MapSample(),
+                // ),
+
                 Padding(
                   padding: Padinho.pequeno,
                   child: Column(
@@ -654,6 +669,44 @@ class _OngpageState extends State<Ongpage> {
                           localbairro,
                           localcidade,
                           localestado);
+
+                      // Recarregar os locais e atualizar as listas
+                      List<Map<String, dynamic>> locaisAtualizados =
+                          await SQLLocal.pegaLocaisOng(widget.ongId);
+
+                      setState(() {
+                        localidades.clear();
+                        localCards.clear();
+
+                        for (var local in locaisAtualizados) {
+                          Localclass novoLocal = Localclass(
+                              local['cep'],
+                              local['rua'],
+                              local['complemento'],
+                              local['numero'],
+                              local['bairro'],
+                              local['cidade'],
+                              local['estado'],
+                              local['id']);
+                          localidades.add(novoLocal);
+                          localCards.add(LocalCard(
+                              rua: novoLocal.rua,
+                              bairro: novoLocal.bairro,
+                              numero: novoLocal.numero,
+                              complemento: novoLocal.complemento,
+                              id: novoLocal.id));
+                        }
+
+                        localcep = '';
+                        localrua = '';
+                        localcomplemento = '';
+                        localnumero = 0;
+                        localbairro = '';
+                        localcidade = '';
+                        localestado = '';
+                      });
+                      //fim do metodo de atualizar (debug)
+
                       Navigator.pop(context);
                     },
                   ),
@@ -825,6 +878,17 @@ class _OngpageState extends State<Ongpage> {
                     ),
                     const SizedBox(height: 15),
                     CustomInputField(
+                      labelText: 'CNPJ:',
+                      hintText: 'Digite o novo CNPJ',
+                      keyboardType: TextInputType.text,
+                      obscureText: false,
+                      onChanged: (value) {
+                        editcnpj = value;
+                      },
+                      onSubmitted: (value) {},
+                    ),
+                    const SizedBox(height: 15),
+                    CustomInputField(
                       labelText: 'Senha:',
                       hintText: 'Digite a nova senha',
                       keyboardType: TextInputType.text,
@@ -849,10 +913,10 @@ class _OngpageState extends State<Ongpage> {
                     CustomButton(
                       text: 'Salvar',
                       onPressed: () async {
-                        List<Map<String, dynamic>> ONG =
+                        List<Map<String, dynamic>> ong =
                             await SQLONG.pegaUmaONG(objetoONG.id);
 
-                        for (dynamic i in ONG) {
+                        for (dynamic i in ong) {
                           print(i['id']);
                           print(i['nome']);
                           print(i['senha']);
@@ -875,15 +939,18 @@ class _OngpageState extends State<Ongpage> {
                           editperfil = objetoONG.perfil;
                         }
                         if (editsenha.isEmpty) {
-                          editsenha = ONG.first['senha'];
+                          editsenha = ong.first['senha'];
                         }
                         if (editemail.isEmpty) {
-                          editemail = ONG.first['email'];
+                          editemail = ong.first['email'];
+                        }
+                        if (editcnpj.isEmpty) {
+                          editcnpj = ong.first['cnpj'];
                         }
                         await SQLONG.atualizaONG(
                             objetoONG.id,
                             editnome,
-                            ONG.first['cnpj'],
+                            editcnpj,
                             editemail,
                             generateMd5(editsenha),
                             editdescricao,
@@ -894,6 +961,22 @@ class _OngpageState extends State<Ongpage> {
                         objetoONG.desc = editdescricao;
                         objetoONG.banner = editbanner;
                         objetoONG.perfil = editperfil;
+
+                        String nomeToken = cipher.xorEncode(editnome);
+                        prefs.setString('nome', nomeToken);
+                        String emailtoken = cipher.xorEncode(editemail);
+                        prefs.setString('email', emailtoken);
+                        String senhatoken =
+                            cipher.xorEncode(generateMd5(editsenha));
+                        prefs.setString('senha', senhatoken);
+
+                        editbanner = '';
+                        editperfil = '';
+                        editdescricao = '';
+                        editnome = '';
+                        editemail = '';
+                        editsenha = '';
+                        editcnpj = '';
 
                         Navigator.pop(context);
                       },
@@ -999,6 +1082,33 @@ class _OngpageState extends State<Ongpage> {
                       } else {
                         await SqlPost.adicionarPost(
                             postTitulo, postComent, postImage, widget.ongId);
+
+                        // Recarregar os posts e atualizar as listas
+                        List<Map<String, dynamic>> postsAtualizados =
+                            await SqlPost.pegaPostsOng(widget.ongId);
+
+                        setState(() {
+                          postagens.clear();
+                          postCards.clear();
+
+                          for (var post in postsAtualizados) {
+                            Postclass novoPost = Postclass(post['titulo'],
+                                post['descricao'], post['imagem'], post['id']);
+                            postagens.add(novoPost);
+                            postCards.add(Postcard(
+                              image: novoPost.imagem,
+                              title: novoPost.titulo,
+                              description: novoPost.coment,
+                              id: novoPost.id,
+                            ));
+                          }
+
+                          postImage = '';
+                          postTitulo = '';
+                          postComent = '';
+                        });
+                        //fim do metodo de atualizar (debug)
+
                         Navigator.pop(context);
                       }
                     },
@@ -1086,9 +1196,33 @@ class _OngpageState extends State<Ongpage> {
                       }
                       await SqlPost.atualizaPost(postatual.id, postTitulo,
                           postComent, postImage, widget.ongId);
+
+                      // Recarregar os posts e atualizar as listas
+                      List<Map<String, dynamic>> postsAtualizados =
+                          await SqlPost.pegaPostsOng(widget.ongId);
+
                       setState(() {
-                        setstatecontador++;
+                        postagens.clear();
+                        postCards.clear();
+
+                        for (var post in postsAtualizados) {
+                          Postclass atualizadoPost = Postclass(post['titulo'],
+                              post['descricao'], post['imagem'], post['id']);
+                          postagens.add(atualizadoPost);
+                          postCards.add(Postcard(
+                            image: atualizadoPost.imagem,
+                            title: atualizadoPost.titulo,
+                            description: atualizadoPost.coment,
+                            id: atualizadoPost.id,
+                          ));
+                        }
+
+                        postImage = '';
+                        postTitulo = '';
+                        postComent = '';
                       });
+                      //fim da parada
+
                       Navigator.pop(context);
                     },
                   ),
@@ -1117,9 +1251,7 @@ class _OngpageState extends State<Ongpage> {
                           DateFormat("dd MMMM yyyy").format(time);
                       await SQLDonate.adicionarDonate(
                           widget.ongId, userID, valor, diaDonate);
-                      setState(() {
-                        setstatecontador++;
-                      });
+                      valor = 0.0;
                       Navigator.pop(context);
                       Navigator.pop(context); // Fecha o pop-up de confirmação
                       Preencha.donationSuccess(context);
@@ -1139,9 +1271,29 @@ class _OngpageState extends State<Ongpage> {
       onConfirm: () async {
                       print('Hora de apagar');
                       await SqlPost.apagaPost(postId);
+
+                      // Recarregar os posts e atualizar as listas
+                      List<Map<String, dynamic>> postsAtualizados =
+                          await SqlPost.pegaPostsOng(widget.ongId);
+
                       setState(() {
-                        setstatecontador++;
+                        postagens.clear();
+                        postCards.clear();
+
+                        for (var post in postsAtualizados) {
+                          Postclass novoPost = Postclass(post['titulo'],
+                              post['descricao'], post['imagem'], post['id']);
+                          postagens.add(novoPost);
+                          postCards.add(Postcard(
+                            image: novoPost.imagem,
+                            title: novoPost.titulo,
+                            description: novoPost.coment,
+                            id: novoPost.id,
+                          ));
+                        }
                       });
+                      //fim do metodo de atualizar (debug)
+
                       Navigator.pop(context);
                     },
       onCancel: () {
@@ -1158,9 +1310,36 @@ class _OngpageState extends State<Ongpage> {
       onConfirm: () async {
                       print('Hora de apagar');
                       await SQLLocal.apagaLocal(localId);
+
+                      // Recarregar os locais e atualizar as listas
+                      List<Map<String, dynamic>> locaisAtualizados =
+                          await SQLLocal.pegaLocaisOng(widget.ongId);
+
                       setState(() {
-                        setstatecontador++;
+                        localidades.clear();
+                        localCards.clear();
+
+                        for (var local in locaisAtualizados) {
+                          Localclass novoLocal = Localclass(
+                              local['cep'],
+                              local['rua'],
+                              local['complemento'],
+                              local['numero'],
+                              local['bairro'],
+                              local['cidade'],
+                              local['estado'],
+                              local['id']);
+                          localidades.add(novoLocal);
+                          localCards.add(LocalCard(
+                              rua: novoLocal.rua,
+                              bairro: novoLocal.bairro,
+                              numero: novoLocal.numero,
+                              complemento: novoLocal.complemento,
+                              id: novoLocal.id));
+                        }
                       });
+                      //fim do metodo de atualizar (debug)
+
                       Navigator.pop(context);
                     },
       onCancel: () {
@@ -1405,7 +1584,7 @@ class _OngpageState extends State<Ongpage> {
                         Preencha.dialogo(context);
                       } else {
                         if (localcomplemento.isEmpty) {
-                          SQLLocal.adicionarLocal(
+                          await SQLLocal.adicionarLocal(
                               localcep,
                               localrua,
                               '',
@@ -1415,7 +1594,7 @@ class _OngpageState extends State<Ongpage> {
                               localestado,
                               widget.ongId);
                         } else {
-                          SQLLocal.adicionarLocal(
+                          await SQLLocal.adicionarLocal(
                               localcep,
                               localrua,
                               localcomplemento,
@@ -1425,6 +1604,44 @@ class _OngpageState extends State<Ongpage> {
                               localestado,
                               widget.ongId);
                         }
+
+                        // Recarregar os locais e atualizar as listas
+                        List<Map<String, dynamic>> locaisAtualizados =
+                            await SQLLocal.pegaLocaisOng(widget.ongId);
+
+                        setState(() {
+                          localidades.clear();
+                          localCards.clear();
+
+                          for (var local in locaisAtualizados) {
+                            Localclass novoLocal = Localclass(
+                                local['cep'],
+                                local['rua'],
+                                local['complemento'],
+                                local['numero'],
+                                local['bairro'],
+                                local['cidade'],
+                                local['estado'],
+                                local['id']);
+                            localidades.add(novoLocal);
+                            localCards.add(LocalCard(
+                                rua: novoLocal.rua,
+                                bairro: novoLocal.bairro,
+                                numero: novoLocal.numero,
+                                complemento: novoLocal.complemento,
+                                id: novoLocal.id));
+                          }
+
+                          localcep = '';
+                          localrua = '';
+                          localcomplemento = '';
+                          localnumero = 0;
+                          localbairro = '';
+                          localcidade = '';
+                          localestado = '';
+                        });
+                        //fim do metodo de atualizar (debug)
+
                         Navigator.pop(context); // Fecha o diálogo
                       }
                     },

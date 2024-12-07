@@ -73,9 +73,7 @@ class __LoginpageState extends State<LoginpageState> {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: 'Entrar com Google',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'Home');
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(height: 20),
                   CustomButton(
@@ -128,6 +126,14 @@ class __LoginpageState extends State<LoginpageState> {
                     text: 'Criar conta',
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, 'Cadastro_User');
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  // Botão Voltar no final
+                  CustomButton(
+                    text: 'Voltar',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Escolha');
                     },
                   ),
                 ],
