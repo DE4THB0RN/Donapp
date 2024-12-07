@@ -81,6 +81,7 @@ flutter:
     - assets/mapa.png
     - assets/GenericProfile.png
     - assets/GenericBanner.png
+    - assets/funciona.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

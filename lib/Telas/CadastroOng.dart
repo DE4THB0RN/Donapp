@@ -145,6 +145,14 @@ class _CadastroOngState extends State<CadastroOng> {
                         Navigator.pushReplacementNamed(context, 'Login_ONG');
                       },
                     ),
+                    SizedBox(height: 20),
+                    // Botão Voltar no final
+                    CustomButton(
+                      text: 'Voltar',
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, 'Escolha');
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -360,7 +360,7 @@ class _OngpageState extends State<Ongpage> {
                   ),
                 ),
 
-                //mapa 
+                //mapa
                 // Padding(
                 //   padding: Padinho.pequeno,
                 //   child: Container(
@@ -374,10 +374,10 @@ class _OngpageState extends State<Ongpage> {
                 //     ),
                 //   ),
                 // ),
-                Padding(
-                  padding: Padinho.pequeno,
-                  child: MapSample(),
-                ),
+                // Padding(
+                //   padding: Padinho.pequeno,
+                //   child: MapSample(),
+                // ),
 
                 Padding(
                   padding: Padinho.pequeno,
