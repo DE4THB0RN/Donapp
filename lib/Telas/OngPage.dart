@@ -20,6 +20,7 @@ import 'package:donapp/Components/PostCard.dart';
 import 'package:donapp/Components/PostClass.dart';
 import 'package:donapp/Components/Preencha.dart';
 import 'package:donapp/Components/localClass.dart';
+import 'package:donapp/Components/map.dart';
 import 'package:donapp/Theme/Color.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class Ongpage extends StatefulWidget {
 
 class _OngpageState extends State<Ongpage> {
   late SharedPreferences prefs;
+  final GlobalKey<MapSampleState> _mapKey = GlobalKey<MapSampleState>();
 
   Ongclass objetoONG = Ongclass.ongClassNull();
   int? idLogado = 0;
@@ -404,28 +406,14 @@ class _OngpageState extends State<Ongpage> {
                     fontSize: 20,
                   ),
                 ),
-
-                //mapa
                 Padding(
                   padding: Padinho.pequeno,
-                  child: Container(
-                    height: 450,
-                    width: 450,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/mapa.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  child: MapSample(
+                    key: _mapKey,
+                    height: 450, // Altura personalizada
+                    width: 450, // Largura personalizada
                   ),
                 ),
-
-                //mapa
-                // Padding(
-                //   padding: Padinho.pequeno,
-                //   child: Mapsample(),
-                // ),
-
                 Padding(
                   padding: Padinho.pequeno,
                   child: Column(
@@ -443,7 +431,24 @@ class _OngpageState extends State<Ongpage> {
                         Row(
                           children: [
                             Expanded(
-                              child: localCards[i],
+                              child: InkWell(
+                                onTap: () {
+                                  String address = localidades[i].cep +
+                                      ' ' +
+                                      localidades[i].estado +
+                                      ' ' +
+                                      localidades[i].cidade +
+                                      ' ' +
+                                      localidades[i].bairro +
+                                      ' ' +
+                                      localidades[i].rua +
+                                      ' ' +
+                                      localidades[i].numero.toString();
+                                  print(address);
+                                  _mapKey.currentState?.moveToAddress(address);
+                                },
+                                child: localCards[i],
+                              ),
                             ),
                             if (isOwnONG) ...[
                               SizedBox(width: 8),

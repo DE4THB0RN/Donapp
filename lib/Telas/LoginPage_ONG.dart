@@ -21,14 +21,8 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
   String email = '';
   String senha = '';
 
-  List<Map<String, dynamic>> _usuario = [];
-
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-  }
-
-  Future<void> _pegarONG() async {
-    _usuario = await SQLONG.pegaUmaONGEmail2(email);
   }
 
   @override

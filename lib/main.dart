@@ -6,6 +6,7 @@ import 'package:donapp/Rotas/ONG_Cadastro.dart';
 import 'package:donapp/Rotas/ONG_Cadastro2.dart';
 import 'package:donapp/Rotas/Ong.dart';
 import 'package:donapp/Rotas/EscolhaScreen.dart';
+import 'package:donapp/Rotas/PostSeguindo.dart';
 import 'package:donapp/Rotas/Seguindo.dart';
 import 'package:donapp/Rotas/Usuario.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class _DonappState extends State<Donapp> {
         'Cadastro_ONG': (context) => const ONG_Cadastro(),
         'Cadastro_ONG2': (context) => const ONG_Cadastro2(),
         'SeguindoPage': (context) => const Seguindo(),
+        'Postseguindo': (context) => const Postseguindo(),
       },
     );
   }

@@ -1,25 +1,30 @@
 import 'package:donapp/BD/sql_ONG.dart';
 import 'package:donapp/BD/sql_follow.dart';
+import 'package:donapp/BD/sql_post.dart';
 import 'package:donapp/BD/sql_user.dart';
 import 'package:donapp/Components/Helper.dart';
-import 'package:donapp/Components/NGOCard.dart';
 import 'package:donapp/Components/OngClass.dart';
+import 'package:donapp/Components/PostCard.dart';
+import 'package:donapp/Components/PostClass.dart';
 import 'package:donapp/Theme/Padding.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Seguindopage extends StatefulWidget {
-  const Seguindopage({super.key});
+class postsSeguindo extends StatefulWidget {
+  const postsSeguindo({super.key});
 
   @override
-  State<Seguindopage> createState() => _SeguindopageState();
+  State<postsSeguindo> createState() => _postsSeguindoState();
 }
 
-class _SeguindopageState extends State<Seguindopage> {
+class _postsSeguindoState extends State<postsSeguindo> {
   late SharedPreferences prefs;
   bool isOng = false;
   List<Ongclass> ONGS = [];
-  List<NGOCard> CardsOng = [];
+  List<int> postsPerOng = [];
+  List<Postclass> postagens = [];
+  List<Postcard> postCards = [];
+  int ongCount = 0;
 
   @override
   void initState() {
@@ -36,11 +41,11 @@ class _SeguindopageState extends State<Seguindopage> {
       });
     }
     if (!isOng) {
-      initializeOngs();
+      initializePosts();
     }
   }
 
-  void initializeOngs() async {
+  void initializePosts() async {
     String? emailUserTmp = prefs.getString('email');
     emailUserTmp = cipher.xorDecode(emailUserTmp!);
     List<Map<String, dynamic>> userTmp =
@@ -48,8 +53,10 @@ class _SeguindopageState extends State<Seguindopage> {
     int idUserTmp = userTmp.first['id'];
     List<Map<String, dynamic>> userFollow =
         await SQLFollow.pegafollowsUser(idUserTmp);
+    ongCount = 0;
     if (userFollow.isNotEmpty) {
       for (dynamic i in userFollow) {
+        ongCount++;
         List<Map<String, dynamic>> ong = await SQLONG.pegaUmaONG(i['id_ong']);
         ONGS.add(Ongclass(
             ong.first['nome'],
@@ -57,6 +64,15 @@ class _SeguindopageState extends State<Seguindopage> {
             ong.first['foto_banner'],
             ong.first['foto_perfil'],
             ong.first['id']));
+        List<Map<String, dynamic>> posts =
+            await SqlPost.pegaPostsOng(i['id_ong']);
+        int postCount = 0;
+        for (dynamic j in posts) {
+          postagens.add(
+              Postclass(j['titulo'], j['descricao'], j['imagem'], j['id']));
+          postCount++;
+        }
+        postsPerOng.add(postCount);
       }
       setState(() {
         updateCards();
@@ -65,10 +81,10 @@ class _SeguindopageState extends State<Seguindopage> {
   }
 
   void updateCards() {
-    CardsOng.clear();
-    for (Ongclass i in ONGS) {
-      CardsOng.add(NGOCard(
-          title: i.nome, description: i.desc, image: i.perfil, id: i.id));
+    postCards.clear();
+    for (Postclass i in postagens) {
+      postCards.add(Postcard(
+          image: i.imagem, title: i.titulo, description: i.coment, id: i.id));
     }
   }
 
@@ -82,7 +98,7 @@ class _SeguindopageState extends State<Seguindopage> {
               Padding(
                 padding: Padinho.grande,
                 child: Text(
-                  "Faça login como doador para poder seguir outras ONGS",
+                  "Faça login como doador para poder seguir outras ONGS e ver suas postagens",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 25,
@@ -92,11 +108,11 @@ class _SeguindopageState extends State<Seguindopage> {
                 ),
               ),
             ] else ...[
-              if (ONGS.isEmpty) ...[
+              if (postagens.isEmpty) ...[
                 Padding(
                   padding: Padinho.grande,
                   child: Text(
-                    "Você ainda não segue nenhuma ONG",
+                    "Você ainda não segue nenhuma ONG ou as ONGS que você segue não fizeram postagens",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 30,
@@ -113,11 +129,11 @@ class _SeguindopageState extends State<Seguindopage> {
                     children: [
                       Column(
                         children: [
-                          for (int i = 0; i < ONGS.length; i++)
+                          for (int i = 0; i < postagens.length; i++)
                             Row(
                               children: [
                                 Expanded(
-                                  child: CardsOng[i],
+                                  child: postCards[i],
                                 ),
                               ],
                             ),

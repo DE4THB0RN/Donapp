@@ -18,7 +18,9 @@ class _BottombarraState extends State<Bottombarra> {
         children: [
           IconButton(
             icon: const Icon(Icons.notifications),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'Postseguindo');
+            },
             color: AppColor.backgroundColor,
           ),
           IconButton(
