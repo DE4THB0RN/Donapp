@@ -17,24 +17,30 @@ class Escolha extends StatefulWidget {
 class _EscolhaState extends State<Escolha> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Padinho.grande,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 600,
-              child: _botao(context, 'Quero doar', 'Cadastro_User'),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Stack(
+        children: [
+          // Imagem de fundo
+          Positioned.fill(
+            child: Image.asset(
+              "funciona.jpg",
+              fit: BoxFit.cover, // Ajusta a imagem ao tamanho da tela
             ),
-            Padding(padding: EdgeInsets.all(60)),
-            SizedBox(
-              width: 600,
-              child: _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
+          ),
+          // Conteúdo sobreposto
+          Padding(
+            padding: Padinho.grande,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _botao(context, 'Quero doar', 'Cadastro_User'),
+                SizedBox(height: 20), // Espaço entre os botões
+                _botao(context, 'Sou uma ONG', 'Cadastro_ONG'),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -54,18 +60,27 @@ class _EscolhaState extends State<Escolha> {
   }
 }
 
-_botao(context, text, destino) {
-  return ElevatedButton(
-    style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all<Color>(AppColor.appBarColor)),
-    onPressed: () => {
-      Navigator.pushReplacementNamed(context, destino.toString()),
-    },
-    child: Center(
+Widget _botao(BuildContext context, String text, String destino) {
+  return SizedBox(
+    width: double.infinity, // Largura ocupando toda a tela
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        backgroundColor: AppColor.appBarColor.withOpacity(0.8), // Transparência
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Bordas arredondadas
+        ),
+      ),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, destino.toString());
+      },
       child: Text(
-        '$text',
+        text,
         style: const TextStyle(
-            fontSize: 30, color: Colors.white, fontFamily: 'Katibeh'),
+          fontSize: 20,
+          color: Colors.white,
+          fontFamily: 'Katibeh',
+        ),
       ),
     ),
   );

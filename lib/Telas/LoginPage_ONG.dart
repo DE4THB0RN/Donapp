@@ -142,6 +142,14 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                       Navigator.pushReplacementNamed(context, 'Escolha');
                     },
                   ),
+                  SizedBox(height: 20),
+                  // Botão Voltar no final
+                  CustomButton(
+                    text: 'Voltar',
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'Escolha');
+                    },
+                  ),
                 ],
               ),
             ),
