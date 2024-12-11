@@ -63,6 +63,10 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
     super.initState();
   }
 
+//==============================================================================
+// Pop ups importantes
+//==============================================================================
+
   void _addLocalidade(Localclass localidade) {
     setState(() {
       localidades.add(localidade); // Adiciona um item vazio na lista
@@ -264,6 +268,10 @@ class _Cadastro2OngState extends State<Cadastro2Ong> {
       },
     );
   }
+
+//==============================================================================
+// Pop ups importantes
+//==============================================================================
 
   @override
   Widget build(BuildContext context) {

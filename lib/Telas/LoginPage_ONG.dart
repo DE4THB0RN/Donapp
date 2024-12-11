@@ -21,14 +21,8 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
   String email = '';
   String senha = '';
 
-  List<Map<String, dynamic>> _usuario = [];
-
   void _initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-  }
-
-  Future<void> _pegarONG() async {
-    _usuario = await SQLONG.pegaUmaONGEmail2(email);
   }
 
   @override
@@ -106,7 +100,7 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
                             prefs.setBool('is_ONG', true);
                             Navigator.pushReplacementNamed(context, 'Home');
                           } else {
-                            _senhaErrada();
+                            Preencha.senhaErrada(context);
                           }
                         } else if (usuarioTry.isEmpty) {
                           showDialog(
@@ -146,23 +140,5 @@ class __Loginpage_ONGState extends State<Loginpage_ONGState> {
     );
   }
 
-  _senhaErrada() {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Erro'),
-          content: const Text('Senha incorreta'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+ 
 }

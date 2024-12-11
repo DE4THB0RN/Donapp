@@ -97,7 +97,7 @@ class __LoginpageState extends State<LoginpageState> {
                             prefs.setBool('is_ONG', false);
                             Navigator.pushReplacementNamed(context, 'Home');
                           } else {
-                            _senhaErrada();
+                            Preencha.senhaErrada(context);
                           }
                         } else if (_usuario.isEmpty) {
                           showDialog(
@@ -134,26 +134,6 @@ class __LoginpageState extends State<LoginpageState> {
           ),
         ),
       ),
-    );
-  }
-
-  _senhaErrada() {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Erro'),
-          content: const Text('Senha incorreta'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
