@@ -25,14 +25,6 @@ class Donapp extends StatefulWidget {
 }
 
 class _DonappState extends State<Donapp> {
-  int cont = 0;
-
-  void incrementar() {
-    setState(() {
-      cont++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,12 +46,6 @@ class _DonappState extends State<Donapp> {
       },
     );
   }
-}
-
-_botao(cont, incrementar) {
-  return Center(
-      child: ElevatedButton(
-          onPressed: () => {incrementar()}, child: Text(cont.toString())));
 }
 
 _body() {
